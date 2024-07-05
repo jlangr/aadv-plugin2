@@ -1,0 +1,21 @@
+Modern Java Practices:
+
+Use functional stream methods when appropriate
+Declare local variables as `var` when possible
+
+Functional Programming:
+
+No mutating local variables.
+Extract complex expressions to separate functions.
+Avoid temporaries unless necessary.
+
+Clean and Clear Code:
+
+Extract complex expressions within chained streams
+Simplify assignment statements by extracting right-hand sides to new methods
+Move related methods to helper classes with high cohesion
+
+Unit testing:
+
+Do not start test names with the word "test"
+In tests, also use `var` where possible
