@@ -1,8 +1,8 @@
 package ui;
 
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.ui.components.JBScrollPane;
-import llms.OpenAIClient;
 import llms.SourceFile;
 import utils.idea.IDEAEditor;
 
@@ -10,25 +10,28 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-public class AADVPanel extends JPanel implements SendPromptListener, UpdateFileListener {
+public class AADVPanel extends JPanel implements  UpdateFileListener {
+   public static final String MSG_KEY_NOT_CONFIGURED =
+      "API key not configured. Please provide it in the AADV plugin settings.";
    private final Project project;
-   private final String apiKey;
+   private final SendPromptListener sendPromptListener;
 
    private JPanel contentPanel =  new JPanel();
 
-//   private OpenAIClient openAIClient = new StubOpenAIClient(); // TODO change to prod
-   private OpenAIClient openAIClient = new OpenAIClient();
-
-   public AADVPanel(Project project, String apiKey) {
+   public AADVPanel(Project project, SendPromptListener sendPromptListener) {
       this.project = project;
-      this.apiKey = apiKey;
+      this.sendPromptListener = sendPromptListener;
       layOut();
+   }
+
+   public void showMessage(String message) {
+      Messages.showMessageDialog(message, "Information", Messages.getInformationIcon());
    }
 
    public void layOut() {
       contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
 
-      contentPanel.add(new PromptPanel(this, apiKey));
+      contentPanel.add(new PromptPanel(sendPromptListener));
 
       var scrollPane = new JBScrollPane(contentPanel);
       scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -41,14 +44,7 @@ public class AADVPanel extends JPanel implements SendPromptListener, UpdateFileL
       setMinimumSize(new Dimension(500, 1024));
    }
 
-   @Override
-   public void send(String text) {
-      var files = openAIClient.retrieveCompletion(text);
-      addSourcePanels(files.prodFiles());
-      addSourcePanels(files.testFiles());
-   }
-
-   private void addSourcePanels(List<SourceFile> sourceFiles) {
+   public void addSourcePanels(List<SourceFile> sourceFiles) {
       sourceFiles.stream()
          .map(file -> new SourcePanel(file, this))
          .forEach(panel -> {

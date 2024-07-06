@@ -2,23 +2,21 @@ package ui;
 
 import com.intellij.ui.components.JBScrollPane;
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
 import java.awt.*;
+
 import static utils.UI.setButtonHeight;
 
 public class PromptPanel extends JPanel {
-   private static final String MSG_KEY_NOT_CONFIGURED = "API key not configured. Please provide it in the AADV plugin settings.";
    private final SendPromptListener sendPromptListener;
    private JTextArea promptField;
    private JButton promptButton;
 
-   public PromptPanel(SendPromptListener sendPromptListener, String apiKey) {
+   public PromptPanel(SendPromptListener sendPromptListener) {
       this.sendPromptListener = sendPromptListener;
 
       createPromptField();
       createPromptButton();
-
-      if (apiKey == null)
-         promptField.setText(MSG_KEY_NOT_CONFIGURED);
 
       setLayout(new GridBagLayout());
       var constraints = new GridBagConstraints();
@@ -46,15 +44,25 @@ public class PromptPanel extends JPanel {
 
    private void createPromptField() {
       promptField = new JTextArea(4, 80);
+      promptField.getDocument().addDocumentListener(new JTextAreaDocumentListener(this::updateButtonState));
       promptField.setEditable(true);
       promptField.setLineWrap(true);
       promptField.setWrapStyleWord(true);
       promptField.setMargin(new Insets(10, 10, 10, 10));
    }
 
+   private void updateButtonState(DocumentEvent documentEvent) {
+      promptButton.setEnabled(!promptField.getText().isBlank());
+   }
+
    private void createPromptButton() {
       promptButton = new JButton("Send");
       promptButton.addActionListener( e -> sendPromptListener.send(promptField.getText()));
+      promptButton.setEnabled(isPromptTextAvailable());
       setButtonHeight(promptButton);
+   }
+
+   private boolean isPromptTextAvailable() {
+      return !promptField.getText().isBlank();
    }
 }
