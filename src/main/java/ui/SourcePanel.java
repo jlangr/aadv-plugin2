@@ -11,6 +11,8 @@ public class SourcePanel extends JPanel {
    public static final String CHIP_TEXT_TEST = "test";
 
    public SourcePanel(SourceFile sourceFile, UpdateFileListener updateFileListener) {
+      setName(sourceFile.fileName());
+
       setLayout(new GridBagLayout());
       GridBagConstraints gbc = new GridBagConstraints();
       gbc.insets = new Insets(5, 5, 5, 5);

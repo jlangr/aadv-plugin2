@@ -4,7 +4,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.ui.components.JBScrollPane;
 import llms.OpenAIClient;
 import llms.SourceFile;
-import llms.StubOpenAIClient;
 import utils.idea.IDEAEditor;
 
 import javax.swing.*;
@@ -17,7 +16,8 @@ public class AADVPanel extends JPanel implements SendPromptListener, UpdateFileL
 
    private JPanel contentPanel =  new JPanel();
 
-   private OpenAIClient openAIClient = new StubOpenAIClient(); // TODO change to prod
+//   private OpenAIClient openAIClient = new StubOpenAIClient(); // TODO change to prod
+   private OpenAIClient openAIClient = new OpenAIClient();
 
    public AADVPanel(Project project, String apiKey) {
       this.project = project;
@@ -44,18 +44,18 @@ public class AADVPanel extends JPanel implements SendPromptListener, UpdateFileL
    @Override
    public void send(String text) {
       var files = openAIClient.retrieveCompletion(text);
-      addSourcePanel(files.prodFiles());
-      addSourcePanel(files.testFiles());
+      addSourcePanels(files.prodFiles());
+      addSourcePanels(files.testFiles());
    }
 
-   private void addSourcePanel(List<SourceFile> sourceFiles) {
+   private void addSourcePanels(List<SourceFile> sourceFiles) {
       sourceFiles.stream()
          .map(file -> new SourcePanel(file, this))
          .forEach(panel -> {
-         contentPanel.add(panel);
-         contentPanel.revalidate();
-         contentPanel.repaint();
-      });
+            contentPanel.add(panel);
+            contentPanel.revalidate();
+            contentPanel.repaint();
+         });
    }
 
    @Override
