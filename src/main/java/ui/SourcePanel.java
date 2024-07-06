@@ -9,6 +9,7 @@ public class SourcePanel extends JPanel {
    public static final String UPDATE_SOURCEBASE_WITH_CODE = "Apply";
    public static final String CHIP_TEXT_PROD = "prod";
    public static final String CHIP_TEXT_TEST = "test";
+   private final JTextArea textArea;
 
    public SourcePanel(SourceFile sourceFile, UpdateFileListener updateFileListener) {
       setName(sourceFile.fileName());
@@ -51,7 +52,7 @@ public class SourcePanel extends JPanel {
       gbc.fill = GridBagConstraints.BOTH;
       gbc.weightx = 1.0;
       gbc.weighty = 1.0;
-      JTextArea textArea = new JTextArea(sourceFile.source());
+      textArea = new JTextArea(sourceFile.source());
       textArea.setEditable(false);
       JScrollPane scrollPane = new JBScrollPane(textArea);
       add(scrollPane, gbc);
@@ -65,6 +66,10 @@ public class SourcePanel extends JPanel {
          case PROD -> new Chip(CHIP_TEXT_PROD, Color.BLUE);
          case TEST -> new Chip(CHIP_TEXT_TEST, new Color(0, 150, 0));
       };
+   }
+
+   public void updateContent(SourceFile file) {
+      textArea.setText(file.source());
    }
 }
 

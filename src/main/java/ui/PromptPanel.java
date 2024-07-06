@@ -44,7 +44,8 @@ public class PromptPanel extends JPanel {
 
    private void createPromptField() {
       promptField = new JTextArea(4, 80);
-      promptField.getDocument().addDocumentListener(new JTextAreaDocumentListener(this::updateButtonState));
+      promptField.getDocument().addDocumentListener(
+         new JTextAreaDocumentListener(this::updateButtonState));
       promptField.setEditable(true);
       promptField.setLineWrap(true);
       promptField.setWrapStyleWord(true);
