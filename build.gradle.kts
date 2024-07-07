@@ -26,6 +26,15 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
 }
 
+sourceSets {
+    main {
+        java.srcDirs("src/main/java")
+    }
+    test {
+        java.srcDirs("src/test/java")
+    }
+}
+
 tasks {
     withType<JavaCompile> {
         sourceCompatibility = "17"

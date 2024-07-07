@@ -4,20 +4,22 @@ import com.intellij.openapi.project.Project;
 import llms.Files;
 import llms.OpenAIClient;
 import llms.SourceFile;
+import llms.StubOpenAIClient;
 import ui.AADVPanel;
 import ui.SendPromptListener;
 import ui.SourcePanel;
-import ui.UpdateFileListener;
+import ui.SourcePanelListener;
 import utils.idea.IDEAEditor;
 
 import javax.swing.*;
+import java.awt.*;
 
-public class AADVController implements SendPromptListener, UpdateFileListener {
+public class AADVController implements SendPromptListener, SourcePanelListener {
    private final Project project;
    private final AADVPanel view;
 
-//   private OpenAIClient openAIClient = new StubOpenAIClient(); // TODO change to prod
-   private OpenAIClient openAIClient = new OpenAIClient();
+   private OpenAIClient openAIClient = new StubOpenAIClient(); // TODO change to prod
+//   private OpenAIClient openAIClient = new OpenAIClient();
    private AADVModel model = new AADVModel();
 
    public AADVController(Project project) {
@@ -54,12 +56,19 @@ public class AADVController implements SendPromptListener, UpdateFileListener {
       new IDEAEditor().replaceEditorContent(project, sourceFile);
    }
 
-   private void upsertSourcePanel(SourceFile file) {
-      var existingPanel = model.getPanel(file);
+   @Override
+   public void delete(SourceFile sourceFile) {
+      var panel = model.getPanel(sourceFile).get();
+      view.removeSourcePanel(panel);
+      model.remove(panel);
+   }
+
+   private void upsertSourcePanel(SourceFile sourceFile) {
+      var existingPanel = model.getPanel(sourceFile);
       if (existingPanel.isPresent())
-         existingPanel.get().updateContent(file);
+         existingPanel.get().updateContent(sourceFile);
       else {
-         var panel = new SourcePanel(file, this);
+         var panel = new SourcePanel(sourceFile, this);
          model.add(panel);
          view.addSourcePanel(panel);
       }

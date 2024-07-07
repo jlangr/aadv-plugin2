@@ -14,4 +14,3 @@ public class AADVPluginAction extends AnAction {
       if (toolWindow != null) toolWindow.show(null);
    }
 }
-

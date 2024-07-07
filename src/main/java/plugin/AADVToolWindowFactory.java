@@ -16,4 +16,3 @@ public class AADVToolWindowFactory implements ToolWindowFactory, DumbAware {
       toolWindow.getContentManager().addContent(content);
    }
 }
-

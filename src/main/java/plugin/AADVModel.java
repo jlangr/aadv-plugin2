@@ -18,4 +18,8 @@ public class AADVModel {
          .filter(panel -> panel.getName().equals(file.fileName()))
          .findFirst();
    }
+
+   public void remove(SourcePanel panel) {
+      panels.remove(panel);
+   }
 }

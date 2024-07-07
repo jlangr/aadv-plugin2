@@ -2,6 +2,7 @@ package ui;
 
 import llms.SourceFile;
 
-public interface UpdateFileListener {
+public interface SourcePanelListener {
    void update(SourceFile sourceFile);
+   void delete(SourceFile sourceFile);
 }

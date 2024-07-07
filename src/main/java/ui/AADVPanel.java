@@ -1,6 +1,5 @@
 package ui;
 
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.ui.components.JBScrollPane;
 
@@ -45,6 +44,15 @@ public class AADVPanel extends JPanel {
 
    public void addSourcePanel(SourcePanel panel) {
       contentPanel.add(panel);
+      refresh();
+   }
+
+   public void removeSourcePanel(SourcePanel panel) {
+      contentPanel.remove(panel);
+      refresh();
+   }
+
+   private void refresh() {
       contentPanel.revalidate();
       contentPanel.repaint();
    }
