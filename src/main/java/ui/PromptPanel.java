@@ -4,10 +4,10 @@ import com.intellij.ui.components.JBScrollPane;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
-
 import static utils.UI.setButtonHeight;
 
 public class PromptPanel extends JPanel {
+   public static final int PROMPT_FIELD_LINE_COUNT = 10;
    private final SendPromptListener sendPromptListener;
    private JTextArea promptField;
    private JButton promptButton;
@@ -38,12 +38,20 @@ public class PromptPanel extends JPanel {
       constraints.fill = GridBagConstraints.NONE;
       add(promptButton, constraints);
 
-      setPreferredSize(new Dimension(400, 100));
-      setMinimumSize(new Dimension(400, 100));
+      var preferredHeight = calculatePreferredHeight();
+      setPreferredSize(new Dimension(400, preferredHeight));
+      setMinimumSize(new Dimension(400, preferredHeight));
+      setMaximumSize(new Dimension(Integer.MAX_VALUE, preferredHeight));
+   }
+
+   private int calculatePreferredHeight() {
+      var metrics = promptField.getFontMetrics(promptField.getFont());
+      return metrics.getHeight() * PROMPT_FIELD_LINE_COUNT
+         + promptField.getInsets().top + promptField.getInsets().bottom;
    }
 
    private void createPromptField() {
-      promptField = new JTextArea(4, 80);
+      promptField = new JTextArea(5, 80);
       promptField.getDocument().addDocumentListener(
          new JTextAreaDocumentListener(this::updateButtonState));
       promptField.setEditable(true);
