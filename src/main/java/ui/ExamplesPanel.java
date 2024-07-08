@@ -5,9 +5,12 @@ import java.awt.*;
 
 public class ExamplesPanel extends JPanel {
    public static final String MSG_EXAMPLES = "Examples";
+   private final ExampleListener exampleListener;
    private ExamplePanel newExamplePanel;
 
-   public ExamplesPanel() {
+   public ExamplesPanel(ExampleListener exampleListener) {
+      this.exampleListener = exampleListener;
+
       setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
       add(new JLabel(MSG_EXAMPLES));
@@ -21,7 +24,7 @@ public class ExamplesPanel extends JPanel {
    }
 
    private void addEmptyExample() {
-      newExamplePanel = new ExamplePanel();
+      newExamplePanel = new ExamplePanel(exampleListener);
       this.add(newExamplePanel);
    }
 }

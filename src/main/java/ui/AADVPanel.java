@@ -11,9 +11,11 @@ public class AADVPanel extends JPanel {
    private final SendPromptListener sendPromptListener;
 
    private JPanel contentPanel =  new JPanel();
+   private ExampleListener exampleListener;
 
-   public AADVPanel(SendPromptListener sendPromptListener) {
+   public AADVPanel(SendPromptListener sendPromptListener, ExampleListener exampleListener) {
       this.sendPromptListener = sendPromptListener;
+      this.exampleListener = exampleListener;
       layOut();
    }
 
@@ -26,7 +28,7 @@ public class AADVPanel extends JPanel {
 
       contentPanel.add(new PromptPanel(sendPromptListener));
 
-      contentPanel.add(new ExamplesPanel());
+      contentPanel.add(new ExamplesPanel(exampleListener));
 
       addScrollBar();
 

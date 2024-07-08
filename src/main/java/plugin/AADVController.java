@@ -5,14 +5,11 @@ import llms.Files;
 import llms.OpenAIClient;
 import llms.SourceFile;
 import llms.StubOpenAIClient;
-import ui.AADVPanel;
-import ui.SendPromptListener;
-import ui.SourcePanel;
-import ui.SourcePanelListener;
+import ui.*;
 import utils.idea.IDEAEditor;
 import javax.swing.*;
 
-public class AADVController implements SendPromptListener, SourcePanelListener {
+public class AADVController implements SendPromptListener, SourcePanelListener, ExampleListener {
    private final Project project;
    private final AADVPanel view;
 
@@ -23,7 +20,7 @@ public class AADVController implements SendPromptListener, SourcePanelListener {
 
    public AADVController(Project project) {
       this.project = project;
-      this.view = new AADVPanel(this);
+      this.view = new AADVPanel(this, this);
    }
 
    public JComponent getComponent() {
@@ -50,6 +47,7 @@ public class AADVController implements SendPromptListener, SourcePanelListener {
          .forEach(file -> upsertSourcePanel(file));
    }
 
+   // source panel listener methods:
    @Override
    public void update(SourceFile sourceFile) {
       new IDEAEditor().replaceEditorContent(project, sourceFile);
@@ -71,5 +69,12 @@ public class AADVController implements SendPromptListener, SourcePanelListener {
          model.add(panel);
          view.addSourcePanel(panel);
       }
+   }
+
+   // example listener methods
+   @Override
+   public void add(String text, String panelName) {
+      System.out.println("add example " + text);
+      model.addExample(panelName, text);
    }
 }

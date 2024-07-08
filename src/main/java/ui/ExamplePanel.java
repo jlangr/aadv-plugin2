@@ -7,17 +7,23 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 
 import java.awt.*;
+import java.util.UUID;
 
 import static utils.UI.setButtonHeight;
 
 public class ExamplePanel extends JPanel {
    private static final String MSG_ADD = "Add";
+   private final ExampleListener exampleListener;
    private JTextArea exampleField;
    private JButton addExampleButton;
 
-   public ExamplePanel() {
+   public ExamplePanel(ExampleListener exampleListener) {
+      this.exampleListener = exampleListener;
+
       createExampleField();
       createAddExampleButton();
+
+      setName(UUID.randomUUID().toString());
 
       setLayout(new GridBagLayout());
       var constraints = new GridBagConstraints();
@@ -42,7 +48,7 @@ public class ExamplePanel extends JPanel {
 
    private void createAddExampleButton() {
       addExampleButton = new JButton(MSG_ADD);
-//      addExampleButton.addActionListener( e -> sendPromptListener.send(promptField.getText()));
+      addExampleButton.addActionListener( e -> exampleListener.add(exampleField.getText(), getName()));
       addExampleButton.setEnabled(hasText());
       setButtonHeight(addExampleButton);
    }
