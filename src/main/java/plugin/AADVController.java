@@ -11,7 +11,8 @@ import javax.swing.*;
 
 public class AADVController implements SendPromptListener, SourcePanelListener, ExampleListener {
    private final Project project;
-   private final AADVPanel view;
+   private final AADVPromptPanel promptView;
+   private final AADVOutputPanel outputView;
 
    private OpenAIClient openAIClient
       = new StubOpenAIClient(); // TODO change to prod
@@ -20,18 +21,23 @@ public class AADVController implements SendPromptListener, SourcePanelListener, 
 
    public AADVController(Project project) {
       this.project = project;
-      this.view = new AADVPanel(this, this);
+      this.promptView = new AADVPromptPanel(this, this);
+      this.outputView = new AADVOutputPanel();
    }
 
-   public JComponent getComponent() {
-      return view;
+   public JComponent getOutputView() {
+      return outputView;
+   }
+
+   public JComponent getPromptView() {
+      return promptView;
    }
 
    @Override
    public void send(String text) {
       var apiKey = new AADVPluginSettings().retrieveAPIKey();
       if (apiKey == null) {
-         view.showMessage(AADVPanel.MSG_KEY_NOT_CONFIGURED);
+         promptView.showMessage(AADVPromptPanel.MSG_KEY_NOT_CONFIGURED);
          return;
       }
 
@@ -56,7 +62,7 @@ public class AADVController implements SendPromptListener, SourcePanelListener, 
    @Override
    public void delete(SourceFile sourceFile) {
       var panel = model.getPanel(sourceFile).get();
-      view.removeSourcePanel(panel);
+      promptView.removeSourcePanel(panel);
       model.remove(panel);
    }
 
@@ -67,7 +73,7 @@ public class AADVController implements SendPromptListener, SourcePanelListener, 
       else {
          var panel = new SourcePanel(sourceFile, this);
          model.add(panel);
-         view.addSourcePanel(panel);
+         promptView.addSourcePanel(panel);
       }
    }
 
@@ -76,12 +82,12 @@ public class AADVController implements SendPromptListener, SourcePanelListener, 
    public void add(String text, String panelName) {
       System.out.println("adding " + panelName + " from model");
       model.addExample(panelName, text);
-      view.refreshExamples(model.getExamples());
+      promptView.refreshExamples(model.getExamples());
    }
 
    @Override
    public void delete(String panelName) {
       model.deleteExample(panelName);
-      view.refreshExamples(model.getExamples());
+      promptView.refreshExamples(model.getExamples());
    }
 }
