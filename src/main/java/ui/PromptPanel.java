@@ -10,6 +10,7 @@ import static utils.UI.setButtonHeight;
 
 public class PromptPanel extends JPanel {
    public static final int PROMPT_FIELD_LINE_COUNT = 10;
+   public static final String MSG_SEND_PROMPT = "Send";
    private final SendPromptListener sendPromptListener;
    private JTextArea promptField;
    private JButton promptButton;
@@ -61,7 +62,7 @@ public class PromptPanel extends JPanel {
    }
 
    private void createPromptButton() {
-      promptButton = new JButton("Send");
+      promptButton = new JButton(MSG_SEND_PROMPT);
       promptButton.addActionListener( e -> sendPromptListener.send(promptField.getText()));
       promptButton.setEnabled(isPromptTextAvailable());
       setButtonHeight(promptButton);
