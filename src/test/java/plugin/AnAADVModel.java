@@ -33,4 +33,15 @@ class AnAADVModel {
 
       assertEquals(model.getExampleText("123"), "smelt");
    }
+
+   @Test
+   void deletesExample() {
+      model.addExample("123", "a");
+      model.addExample("456", "b");
+
+      model.deleteExample("123");
+
+      assertEquals(model.getExamples(),
+         List.of(new Example("456", "b")));
+   }
 }

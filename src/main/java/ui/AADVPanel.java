@@ -2,8 +2,11 @@ package ui;
 
 import com.intellij.openapi.ui.Messages;
 import com.intellij.ui.components.JBScrollPane;
+import plugin.Example;
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 public class AADVPanel extends JPanel {
    public static final String MSG_KEY_NOT_CONFIGURED =
@@ -12,6 +15,7 @@ public class AADVPanel extends JPanel {
 
    private JPanel contentPanel =  new JPanel();
    private ExampleListener exampleListener;
+   private ExamplesPanel examplesPanel;
 
    public AADVPanel(SendPromptListener sendPromptListener, ExampleListener exampleListener) {
       this.sendPromptListener = sendPromptListener;
@@ -28,7 +32,8 @@ public class AADVPanel extends JPanel {
 
       contentPanel.add(new PromptPanel(sendPromptListener));
 
-      contentPanel.add(new ExamplesPanel(exampleListener));
+      examplesPanel = new ExamplesPanel(exampleListener);
+      contentPanel.add(examplesPanel);
 
       addScrollBar();
 
@@ -58,5 +63,18 @@ public class AADVPanel extends JPanel {
    private void refresh() {
       contentPanel.revalidate();
       contentPanel.repaint();
+   }
+
+   public void addedExample() {
+      examplesPanel.addedExample();
+   }
+
+   public void deleteExample(String panelName) {
+      examplesPanel.deleteExample(panelName);
+   }
+
+   public void refreshExamples(List<Example> examples) {
+      examplesPanel.refreshExamples(examples);
+
    }
 }

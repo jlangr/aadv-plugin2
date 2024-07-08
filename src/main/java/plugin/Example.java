@@ -2,7 +2,7 @@ package plugin;
 
 import java.util.Objects;
 
-class Example {
+public class Example {
    private String text;
    private final String id;
 
@@ -19,20 +19,20 @@ class Example {
       return Objects.hashCode(id);
    }
 
-   Example(String id, String text) {
+   public Example(String id, String text) {
       this.text = text;
       this.id = id;
    }
 
-   String getText() {
+   public String getText() {
       return text;
    }
 
-   String getId() {
+   public String getId() {
       return id;
    }
 
-   void setText(String text) {
+   public void setText(String text) {
       this.text = text;
    }
 }

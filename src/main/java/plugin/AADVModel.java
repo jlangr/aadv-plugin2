@@ -51,4 +51,15 @@ public class AADVModel {
          throw new ExampleNotFoundException();
       return result.get();
    }
+
+   public void deleteExample(String id) {
+      var iterator = examples.iterator();
+      while (iterator.hasNext()) {
+         var example = iterator.next();
+         if (example.getId().equals(id)) {
+            iterator.remove();
+            break;
+         }
+      }
+   }
 }

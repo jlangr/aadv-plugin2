@@ -1,6 +1,5 @@
 package ui;
 
-import com.intellij.ui.components.JBScrollPane;
 import utils.UI;
 
 import javax.swing.*;
@@ -16,14 +15,17 @@ public class ExamplePanel extends JPanel {
    private final ExampleListener exampleListener;
    private JTextArea exampleField;
    private JButton addExampleButton;
+   private JButton deleteExampleButton;
 
    public ExamplePanel(ExampleListener exampleListener) {
       this.exampleListener = exampleListener;
 
+      setName(UUID.randomUUID().toString());
+      System.out.println("in ctor for Example panel; name: " + getName());
+
       createExampleField();
       createAddExampleButton();
-
-      setName(UUID.randomUUID().toString());
+      createDeleteExampleButton();
 
       setLayout(new GridBagLayout());
       var constraints = new GridBagConstraints();
@@ -44,11 +46,28 @@ public class ExamplePanel extends JPanel {
       constraints.gridwidth = 1;
       constraints.fill = GridBagConstraints.NONE;
       add(addExampleButton, constraints);
+
+      constraints.gridx = 2;
+      constraints.gridy = 0;
+      constraints.weightx = 0.0;
+      constraints.gridwidth = 1;
+      constraints.fill = GridBagConstraints.NONE;
+      add(deleteExampleButton, constraints);
+   }
+
+   private void createDeleteExampleButton() {
+      deleteExampleButton = new JButton(MSG_ADD);
+      deleteExampleButton.addActionListener( e -> exampleListener.delete(getName()));
+      deleteExampleButton.setEnabled(hasText());
+      setButtonHeight(deleteExampleButton);
    }
 
    private void createAddExampleButton() {
       addExampleButton = new JButton(MSG_ADD);
-      addExampleButton.addActionListener( e -> exampleListener.add(exampleField.getText(), getName()));
+      addExampleButton.addActionListener( e -> {
+         System.out.println("ExamplePanel::actionListener called " + getName());
+         exampleListener.add(exampleField.getText(), getName());
+      });
       addExampleButton.setEnabled(hasText());
       setButtonHeight(addExampleButton);
    }
@@ -68,5 +87,9 @@ public class ExamplePanel extends JPanel {
 
    int preferredHeight() {
       return UI.calculatePreferredHeight(exampleField, 5);
+   }
+
+   public void setText(String text) {
+      exampleField.setText(text);
    }
 }
