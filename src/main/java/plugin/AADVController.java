@@ -10,16 +10,15 @@ import ui.SendPromptListener;
 import ui.SourcePanel;
 import ui.SourcePanelListener;
 import utils.idea.IDEAEditor;
-
 import javax.swing.*;
-import java.awt.*;
 
 public class AADVController implements SendPromptListener, SourcePanelListener {
    private final Project project;
    private final AADVPanel view;
 
-   private OpenAIClient openAIClient = new StubOpenAIClient(); // TODO change to prod
-//   private OpenAIClient openAIClient = new OpenAIClient();
+   private OpenAIClient openAIClient
+      = new StubOpenAIClient(); // TODO change to prod
+//      = new OpenAIClient();
    private AADVModel model = new AADVModel();
 
    public AADVController(Project project) {
