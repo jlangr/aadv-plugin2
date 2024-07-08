@@ -4,7 +4,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.util.function.Consumer;
 
-class JTextAreaDocumentListener implements DocumentListener {
+public class JTextAreaDocumentListener implements DocumentListener {
    private final Consumer<DocumentEvent> callback;
 
    public JTextAreaDocumentListener(Consumer<DocumentEvent> callback) {

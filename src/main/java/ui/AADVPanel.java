@@ -2,7 +2,6 @@ package ui;
 
 import com.intellij.openapi.ui.Messages;
 import com.intellij.ui.components.JBScrollPane;
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -26,6 +25,8 @@ public class AADVPanel extends JPanel {
       contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
 
       contentPanel.add(new PromptPanel(sendPromptListener));
+
+      contentPanel.add(new ExamplesPanel());
 
       addScrollBar();
 

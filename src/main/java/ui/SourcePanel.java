@@ -7,7 +7,6 @@ import javax.swing.*;
 import java.awt.*;
 
 public class SourcePanel extends JPanel {
-   public static final String UPDATE_SOURCEBASE_WITH_CODE = "Apply";
    public static final String CHIP_TEXT_PROD = "prod";
    public static final String CHIP_TEXT_TEST = "test";
    private static final String MSG_TIP_APPLY_SOURCE = "Apply generated code to project";

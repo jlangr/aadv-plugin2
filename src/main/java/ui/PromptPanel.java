@@ -1,6 +1,8 @@
 package ui;
 
 import com.intellij.ui.components.JBScrollPane;
+import utils.UI;
+
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
@@ -38,16 +40,10 @@ public class PromptPanel extends JPanel {
       constraints.fill = GridBagConstraints.NONE;
       add(promptButton, constraints);
 
-      var preferredHeight = calculatePreferredHeight();
+      var preferredHeight = UI.calculatePreferredHeight(promptField, PROMPT_FIELD_LINE_COUNT);
       setPreferredSize(new Dimension(400, preferredHeight));
       setMinimumSize(new Dimension(400, preferredHeight));
       setMaximumSize(new Dimension(Integer.MAX_VALUE, preferredHeight));
-   }
-
-   private int calculatePreferredHeight() {
-      var metrics = promptField.getFontMetrics(promptField.getFont());
-      return metrics.getHeight() * PROMPT_FIELD_LINE_COUNT
-         + promptField.getInsets().top + promptField.getInsets().bottom;
    }
 
    private void createPromptField() {
