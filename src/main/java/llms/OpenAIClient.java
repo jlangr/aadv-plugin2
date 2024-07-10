@@ -1,34 +1,65 @@
 package llms;
 
 import plugin.AADVPluginSettings;
+import plugin.Example;
 import utils.Http;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
+import static java.lang.String.format;
+import static java.util.stream.Collectors.joining;
 
 public class OpenAIClient {
    static final String API_URL = "https://api.openai.com/v1/chat/completions";
+   static final String PROMPT_OVERVIEW = "Generate JUnit test class(es) and production Java code for the solution. " +
+      "In output, begin each code listing with a header in either the form:\n/* test class TestFileName.java */\nor:\n/* prod class ProdFileName.java */\nEnd each code listing with a footer, either:\n/* end test class */\nor:\n/* end prod class */. Substitute the real file name for TestFileName and ProdFileName. ";
+   static final String PROMPT_ASSISTANT_GUIDELINES = "You're a Java programming assistant. When asked to generate solution code, include only code. Don't include any explanation. Don't include comments in any code.";
+   static final String PROMPT_TEXT = "Generate code for this:";
+   static final String PROMPT_EXAMPLES = "Examples:";
 
    Http http = new Http();
 
    record Message(String role, String content) {}
 
-   public Files retrieveCompletion(String prompt) {
+   public Files retrieveCompletion(String prompt, List<Example> examples) {
       var apiKey = new AADVPluginSettings().retrieveAPIKey();
-      var requestBody = createRequestBody(prompt);
+      var requestBody = createRequestBody(prompt, examples);
       var request = http.createPostRequest(requestBody, apiKey, API_URL);
       var completion = (ChatCompletionResponse)http.send(request);
       return new CodeResponseSplitter().split(completion.firstMessageContent());
    }
 
-   private HashMap<Object, Object> createRequestBody(String prompt) {
+   private HashMap<Object, Object> createRequestBody(String prompt, List<Example> examples) {
       var requestBody = new HashMap<>();
       requestBody.put("model", "gpt-4o");
-      requestBody.put("messages", new Message[] {
-         new Message("system", "You're a Java programming assistant. When asked to generate solution code, include only code. Don't include any explanation. Don't include comments in any code."),
-         new Message("user", "Generate JUnit test class(es) and production Java code for the solution. " +
-         "In output, begin each code listing with a header in either the form:\n/* test class TestFileName.java */\nor:\n/* prod class ProdFileName.java */\nEnd each code listing with a footer, either:\n/* end test class */\nor:\n/* end prod class */. Substitute the real file name for TestFileName and ProdFileName. Generate code for this:" +
-            prompt),
-      });
+      requestBody.put("messages", createRequestMessages(prompt, examples));
       requestBody.put("max_tokens", 4096);
       return requestBody;
+   }
+
+   private Message[] createRequestMessages(String prompt, List<Example> examples) {
+      List<Message> messages = new ArrayList<>();
+      messages.add(new Message("system", PROMPT_ASSISTANT_GUIDELINES));
+      messages.add(new Message("user", generatePrompt(prompt, examples)));
+      return messages.toArray(new Message[0]);
+   }
+
+   private String generatePrompt(String prompt, List<Example> examples) {
+      var examplesText = examples.stream()
+         .map(Example::getText)
+         .collect(joining("\n---\n"));
+
+      var builder = new StringBuilder();
+      builder.append(format("%n%s%n", PROMPT_OVERVIEW));
+      builder.append(format("%n%s%n", PROMPT_TEXT));
+      builder.append(prompt);
+      builder.append(format("%n%s%n", PROMPT_EXAMPLES));
+      builder.append(format("%n%s%n", examplesText));
+
+      var result = builder.toString();
+      System.out.println("PROMPT: " + result);
+      return result;
    }
 }

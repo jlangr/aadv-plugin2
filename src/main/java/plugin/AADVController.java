@@ -16,8 +16,8 @@ public class AADVController implements SendPromptListener, SourcePanelListener, 
    private final AADVOutputPanel outputView;
 
    private OpenAIClient openAIClient
-      = new StubOpenAIClient(); // TODO change to prod
-//      = new OpenAIClient();
+//      = new StubOpenAIClient(); // TODO change to prod
+      = new OpenAIClient();
    AADVModel model = new AADVModel();
    private IDEAEditor ide = new IDEAEditor();
 
@@ -47,13 +47,15 @@ public class AADVController implements SendPromptListener, SourcePanelListener, 
 
    @Override
    public void send(String text) {
+      System.out.println("SENDING MESSAGE!");
       var apiKey = new AADVPluginSettings().retrieveAPIKey();
       if (apiKey == null) {
          promptView.showMessage(AADVPromptPanel.MSG_KEY_NOT_CONFIGURED);
          return;
       }
+      System.out.println("EXAMPLES: " + model.getExamples());
 
-      var files = openAIClient.retrieveCompletion(text);
+      var files = openAIClient.retrieveCompletion(text, model.getExamples());
 
       updateSourcePanels(files);
    }
