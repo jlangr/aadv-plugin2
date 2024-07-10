@@ -50,16 +50,6 @@ public class AADVPromptPanel extends JPanel {
       add(scrollPane, BorderLayout.CENTER);
    }
 
-   public void addSourcePanel(SourcePanel panel) {
-      contentPanel.add(panel);
-      refresh();
-   }
-
-   public void removeSourcePanel(SourcePanel panel) {
-      contentPanel.remove(panel);
-      refresh();
-   }
-
    private void refresh() {
       contentPanel.revalidate();
       contentPanel.repaint();
@@ -75,6 +65,5 @@ public class AADVPromptPanel extends JPanel {
 
    public void refreshExamples(List<Example> examples) {
       examplesPanel.refreshExamples(examples);
-
    }
 }

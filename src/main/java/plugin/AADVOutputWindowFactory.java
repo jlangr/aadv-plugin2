@@ -8,7 +8,7 @@ import com.intellij.ui.content.ContentFactory;
 public class AADVOutputWindowFactory implements ToolWindowFactory {
    @Override
    public void createToolWindowContent(Project project, ToolWindow toolWindow) {
-      var controller = new AADVController(project);
+      var controller = AADVController.get(project);
 
       var contentFactory = ContentFactory.getInstance();
       var content = contentFactory.createContent(controller.getOutputView(), "", false);

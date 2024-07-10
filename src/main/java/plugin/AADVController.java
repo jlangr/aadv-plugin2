@@ -10,6 +10,7 @@ import utils.idea.IDEAEditor;
 import javax.swing.*;
 
 public class AADVController implements SendPromptListener, SourcePanelListener, ExampleListener {
+   private static AADVController controller = null;
    private final Project project;
    private final AADVPromptPanel promptView;
    private final AADVOutputPanel outputView;
@@ -19,10 +20,16 @@ public class AADVController implements SendPromptListener, SourcePanelListener, 
 //      = new OpenAIClient();
    private AADVModel model = new AADVModel();
 
-   public AADVController(Project project) {
+   private AADVController(Project project) {
       this.project = project;
       this.promptView = new AADVPromptPanel(this, this);
       this.outputView = new AADVOutputPanel();
+   }
+
+   public static synchronized AADVController get(Project project) {
+      if (controller == null)
+         controller = new AADVController(project);
+      return controller;
    }
 
    public JComponent getOutputView() {
@@ -62,7 +69,7 @@ public class AADVController implements SendPromptListener, SourcePanelListener, 
    @Override
    public void delete(SourceFile sourceFile) {
       var panel = model.getPanel(sourceFile).get();
-      promptView.removeSourcePanel(panel);
+      outputView.removeSourcePanel(panel);
       model.remove(panel);
    }
 
@@ -73,7 +80,7 @@ public class AADVController implements SendPromptListener, SourcePanelListener, 
       else {
          var panel = new SourcePanel(sourceFile, this);
          model.add(panel);
-         promptView.addSourcePanel(panel);
+         outputView.addSourcePanel(panel);
       }
    }
 
