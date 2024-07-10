@@ -66,7 +66,7 @@ public class ExamplePanel extends JPanel {
       addExampleButton = new JButton(MSG_ADD);
       addExampleButton.addActionListener( e -> {
          System.out.println("ExamplePanel::actionListener called " + getName());
-         exampleListener.add(exampleField.getText(), getName());
+         exampleListener.add(getName(), exampleField.getText());
       });
       addExampleButton.setEnabled(hasText());
       setButtonHeight(addExampleButton);

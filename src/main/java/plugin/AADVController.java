@@ -12,18 +12,23 @@ import javax.swing.*;
 public class AADVController implements SendPromptListener, SourcePanelListener, ExampleListener {
    private static AADVController controller = null;
    private final Project project;
-   private final AADVPromptPanel promptView;
+   private AADVPromptPanel promptView;
    private final AADVOutputPanel outputView;
 
    private OpenAIClient openAIClient
       = new StubOpenAIClient(); // TODO change to prod
 //      = new OpenAIClient();
-   private AADVModel model = new AADVModel();
+   AADVModel model = new AADVModel();
+   private IDEAEditor ide = new IDEAEditor();
 
    private AADVController(Project project) {
       this.project = project;
       this.promptView = new AADVPromptPanel(this, this);
       this.outputView = new AADVOutputPanel();
+   }
+
+   public static void reset() {
+      controller = null;
    }
 
    public static synchronized AADVController get(Project project) {
@@ -60,19 +65,6 @@ public class AADVController implements SendPromptListener, SourcePanelListener, 
          .forEach(file -> upsertSourcePanel(file));
    }
 
-   // source panel listener methods:
-   @Override
-   public void update(SourceFile sourceFile) {
-      new IDEAEditor().replaceEditorContent(project, sourceFile);
-   }
-
-   @Override
-   public void delete(SourceFile sourceFile) {
-      var panel = model.getPanel(sourceFile).get();
-      outputView.removeSourcePanel(panel);
-      model.remove(panel);
-   }
-
    private void upsertSourcePanel(SourceFile sourceFile) {
       var existingPanel = model.getPanel(sourceFile);
       if (existingPanel.isPresent())
@@ -84,10 +76,22 @@ public class AADVController implements SendPromptListener, SourcePanelListener, 
       }
    }
 
+   // source panel listener methods:
+   @Override
+   public void applySourceToIDE(SourceFile sourceFile) {
+      ide.replaceEditorContent(project, sourceFile);
+   }
+
+   @Override
+   public void delete(SourceFile sourceFile) {
+      var panel = model.getPanel(sourceFile).get();
+      outputView.removeSourcePanel(panel);
+      model.remove(panel);
+   }
+
    // example listener methods
    @Override
-   public void add(String text, String panelName) {
-      System.out.println("adding " + panelName + " from model");
+   public void add(String panelName, String text) {
       model.addExample(panelName, text);
       promptView.refreshExamples(model.getExamples());
    }
@@ -96,5 +100,13 @@ public class AADVController implements SendPromptListener, SourcePanelListener, 
    public void delete(String panelName) {
       model.deleteExample(panelName);
       promptView.refreshExamples(model.getExamples());
+   }
+
+   public void setPromptView(AADVPromptPanel panel) {
+      this.promptView = panel;
+   }
+
+   public void setModel(AADVModel model) {
+      this.model = model;
    }
 }
