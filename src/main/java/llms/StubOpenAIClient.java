@@ -8,7 +8,7 @@ import static llms.SampleSourceFiles.*;
 
 public class StubOpenAIClient extends OpenAIClient {
    @Override
-   public Files retrieveCompletion(String prompt, List<Example> examples) {
+   public Files retrieveCompletion(String prompt, ExampleList examples) {
       return new Files(
          List.of(
             new SourceFile(PROD, fizzBuzzProdSource, "FizzBuzz.java"),

@@ -52,7 +52,7 @@ public class AADVController implements SendPromptListener, SourcePanelListener, 
       }
       System.out.println("EXAMPLES: " + model.getExamples());
 
-      var files = openAIClient.retrieveCompletion(text, model.getExamples());
+      var files = openAIClient.retrieveCompletion(text, model.getExampleList());
 
       updateSourcePanels(files);
    }

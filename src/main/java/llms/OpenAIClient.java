@@ -5,7 +5,6 @@ import utils.Http;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import static java.lang.String.format;
 import static java.util.stream.Collectors.joining;
@@ -22,7 +21,7 @@ public class OpenAIClient {
 
    Http http = new Http();
 
-   public Files retrieveCompletion(String prompt, List<Example> examples) {
+   public Files retrieveCompletion(String prompt, ExampleList examples) {
       var apiKey = new AADVPluginSettings().retrieveAPIKey();
       var requestBody = createRequestBody(prompt, examples);
       var request = http.createPostRequest(requestBody, apiKey, API_URL);
@@ -30,7 +29,7 @@ public class OpenAIClient {
       return new CodeResponseSplitter().split(completion.firstMessageContent());
    }
 
-   private HashMap<Object, Object> createRequestBody(String prompt, List<Example> examples) {
+   private HashMap<Object, Object> createRequestBody(String prompt, ExampleList examples) {
       var requestBody = new HashMap<>();
       requestBody.put("model", "gpt-4o");
       requestBody.put("messages", createRequestMessages(prompt, examples));
@@ -38,15 +37,15 @@ public class OpenAIClient {
       return requestBody;
    }
 
-   Message[] createRequestMessages(String prompt, List<Example> examples) {
+   Message[] createRequestMessages(String prompt, ExampleList examples) {
       var messages = new ArrayList<Message>();
       messages.add(new Message(MESSAGE_TYPE_SYSTEM, PROMPT_ASSISTANT_GUIDELINES));
       messages.add(new Message(MESSAGE_ROLE_USER, generatePrompt(prompt, examples)));
       return messages.toArray(new Message[0]);
    }
 
-   private String generatePrompt(String prompt, List<Example> examples) {
-       return getString(prompt, concatenateExamples(examples));
+   private String generatePrompt(String prompt, ExampleList examples) {
+       return getString(prompt, examples.concatenateExamples());
    }
 
    private String getString(String prompt, String examplesText) {
@@ -57,11 +56,5 @@ public class OpenAIClient {
       builder.append(format("%n%s%n", PROMPT_EXAMPLES));
       builder.append(format("%n%s%n", examplesText));
       return builder.toString();
-   }
-
-   String concatenateExamples(List<Example> examples) {
-       return examples.stream()
-          .map(Example::getText)
-          .collect(joining("\n---\n"));
    }
 }

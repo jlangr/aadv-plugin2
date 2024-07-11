@@ -2,6 +2,7 @@ package plugin;
 
 import llms.AADVModel;
 import llms.Example;
+import llms.ExampleList;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -26,11 +27,13 @@ class AnAADVController {
       AADVPromptPanel promptView = mock(AADVPromptPanel.class);
       AADVModel model = mock(AADVModel.class);
       static final Example ABC_EXAMPLE = new Example("abc", "ABC panel");
+      ExampleList examples = new ExampleList();
 
       @BeforeEach
       void setup() {
          controller.setPromptView(promptView);
          controller.setModel(model);
+         examples.add(ABC_EXAMPLE.getId(), ABC_EXAMPLE.getText());
       }
 
       @AfterEach
@@ -54,19 +57,21 @@ class AnAADVController {
 
       @Test
       void refreshesPromptViewOnAdd() {
-         when(model.getExamples()).thenReturn(List.of(ABC_EXAMPLE));
+         when(model.getExamples()).thenReturn(examples.getAll());
 
          controller.add(ABC_EXAMPLE.getId(), ABC_EXAMPLE.getText());
 
+         // TODO
          verify(promptView).refreshExamples(List.of(ABC_EXAMPLE));
       }
 
       @Test
       void refreshesPromptViewOnDelete() {
-         when(model.getExamples()).thenReturn(List.of(ABC_EXAMPLE));
+         when(model.getExamples()).thenReturn(examples.getAll());
 
          controller.delete(ABC_EXAMPLE.getId());
 
+         // TODO
          verify(promptView).refreshExamples(List.of(ABC_EXAMPLE));
       }
    }

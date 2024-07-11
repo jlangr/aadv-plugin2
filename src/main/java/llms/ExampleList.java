@@ -3,6 +3,8 @@ package llms;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.stream.Collectors.joining;
+
 public class ExampleList {
    private List<Example> examples = new ArrayList<>();
 
@@ -37,5 +39,12 @@ public class ExampleList {
    public void update(String id, String text) {
       var example = get(id);
       example.setText(text);
+   }
+
+   // TODO test
+   String concatenateExamples() {
+       return getAll().stream()
+          .map(Example::getText)
+          .collect(joining("\n---\n"));
    }
 }

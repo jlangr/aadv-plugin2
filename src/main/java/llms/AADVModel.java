@@ -33,6 +33,10 @@ public class AADVModel {
       exampleList.add(id, text);
    }
 
+   public ExampleList getExampleList() {
+      return exampleList;
+   }
+
    public List<Example> getExamples() {
       return exampleList.getAll();
    }
