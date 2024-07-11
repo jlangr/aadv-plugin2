@@ -1,6 +1,6 @@
 package llms;
 
-import plugin.AADVPluginSettings;
+import plugin.Example;
 
 import java.util.List;
 
@@ -10,8 +10,7 @@ import static llms.SampleSourceFiles.*;
 
 public class StubOpenAIClient extends OpenAIClient {
    @Override
-   public Files retrieveCompletion(String prompt) {
-
+   public Files retrieveCompletion(String prompt, List<Example> examples) {
       return new Files(
          List.of(
             new SourceFile(PROD, fizzBuzzProdSource, "FizzBuzz.java"),

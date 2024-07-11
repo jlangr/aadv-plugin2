@@ -51,7 +51,7 @@ public class SourcePanel extends JPanel {
 
    private JButton createUpdateButton() {
       var button = createIconButton("right.png", MSG_TIP_APPLY_SOURCE);
-      button.addActionListener(e -> sourcePanelListener.update(sourceFile));
+      button.addActionListener(e -> sourcePanelListener.applySourceToIDE(sourceFile));
       return button;
    }
 

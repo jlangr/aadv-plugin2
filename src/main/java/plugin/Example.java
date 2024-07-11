@@ -19,6 +19,11 @@ public class Example {
       return Objects.hashCode(id);
    }
 
+   @Override
+   public String toString() {
+      return "[Example; id=" + id + ", text=" + text + "]";
+   }
+
    public Example(String id, String text) {
       this.text = text;
       this.id = id;

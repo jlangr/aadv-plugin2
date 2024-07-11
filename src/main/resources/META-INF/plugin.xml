@@ -20,14 +20,16 @@
 
     <!-- https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow id="AADV" factoryClass="plugin.AADVToolWindowFactory" anchor="left"/>
+        <toolWindow id="AADVPrompt" factoryClass="plugin.AADVPromptWindowFactory" anchor="left"/>
+        <toolWindow id="AADVOutput" factoryClass="plugin.AADVOutputWindowFactory" anchor="right"/>
         <projectConfigurable instance="plugin.OpenAIConfigurable"/>
     </extensions>
 
     <actions>
         <group id="AADVPluginMenu" text="AADV" description="AADV plugin actions" >
             <add-to-group group-id="ToolsMenu" anchor="last"/>
-            <action id="AADVPluginAction" class="plugin.AADVPluginAction" text="AADV Helper" description="AADV"/>
+            <action id="AADVPluginAction" class="plugin.AADVPluginAction" text="Prompt" description="Enter and send prompt and examples"/>
+            <action id="AADVPluginOutputAction" class="plugin.AADVPluginOutputAction" text="Output" description="Source files generated"/>
         </group>
     </actions>
 

@@ -1,6 +1,6 @@
 package ui;
 
 public interface ExampleListener {
-   void add(String text, String panelName);
+   void add(String panelName, String text);
    void delete(String name);
 }

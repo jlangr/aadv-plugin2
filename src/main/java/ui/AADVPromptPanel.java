@@ -8,7 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-public class AADVPanel extends JPanel {
+public class AADVPromptPanel extends JPanel {
    public static final String MSG_KEY_NOT_CONFIGURED =
       "API key not configured. Please provide it in the AADV plugin settings.";
    private final SendPromptListener sendPromptListener;
@@ -17,7 +17,7 @@ public class AADVPanel extends JPanel {
    private ExampleListener exampleListener;
    private ExamplesPanel examplesPanel;
 
-   public AADVPanel(SendPromptListener sendPromptListener, ExampleListener exampleListener) {
+   public AADVPromptPanel(SendPromptListener sendPromptListener, ExampleListener exampleListener) {
       this.sendPromptListener = sendPromptListener;
       this.exampleListener = exampleListener;
       layOut();
@@ -50,16 +50,6 @@ public class AADVPanel extends JPanel {
       add(scrollPane, BorderLayout.CENTER);
    }
 
-   public void addSourcePanel(SourcePanel panel) {
-      contentPanel.add(panel);
-      refresh();
-   }
-
-   public void removeSourcePanel(SourcePanel panel) {
-      contentPanel.remove(panel);
-      refresh();
-   }
-
    private void refresh() {
       contentPanel.revalidate();
       contentPanel.repaint();
@@ -75,6 +65,5 @@ public class AADVPanel extends JPanel {
 
    public void refreshExamples(List<Example> examples) {
       examplesPanel.refreshExamples(examples);
-
    }
 }

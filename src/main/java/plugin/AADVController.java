@@ -10,32 +10,52 @@ import utils.idea.IDEAEditor;
 import javax.swing.*;
 
 public class AADVController implements SendPromptListener, SourcePanelListener, ExampleListener {
+   private static AADVController controller = null;
    private final Project project;
-   private final AADVPanel view;
+   private AADVPromptPanel promptView;
+   private final AADVOutputPanel outputView;
 
    private OpenAIClient openAIClient
-      = new StubOpenAIClient(); // TODO change to prod
-//      = new OpenAIClient();
-   private AADVModel model = new AADVModel();
+//      = new StubOpenAIClient(); // TODO change to prod
+      = new OpenAIClient();
+   AADVModel model = new AADVModel();
+   private IDEAEditor ide = new IDEAEditor();
 
-   public AADVController(Project project) {
+   private AADVController(Project project) {
       this.project = project;
-      this.view = new AADVPanel(this, this);
+      this.promptView = new AADVPromptPanel(this, this);
+      this.outputView = new AADVOutputPanel();
    }
 
-   public JComponent getComponent() {
-      return view;
+   public static void reset() {
+      controller = null;
+   }
+
+   public static synchronized AADVController get(Project project) {
+      if (controller == null)
+         controller = new AADVController(project);
+      return controller;
+   }
+
+   public JComponent getOutputView() {
+      return outputView;
+   }
+
+   public JComponent getPromptView() {
+      return promptView;
    }
 
    @Override
    public void send(String text) {
+      System.out.println("SENDING MESSAGE!");
       var apiKey = new AADVPluginSettings().retrieveAPIKey();
       if (apiKey == null) {
-         view.showMessage(AADVPanel.MSG_KEY_NOT_CONFIGURED);
+         promptView.showMessage(AADVPromptPanel.MSG_KEY_NOT_CONFIGURED);
          return;
       }
+      System.out.println("EXAMPLES: " + model.getExamples());
 
-      var files = openAIClient.retrieveCompletion(text);
+      var files = openAIClient.retrieveCompletion(text, model.getExamples());
 
       updateSourcePanels(files);
    }
@@ -47,19 +67,6 @@ public class AADVController implements SendPromptListener, SourcePanelListener, 
          .forEach(file -> upsertSourcePanel(file));
    }
 
-   // source panel listener methods:
-   @Override
-   public void update(SourceFile sourceFile) {
-      new IDEAEditor().replaceEditorContent(project, sourceFile);
-   }
-
-   @Override
-   public void delete(SourceFile sourceFile) {
-      var panel = model.getPanel(sourceFile).get();
-      view.removeSourcePanel(panel);
-      model.remove(panel);
-   }
-
    private void upsertSourcePanel(SourceFile sourceFile) {
       var existingPanel = model.getPanel(sourceFile);
       if (existingPanel.isPresent())
@@ -67,21 +74,41 @@ public class AADVController implements SendPromptListener, SourcePanelListener, 
       else {
          var panel = new SourcePanel(sourceFile, this);
          model.add(panel);
-         view.addSourcePanel(panel);
+         outputView.addSourcePanel(panel);
       }
+   }
+
+   // source panel listener methods:
+   @Override
+   public void applySourceToIDE(SourceFile sourceFile) {
+      ide.replaceEditorContent(project, sourceFile);
+   }
+
+   @Override
+   public void delete(SourceFile sourceFile) {
+      var panel = model.getPanel(sourceFile).get();
+      outputView.removeSourcePanel(panel);
+      model.remove(panel);
    }
 
    // example listener methods
    @Override
-   public void add(String text, String panelName) {
-      System.out.println("adding " + panelName + " from model");
+   public void add(String panelName, String text) {
       model.addExample(panelName, text);
-      view.refreshExamples(model.getExamples());
+      promptView.refreshExamples(model.getExamples());
    }
 
    @Override
    public void delete(String panelName) {
       model.deleteExample(panelName);
-      view.refreshExamples(model.getExamples());
+      promptView.refreshExamples(model.getExamples());
+   }
+
+   public void setPromptView(AADVPromptPanel panel) {
+      this.promptView = panel;
+   }
+
+   public void setModel(AADVModel model) {
+      this.model = model;
    }
 }

@@ -6,13 +6,13 @@ import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
 import com.intellij.ui.content.ContentFactory;
 
-public class AADVToolWindowFactory implements ToolWindowFactory, DumbAware {
+public class AADVPromptWindowFactory implements ToolWindowFactory, DumbAware {
    @Override
    public void createToolWindowContent(Project project, ToolWindow toolWindow) {
-      var controller = new AADVController(project);
+      var controller = AADVController.get(project);
 
       var contentFactory = ContentFactory.getInstance();
-      var content = contentFactory.createContent(controller.getComponent(), "AADV Helper", false);
+      var content = contentFactory.createContent(controller.getPromptView(), "", false);
       toolWindow.getContentManager().addContent(content);
    }
 }
