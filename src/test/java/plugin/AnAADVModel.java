@@ -1,5 +1,6 @@
 package plugin;
 
+import llms.AADVModel;
 import llms.Example;
 import llms.ExampleNotFoundException;
 import org.junit.jupiter.api.Test;
@@ -33,7 +34,7 @@ class AnAADVModel {
 
       model.updateExample("123", "smelt");
 
-      assertEquals(model.getExampleText("123"), "smelt");
+      assertEquals(model.getExample("123").getText(), "smelt");
    }
 
    @Test

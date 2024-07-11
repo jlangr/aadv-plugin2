@@ -1,10 +1,7 @@
 package plugin;
 
 import com.intellij.openapi.project.Project;
-import llms.Files;
-import llms.OpenAIClient;
-import llms.SourceFile;
-import llms.StubOpenAIClient;
+import llms.*;
 import ui.*;
 import utils.idea.IDEAEditor;
 import javax.swing.*;
