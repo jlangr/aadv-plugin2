@@ -55,4 +55,11 @@ public class Example {
    public String getName() {
       return name;
    }
+
+   String toPromptString() {
+      var builder = new StringBuilder();
+      if (name != null && !name.isEmpty()) builder.append("Example: " + name + "\n");
+      builder.append(text);
+      return builder.toString();
+   }
 }

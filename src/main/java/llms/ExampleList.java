@@ -3,10 +3,17 @@ package llms;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
 
 public class ExampleList {
    private List<Example> examples = new ArrayList<>();
+
+   public ExampleList() {}
+
+   public ExampleList(Example... examples) {
+      this.examples.addAll(asList(examples));
+   }
 
    public void add(String id, String text) {
       examples.add(new Example(id, text));
@@ -41,10 +48,9 @@ public class ExampleList {
       example.setText(text);
    }
 
-   // TODO test
-   String concatenateExamples() {
+   String concatenate() {
        return getAll().stream()
-          .map(Example::getText)
+          .map(Example::toPromptString)
           .collect(joining("\n---\n"));
    }
 }

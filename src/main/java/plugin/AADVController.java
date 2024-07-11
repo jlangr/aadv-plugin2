@@ -44,13 +44,11 @@ public class AADVController implements SendPromptListener, SourcePanelListener, 
 
    @Override
    public void send(String text) {
-      System.out.println("SENDING MESSAGE!");
       var apiKey = new AADVPluginSettings().retrieveAPIKey();
       if (apiKey == null) {
          promptView.showMessage(AADVPromptPanel.MSG_KEY_NOT_CONFIGURED);
          return;
       }
-      System.out.println("EXAMPLES: " + model.getExamples());
 
       var files = openAIClient.retrieveCompletion(text, model.getExampleList());
 
