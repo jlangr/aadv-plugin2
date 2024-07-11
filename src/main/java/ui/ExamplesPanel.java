@@ -1,6 +1,6 @@
 package ui;
 
-import plugin.Example;
+import llms.Example;
 
 import javax.swing.*;
 import java.awt.*;

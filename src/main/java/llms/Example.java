@@ -1,9 +1,11 @@
-package plugin;
+package llms;
 
 import java.util.Objects;
 
 public class Example {
+   private String name;
    private String text;
+   private ExampleState state;
    private final String id;
 
    @Override
@@ -24,13 +26,14 @@ public class Example {
       return "[Example; id=" + id + ", text=" + text + "]";
    }
 
-   public Example(String id, String text) {
+   public Example(String id, String text, String name) {
       this.text = text;
       this.id = id;
+      this.name = name;
    }
 
-   public String getText() {
-      return text;
+   public Example(String id, String text) {
+      this(id, text, "");
    }
 
    public String getId() {
@@ -39,5 +42,17 @@ public class Example {
 
    public void setText(String text) {
       this.text = text;
+   }
+
+   public String getText() {
+      return text;
+   }
+
+   public void setName(String name) {
+      this.name = name;
+   }
+
+   public String getName() {
+      return name;
    }
 }

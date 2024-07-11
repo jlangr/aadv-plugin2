@@ -1,5 +1,7 @@
 package plugin;
 
+import llms.Example;
+import llms.ExampleNotFoundException;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

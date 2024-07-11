@@ -2,7 +2,7 @@ package ui;
 
 import com.intellij.openapi.ui.Messages;
 import com.intellij.ui.components.JBScrollPane;
-import plugin.Example;
+import llms.Example;
 
 import javax.swing.*;
 import java.awt.*;

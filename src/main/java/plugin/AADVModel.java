@@ -1,5 +1,7 @@
 package plugin;
 
+import llms.Example;
+import llms.ExampleNotFoundException;
 import llms.SourceFile;
 import ui.SourcePanel;
 import java.util.ArrayList;

@@ -1,7 +1,6 @@
 package llms;
 
 import plugin.AADVPluginSettings;
-import plugin.Example;
 import utils.Http;
 
 import java.util.ArrayList;
@@ -12,6 +11,8 @@ import static java.lang.String.format;
 import static java.util.stream.Collectors.joining;
 
 public class OpenAIClient {
+   static final String MESSAGE_ROLE_USER = "user";
+   static final String MESSAGE_TYPE_SYSTEM = "system";
    static final String API_URL = "https://api.openai.com/v1/chat/completions";
    static final String PROMPT_OVERVIEW = "Generate JUnit test class(es) and production Java code for the solution. " +
       "In output, begin each code listing with a header in either the form:\n/* test class TestFileName.java */\nor:\n/* prod class ProdFileName.java */\nEnd each code listing with a footer, either:\n/* end test class */\nor:\n/* end prod class */. Substitute the real file name for TestFileName and ProdFileName. ";
@@ -20,8 +21,6 @@ public class OpenAIClient {
    static final String PROMPT_EXAMPLES = "Examples:";
 
    Http http = new Http();
-
-   record Message(String role, String content) {}
 
    public Files retrieveCompletion(String prompt, List<Example> examples) {
       var apiKey = new AADVPluginSettings().retrieveAPIKey();
@@ -39,27 +38,30 @@ public class OpenAIClient {
       return requestBody;
    }
 
-   private Message[] createRequestMessages(String prompt, List<Example> examples) {
-      List<Message> messages = new ArrayList<>();
-      messages.add(new Message("system", PROMPT_ASSISTANT_GUIDELINES));
-      messages.add(new Message("user", generatePrompt(prompt, examples)));
+   Message[] createRequestMessages(String prompt, List<Example> examples) {
+      var messages = new ArrayList<Message>();
+      messages.add(new Message(MESSAGE_TYPE_SYSTEM, PROMPT_ASSISTANT_GUIDELINES));
+      messages.add(new Message(MESSAGE_ROLE_USER, generatePrompt(prompt, examples)));
       return messages.toArray(new Message[0]);
    }
 
    private String generatePrompt(String prompt, List<Example> examples) {
-      var examplesText = examples.stream()
-         .map(Example::getText)
-         .collect(joining("\n---\n"));
+       return getString(prompt, concatenateExamples(examples));
+   }
 
+   private String getString(String prompt, String examplesText) {
       var builder = new StringBuilder();
       builder.append(format("%n%s%n", PROMPT_OVERVIEW));
       builder.append(format("%n%s%n", PROMPT_TEXT));
       builder.append(prompt);
       builder.append(format("%n%s%n", PROMPT_EXAMPLES));
       builder.append(format("%n%s%n", examplesText));
+      return builder.toString();
+   }
 
-      var result = builder.toString();
-      System.out.println("PROMPT: " + result);
-      return result;
+   String concatenateExamples(List<Example> examples) {
+       return examples.stream()
+          .map(Example::getText)
+          .collect(joining("\n---\n"));
    }
 }
