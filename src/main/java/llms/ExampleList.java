@@ -15,8 +15,8 @@ public class ExampleList {
       this.examples.addAll(asList(examples));
    }
 
-   public void add(String id, String text) {
-      examples.add(new Example(id, text));
+   public void add(String id, String name, String text) {
+      examples.add(new Example(id, text, name));
    }
 
    public List<Example> getAll() {

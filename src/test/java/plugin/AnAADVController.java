@@ -26,14 +26,14 @@ class AnAADVController {
       AADVController controller = AADVController.get(null);
       AADVPromptPanel promptView = mock(AADVPromptPanel.class);
       AADVModel model = mock(AADVModel.class);
-      static final Example ABC_EXAMPLE = new Example("abc", "ABC panel");
+      static final Example ABC_EXAMPLE = new Example("abc", "ABC name", "ABC text");
       ExampleList examples = new ExampleList();
 
       @BeforeEach
       void setup() {
          controller.setPromptView(promptView);
          controller.setModel(model);
-         examples.add(ABC_EXAMPLE.getId(), ABC_EXAMPLE.getText());
+         examples.add(ABC_EXAMPLE.getId(), ABC_EXAMPLE.getName(), ABC_EXAMPLE.getText());
       }
 
       @AfterEach
@@ -43,9 +43,9 @@ class AnAADVController {
 
       @Test
       void addedToModelOnAdd() {
-         controller.add(ABC_EXAMPLE.getId(), ABC_EXAMPLE.getText());
+         controller.add(ABC_EXAMPLE.getId(), ABC_EXAMPLE.getName(), ABC_EXAMPLE.getText());
 
-         verify(model).addExample(ABC_EXAMPLE.getId(), ABC_EXAMPLE.getText());
+         verify(model).addExample(ABC_EXAMPLE.getId(), ABC_EXAMPLE.getName(), ABC_EXAMPLE.getText());
       }
 
       @Test
@@ -59,7 +59,7 @@ class AnAADVController {
       void refreshesPromptViewOnAdd() {
          when(model.getExamples()).thenReturn(examples.getAll());
 
-         controller.add(ABC_EXAMPLE.getId(), ABC_EXAMPLE.getText());
+         controller.add(ABC_EXAMPLE.getId(), ABC_EXAMPLE.getText(), ABC_EXAMPLE.getText());
 
          // TODO
          verify(promptView).refreshExamples(List.of(ABC_EXAMPLE));

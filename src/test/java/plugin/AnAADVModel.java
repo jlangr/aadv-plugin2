@@ -14,12 +14,12 @@ class AnAADVModel {
 
    @Test
    void addsExamples() {
-      model.addExample("123", "hey");
-      model.addExample("345", "there");
+      model.addExample("123", "a", "hey");
+      model.addExample("345", "b", "there");
 
       assertEquals(List.of(
-            new Example("123", "hey"),
-            new Example("345", "there")),
+            new Example("123", "a", "hey"),
+            new Example("345", "b", "there")),
          model.getExamples());
    }
 
@@ -30,21 +30,21 @@ class AnAADVModel {
 
    @Test
    void updatesExampleText() {
-      model.addExample("123", "hey");
+      model.addExample("123", "a", "hey");
 
-      model.updateExample("123", "smelt");
+      model.updateExampleText("123", "smelt");
 
       assertEquals(model.getExample("123").getText(), "smelt");
    }
 
    @Test
    void deletesExample() {
-      model.addExample("123", "a");
-      model.addExample("456", "b");
+      model.addExample("123", "a name", "a");
+      model.addExample("456", "b name", "b");
 
       model.deleteExample("123");
 
       assertEquals(model.getExamples(),
-         List.of(new Example("456", "b")));
+         List.of(new Example("456", "b name", "b")));
    }
 }

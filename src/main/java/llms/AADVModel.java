@@ -25,12 +25,12 @@ public class AADVModel {
 
    // Examples
 
-   public void updateExample(String id, String text) {
+   public void updateExampleText(String id, String text) {
       exampleList.update(id, text);
    }
 
-   public void addExample(String id, String text) {
-      exampleList.add(id, text);
+   public void addExample(String id, String name, String text) {
+      exampleList.add(id, name, text);
    }
 
    public ExampleList getExampleList() {

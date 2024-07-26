@@ -13,9 +13,9 @@ class AnExampleList {
       @Test
       void withoutName() {
          examples = new ExampleList(
-            new Example("A", "text a"),
-            new Example("B", "text b"),
-            new Example("C", "text c"));
+            new Example("A", "", "text a"),
+            new Example("B", "", "text b"),
+            new Example("C", "", "text c"));
 
          var concatenated = examples.concatenate();
 
@@ -37,14 +37,14 @@ class AnExampleList {
          var concatenated = examples.concatenate();
 
          assertEquals("""
-            Example: description for a
-            text a
+            name: text a
+            description for a
             ---
-            Example: description for b
-            text b
+            name: text b
+            description for b
             ---
-            Example: description for c
-            text c""", concatenated);
+            name: text c
+            description for c""", concatenated);
       }
    }
 }

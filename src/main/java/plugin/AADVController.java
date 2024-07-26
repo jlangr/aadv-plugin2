@@ -96,14 +96,16 @@ public class AADVController implements SendPromptListener, SourcePanelListener, 
 
    // example listener methods
    @Override
-   public void add(String panelName, String text) {
-      model.addExample(panelName, text);
+   public void add(String panelName, String name, String text) {
+      model.addExample(panelName, name, text);
       promptView.refreshExamples(model.getExamples());
    }
 
    @Override
    public void delete(String panelName) {
+      System.out.println("DELETING PANEL:" + panelName);
       model.deleteExample(panelName);
+      System.out.println("UPDATED EXAMPLES: " + model.getExamples());
       promptView.refreshExamples(model.getExamples());
    }
 

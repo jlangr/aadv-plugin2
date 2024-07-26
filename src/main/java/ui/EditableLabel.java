@@ -47,6 +47,10 @@ public class EditableLabel extends JPanel {
       add(label);
    }
 
+   public String getText() {
+      return label.getText();
+   }
+
    private void showTextField() {
       removeAll();
       add(textField);

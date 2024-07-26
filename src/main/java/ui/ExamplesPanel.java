@@ -25,13 +25,13 @@ public class ExamplesPanel extends JPanel {
       frame.setSize(400, 900);
 
       var examples = new ArrayList<Example>();
-      examples.add(new Example("one", "a one"));
-      examples.add(new Example("two", "a two"));
+      examples.add(new Example("1", "one", "a one"));
+      examples.add(new Example("2", "two", "a two"));
 
       ExampleListener listener = new ExampleListener() {
          @Override
-         public void add(String panelName, String text) {
-            System.out.println("add " + panelName + " " + text);
+         public void add(String panelName, String name, String text) {
+            System.out.println("add " + panelName + " " + text + " name: " + name);
          }
 
          @Override

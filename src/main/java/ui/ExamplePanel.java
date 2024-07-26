@@ -14,10 +14,11 @@ import static javax.swing.BorderFactory.createEmptyBorder;
 public class ExamplePanel extends JPanel {
    private static final String MSG_ADD = "Add";
    private static final String MSG_DELETE = "Delete";
+   public static final String MSG_NAME_PLACEHOLDER = "[ add name ]";
    private final ExampleListener exampleListener;
    private final Example example;
    private JTextArea exampleField;
-   private EditableLabel titleLabel;
+   private EditableLabel nameLabel;
    private JButton addExampleButton;
    private JButton deleteExampleButton;
 
@@ -45,9 +46,9 @@ public class ExamplePanel extends JPanel {
       panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
       panel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-      titleLabel = new EditableLabel(example == Example.EMPTY || isEmpty(example.getName()) ? "[ add description ]" : example.getName());
-      titleLabel.setAlignmentX(LEFT_ALIGNMENT);
-      panel.add(titleLabel);
+      nameLabel = new EditableLabel(example == Example.EMPTY || isEmpty(example.getName()) ? MSG_NAME_PLACEHOLDER : example.getName());
+      nameLabel.setAlignmentX(LEFT_ALIGNMENT);
+      panel.add(nameLabel);
 
       panel.add(Box.createRigidArea(new Dimension(0, 5)));
 
@@ -86,7 +87,7 @@ public class ExamplePanel extends JPanel {
 
    private void createAddExampleButton() {
       addExampleButton = UI.createIconButton(this, "plus.png", MSG_ADD,
-         e -> exampleListener.add(getName(), exampleField.getText()));
+         e -> exampleListener.add(getName(), nameLabel.getText(), exampleField.getText()));
       addExampleButton.setEnabled(hasText());
       // TODO how to show different states enabled / disabled
    }

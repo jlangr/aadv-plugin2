@@ -5,10 +5,9 @@ import java.util.Objects;
 public class Example {
    public static final Example EMPTY = new Example("", "", "");
 
+   private final String id;
    private String name;
    private String text;
-   private ExampleState state;
-   private final String id;
 
    @Override
    public boolean equals(Object o) {
@@ -25,17 +24,13 @@ public class Example {
 
    @Override
    public String toString() {
-      return "[Example; id=" + id + ", text=" + text + "]";
+      return "[Example; id=" + id + ", name=" + name + ", text=" + text + "]";
    }
 
-   public Example(String id, String text, String name) {
-      this.text = text;
+   public Example(String id, String name, String text) {
       this.id = id;
       this.name = name;
-   }
-
-   public Example(String id, String text) {
-      this(id, text, "");
+      this.text = text;
    }
 
    public String getId() {
@@ -60,7 +55,7 @@ public class Example {
 
    String toPromptString() {
       var builder = new StringBuilder();
-      if (name != null && !name.isEmpty()) builder.append("Example: " + name + "\n");
+      if (name != null && !name.isEmpty()) builder.append("name: " + name + "\n");
       builder.append(text);
       return builder.toString();
    }
