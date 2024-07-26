@@ -17,7 +17,7 @@ public class ExamplePanel extends JPanel {
    private final ExampleListener exampleListener;
    private final Example example;
    private JTextArea exampleField;
-   private JLabel titleLabel;
+   private EditableLabel titleLabel;
    private JButton addExampleButton;
    private JButton deleteExampleButton;
 
@@ -45,7 +45,7 @@ public class ExamplePanel extends JPanel {
       panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
       panel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-      titleLabel = new JLabel(example == Example.EMPTY || isEmpty(example.getName()) ? "[ add description ]" : example.getName());
+      titleLabel = new EditableLabel(example == Example.EMPTY || isEmpty(example.getName()) ? "[ add description ]" : example.getName());
       titleLabel.setAlignmentX(LEFT_ALIGNMENT);
       panel.add(titleLabel);
 
