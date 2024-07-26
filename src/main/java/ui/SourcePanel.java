@@ -2,7 +2,7 @@ package ui;
 
 import com.intellij.ui.components.JBScrollPane;
 import llms.SourceFile;
-
+import utils.UI;
 import javax.swing.*;
 import java.awt.*;
 
@@ -50,27 +50,13 @@ public class SourcePanel extends JPanel {
    }
 
    private JButton createUpdateButton() {
-      var button = createIconButton("right.png", MSG_TIP_APPLY_SOURCE);
-      button.addActionListener(e -> sourcePanelListener.applySourceToIDE(sourceFile));
-      return button;
+      return UI.createIconButton(this, "right.png", MSG_TIP_APPLY_SOURCE,
+         e -> sourcePanelListener.applySourceToIDE(sourceFile));
    }
 
    private JButton createCloseButton() {
-      var closeButton = createIconButton("close_icon.png", MSG_CLOSE);
-      closeButton.addActionListener(e -> sourcePanelListener.delete(sourceFile));
-      return closeButton;
-   }
-
-   private JButton createIconButton(String imageFilename, String toolTipText) {
-      var icon = new ImageIcon(getClass().getResource(imageFilename));
-      var button = new JButton(icon);
-      button.setToolTipText(toolTipText);
-      button.setMargin(new Insets(0, 0, 0, 0));
-      button.setContentAreaFilled(false);
-      button.setBorderPainted(false);
-      button.setFocusPainted(false);
-      button.setPreferredSize(new Dimension(16, 16));
-      return button;
+      return UI.createIconButton(this, "close_icon.png", MSG_CLOSE,
+         e -> sourcePanelListener.delete(sourceFile));
    }
 
    private JPanel createSourceTypeChip(SourceFile sourceFile) {

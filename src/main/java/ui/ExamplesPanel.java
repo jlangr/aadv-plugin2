@@ -4,6 +4,7 @@ import llms.Example;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -11,6 +12,38 @@ public class ExamplesPanel extends JPanel {
    public static final String MSG_EXAMPLES = "Examples";
    private final ExampleListener exampleListener;
    private ExamplePanel newExamplePanel;
+
+   public static void main(String[] args) {
+      // Schedule a job for the event-dispatching thread:
+      // creating and showing this application's GUI.
+      SwingUtilities.invokeLater(() -> createAndShowGUI());
+   }
+
+   private static void createAndShowGUI() {
+      JFrame frame = new JFrame("Simple Swing Application");
+      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      frame.setSize(400, 900);
+
+      var examples = new ArrayList<Example>();
+      examples.add(new Example("one", "a one"));
+      examples.add(new Example("two", "a two"));
+
+      ExampleListener listener = new ExampleListener() {
+         @Override
+         public void add(String panelName, String text) {
+            System.out.println("add " + panelName + " " + text);
+         }
+
+         @Override
+         public void delete(String name) {
+            System.out.println("delete " + name);
+         }
+      };
+      var panel = new ExamplesPanel(listener);
+      panel.refreshExamples(examples);
+      frame.getContentPane().add(panel, BorderLayout.CENTER);
+      frame.setVisible(true);
+   }
 
    public ExamplesPanel(ExampleListener exampleListener) {
       this.exampleListener = exampleListener;
@@ -27,8 +60,7 @@ public class ExamplesPanel extends JPanel {
    }
 
    private ExamplePanel addEmptyExample() {
-      System.out.println("addEmptyExample");
-      var panel = new ExamplePanel(exampleListener);
+      var panel = new ExamplePanel(exampleListener, null);
       add(panel);
       return panel;
    }
@@ -43,7 +75,7 @@ public class ExamplesPanel extends JPanel {
 
       examples.stream()
          .forEach(example -> {
-            var panel = new ExamplePanel(exampleListener);
+            var panel = new ExamplePanel(exampleListener, example);
             panel.setText(example.getText());
             add(example.getId(), panel);
          });

@@ -1,84 +1,99 @@
 package ui;
 
+import llms.Example;
 import utils.UI;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
-
 import java.awt.*;
 import java.util.UUID;
 
-import static utils.UI.setButtonHeight;
+import static java.awt.BorderLayout.*;
+import static javax.swing.BorderFactory.createEmptyBorder;
 
 public class ExamplePanel extends JPanel {
    private static final String MSG_ADD = "Add";
+   private static final String MSG_DELETE = "Delete";
    private final ExampleListener exampleListener;
+   private final Example example;
    private JTextArea exampleField;
+   private JLabel titleLabel;
    private JButton addExampleButton;
    private JButton deleteExampleButton;
 
-   public ExamplePanel(ExampleListener exampleListener) {
+   public ExamplePanel(ExampleListener exampleListener, Example example) {
       this.exampleListener = exampleListener;
+      this.example = example;
 
       setName(UUID.randomUUID().toString());
-      System.out.println("in ctor for Example panel; name: " + getName());
 
+      setLayout(new BorderLayout());
+      add(createButtonPanel(), EAST);
+      add(createContentPanel(), CENTER);
+
+      setBorder(createEmptyBorder(5, 5, 5, 5));
+
+      int preferredHeight = calculatePreferredHeight(exampleField, 3);
+      setPreferredSize(new Dimension(400, preferredHeight));
+      setMaximumSize(new Dimension(Integer.MAX_VALUE, preferredHeight));
+   }
+
+   private JPanel createContentPanel() {
       createExampleField();
-      createAddExampleButton();
+
+      var panel = new JPanel();
+      panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+      panel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+      titleLabel = new JLabel(example == null || example.getName() == null ? "description" : example.getName());
+      titleLabel.setAlignmentX(LEFT_ALIGNMENT);
+      panel.add(titleLabel);
+
+      panel.add(Box.createRigidArea(new Dimension(0, 5)));
+
+      exampleField.setAlignmentX(LEFT_ALIGNMENT);
+      panel.add(exampleField);
+      return panel;
+   }
+
+   // dup?
+   private int calculatePreferredHeight(JTextArea textArea, int rows) {
+      var fm = textArea.getFontMetrics(textArea.getFont());
+      var rowHeight = fm.getHeight();
+      var insets = textArea.getInsets();
+      return insets.top + insets.bottom + rowHeight * rows;
+   }
+
+   private JPanel createButtonPanel() {
+      var buttonPanel = new JPanel();
+      buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+
       createDeleteExampleButton();
+      createAddExampleButton();
 
-      setLayout(new GridBagLayout());
-      var constraints = new GridBagConstraints();
-
-      constraints.fill = GridBagConstraints.BOTH;
-      constraints.insets = new Insets(5, 5, 5, 5);
-
-      constraints.gridx = 0;
-      constraints.gridy = 0;
-      constraints.weightx = 1.0;
-      constraints.weighty = 0.1;
-      constraints.gridwidth = 2;
-      add(exampleField, constraints);
-
-      constraints.gridx = 2;
-      constraints.gridy = 0;
-      constraints.weightx = 0.0;
-      constraints.gridwidth = 1;
-      constraints.fill = GridBagConstraints.NONE;
-      add(addExampleButton, constraints);
-
-      constraints.gridx = 2;
-      constraints.gridy = 0;
-      constraints.weightx = 0.0;
-      constraints.gridwidth = 1;
-      constraints.fill = GridBagConstraints.NONE;
-      add(deleteExampleButton, constraints);
+      buttonPanel.add(example == null ? addExampleButton : deleteExampleButton);
+      return buttonPanel;
    }
 
    private void createDeleteExampleButton() {
-      deleteExampleButton = new JButton(MSG_ADD);
-      deleteExampleButton.addActionListener( e -> exampleListener.delete(getName()));
-      deleteExampleButton.setEnabled(hasText());
-      setButtonHeight(deleteExampleButton);
+      deleteExampleButton = UI.createIconButton(this, "close_icon.png", MSG_DELETE,
+            e -> exampleListener.delete(getName()));
    }
 
    private void createAddExampleButton() {
-      addExampleButton = new JButton(MSG_ADD);
-      addExampleButton.addActionListener( e -> {
-         System.out.println("ExamplePanel::actionListener called " + getName());
-         exampleListener.add(getName(), exampleField.getText());
-      });
+      addExampleButton = UI.createIconButton(this, "plus.png", MSG_ADD,
+         e -> exampleListener.add(getName(), exampleField.getText()));
       addExampleButton.setEnabled(hasText());
-      setButtonHeight(addExampleButton);
+      // TODO how to show different states enabled / disabled
    }
 
    // dup
    private boolean hasText() {
-      return !exampleField.getText().isBlank();
+      return exampleField != null && !exampleField.getText().isBlank();
    }
 
    private void createExampleField() {
-      exampleField = UI.createTextArea(5, 80, this::updateButtonState);
+      exampleField = UI.createTextArea(3, 80, this::updateButtonState);
    }
 
    private void updateButtonState(DocumentEvent documentEvent) {
