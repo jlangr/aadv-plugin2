@@ -5,6 +5,10 @@ import llms.*;
 import ui.*;
 import utils.idea.IDEAEditor;
 import javax.swing.*;
+import java.awt.*;
+
+import static java.awt.Cursor.WAIT_CURSOR;
+import static java.awt.Cursor.getPredefinedCursor;
 
 public class AADVController implements SendPromptListener, SourcePanelListener, ExampleListener {
    private static AADVController controller = null;
@@ -50,9 +54,13 @@ public class AADVController implements SendPromptListener, SourcePanelListener, 
          return;
       }
 
-      var files = openAIClient.retrieveCompletion(text, model.getExampleList());
+      promptView.getParent().setCursor(getPredefinedCursor(WAIT_CURSOR));
 
-      updateSourcePanels(files);
+      new Thread(() -> {
+         var files = openAIClient.retrieveCompletion(text, model.getExampleList());
+         updateSourcePanels(files);
+         promptView.getParent().setCursor(Cursor.getDefaultCursor());
+      }).start();
    }
 
    private void updateSourcePanels(Files files) {
