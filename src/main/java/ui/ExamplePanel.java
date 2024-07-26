@@ -45,7 +45,7 @@ public class ExamplePanel extends JPanel {
       panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
       panel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-      titleLabel = new JLabel(example == null || example.getName() == null ? "description" : example.getName());
+      titleLabel = new JLabel(example == Example.EMPTY || isEmpty(example.getName()) ? "[ add description ]" : example.getName());
       titleLabel.setAlignmentX(LEFT_ALIGNMENT);
       panel.add(titleLabel);
 
@@ -54,6 +54,10 @@ public class ExamplePanel extends JPanel {
       exampleField.setAlignmentX(LEFT_ALIGNMENT);
       panel.add(exampleField);
       return panel;
+   }
+
+   private boolean isEmpty(String s) {
+      return s == null || s.isEmpty();
    }
 
    // dup?
@@ -71,7 +75,7 @@ public class ExamplePanel extends JPanel {
       createDeleteExampleButton();
       createAddExampleButton();
 
-      buttonPanel.add(example == null ? addExampleButton : deleteExampleButton);
+      buttonPanel.add(example == Example.EMPTY ? addExampleButton : deleteExampleButton);
       return buttonPanel;
    }
 

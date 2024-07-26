@@ -60,7 +60,7 @@ public class ExamplesPanel extends JPanel {
    }
 
    private ExamplePanel addEmptyExample() {
-      var panel = new ExamplePanel(exampleListener, null);
+      var panel = new ExamplePanel(exampleListener, Example.EMPTY);
       add(panel);
       return panel;
    }
@@ -87,7 +87,6 @@ public class ExamplesPanel extends JPanel {
    }
 
    public void addedExample() {
-      System.out.println("Added example");
       addEmptyExample();
       refresh(); // TODO no need for arg?
    }

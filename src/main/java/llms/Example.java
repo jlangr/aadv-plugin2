@@ -3,6 +3,8 @@ package llms;
 import java.util.Objects;
 
 public class Example {
+   public static final Example EMPTY = new Example("", "", "");
+
    private String name;
    private String text;
    private ExampleState state;
