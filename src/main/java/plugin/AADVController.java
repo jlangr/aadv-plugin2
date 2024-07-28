@@ -54,6 +54,8 @@ public class AADVController implements SendPromptListener, SourcePanelListener, 
          return;
       }
 
+      model.setPromptText(text);
+
       promptView.getParent().setCursor(getPredefinedCursor(WAIT_CURSOR));
 
       new Thread(() -> {
@@ -66,9 +68,7 @@ public class AADVController implements SendPromptListener, SourcePanelListener, 
    @Override
    public void dump(String text) {
       System.out.println("PROMPT\n");
-      System.out.println(text);
-      System.out.println(model.getExampleList().concatenate());
-      System.out.println("===");
+      System.out.println(model.combinedPrompt());
    }
 
    private void updateSourcePanels(Files files) {
