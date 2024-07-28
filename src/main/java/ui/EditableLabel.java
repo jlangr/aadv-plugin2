@@ -8,6 +8,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class EditableLabel extends JPanel {
+   public static final String CHECK_ICON = "\u2713";
+   public static final String CANCEL_ICON = "\u2717";
    private JLabel label;
    private JTextField textField;
    private JButton checkButton;
@@ -27,22 +29,11 @@ public class EditableLabel extends JPanel {
       });
 
       textField = new JTextField(initialText, 20);
-      checkButton = new JButton("\u2713"); // Unicode for check icon
-      cancelButton = new JButton("\u2717"); // Unicode for cancel icon
+      checkButton = new JButton(CHECK_ICON);
+      cancelButton = new JButton(CANCEL_ICON);
 
-      checkButton.addActionListener(new ActionListener() {
-         @Override
-         public void actionPerformed(ActionEvent e) {
-            confirmEdit();
-         }
-      });
-
-      cancelButton.addActionListener(new ActionListener() {
-         @Override
-         public void actionPerformed(ActionEvent e) {
-            cancelEdit();
-         }
-      });
+      checkButton.addActionListener(this::confirmEdit);
+      cancelButton.addActionListener(this::cancelEdit);
 
       add(label);
    }
@@ -59,15 +50,16 @@ public class EditableLabel extends JPanel {
       revalidate();
       repaint();
       textField.requestFocus();
+      textField.selectAll();
    }
 
-   private void confirmEdit() {
+   private void confirmEdit(ActionEvent e) {
       originalText = textField.getText();
       label.setText(originalText);
       showLabel();
    }
 
-   private void cancelEdit() {
+   private void cancelEdit(ActionEvent e) {
       textField.setText(originalText);
       showLabel();
    }
@@ -77,5 +69,9 @@ public class EditableLabel extends JPanel {
       add(label);
       revalidate();
       repaint();
+   }
+
+   public void setText(String text) {
+      textField.setText(text);
    }
 }

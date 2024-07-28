@@ -63,6 +63,14 @@ public class AADVController implements SendPromptListener, SourcePanelListener, 
       }).start();
    }
 
+   @Override
+   public void dump(String text) {
+      System.out.println("PROMPT\n");
+      System.out.println(text);
+      System.out.println(model.getExampleList().concatenate());
+      System.out.println("===");
+   }
+
    private void updateSourcePanels(Files files) {
       files.prodFiles().stream()
             .forEach(file -> upsertSourcePanel(file));
@@ -103,9 +111,7 @@ public class AADVController implements SendPromptListener, SourcePanelListener, 
 
    @Override
    public void delete(String panelName) {
-      System.out.println("DELETING PANEL:" + panelName);
       model.deleteExample(panelName);
-      System.out.println("UPDATED EXAMPLES: " + model.getExamples());
       promptView.refreshExamples(model.getExamples());
    }
 

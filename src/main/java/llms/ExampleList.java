@@ -15,8 +15,9 @@ public class ExampleList {
       this.examples.addAll(asList(examples));
    }
 
+   // TODO test
    public void add(String id, String name, String text) {
-      examples.add(new Example(id, text, name));
+      examples.add(new Example(id, name, text));
    }
 
    public List<Example> getAll() {
@@ -48,7 +49,7 @@ public class ExampleList {
       example.setText(text);
    }
 
-   String concatenate() {
+   public String concatenate() {
        return getAll().stream()
           .map(Example::toPromptString)
           .collect(joining("\n---\n"));

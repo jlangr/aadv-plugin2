@@ -31,7 +31,7 @@ public class ExamplesPanel extends JPanel {
       ExampleListener listener = new ExampleListener() {
          @Override
          public void add(String panelName, String name, String text) {
-            System.out.println("add " + panelName + " " + text + " name: " + name);
+            System.out.println("add " + panelName + " name: " + name + " > " + text);
          }
 
          @Override
@@ -76,7 +76,9 @@ public class ExamplesPanel extends JPanel {
       examples.stream()
          .forEach(example -> {
             var panel = new ExamplePanel(exampleListener, example);
-            panel.setText(example.getText());
+            panel.setExampleText(example.getText());
+            panel.setExampleName(example.getName());
+            panel.setName(example.getId());
             add(example.getId(), panel);
          });
 
@@ -86,21 +88,21 @@ public class ExamplesPanel extends JPanel {
       refresh();
    }
 
-   public void addedExample() {
-      addEmptyExample();
-      refresh(); // TODO no need for arg?
-   }
-
-   public void deleteExample(String panelName) {
-      var panel = Arrays.stream(this.getComponents())
-         .filter(component -> component instanceof ExamplePanel && panelName.equals(component.getName()))
-         .findFirst();
-      if (panel.isEmpty()) {
-         System.out.println("panel " + panelName + " not present");
-         return;
-      }
-      this.remove(panel.get());
-      refresh();
-   }
+//   public void addedExample() {
+//      addEmptyExample();
+//      refresh(); // TODO no need for arg?
+//   }
+//
+//   public void deleteExample(String panelName) {
+//      var panel = Arrays.stream(this.getComponents())
+//         .filter(component -> component instanceof ExamplePanel && panelName.equals(component.getName()))
+//         .findFirst();
+//      if (panel.isEmpty()) {
+//         System.out.println("panel " + panelName + " not present");
+//         return;
+//      }
+//      this.remove(panel.get());
+//      refresh();
+//   }
 
 }

@@ -20,14 +20,14 @@ public class AADVPromptPanel extends JPanel {
    public AADVPromptPanel(SendPromptListener sendPromptListener, ExampleListener exampleListener) {
       this.sendPromptListener = sendPromptListener;
       this.exampleListener = exampleListener;
-      layOut();
+      createLayout();
    }
 
    public void showMessage(String message) {
       Messages.showMessageDialog(message, "Information", Messages.getInformationIcon());
    }
 
-   public void layOut() {
+   public void createLayout() {
       contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
 
       contentPanel.add(new PromptPanel(sendPromptListener));
@@ -48,19 +48,6 @@ public class AADVPromptPanel extends JPanel {
 
       setLayout(new BorderLayout());
       add(scrollPane, BorderLayout.CENTER);
-   }
-
-   private void refresh() {
-      contentPanel.revalidate();
-      contentPanel.repaint();
-   }
-
-   public void addedExample() {
-      examplesPanel.addedExample();
-   }
-
-   public void deleteExample(String panelName) {
-      examplesPanel.deleteExample(panelName);
    }
 
    public void refreshExamples(List<Example> examples) {
