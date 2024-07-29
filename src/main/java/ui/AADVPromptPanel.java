@@ -11,14 +11,14 @@ import java.util.List;
 public class AADVPromptPanel extends JPanel {
    public static final String MSG_KEY_NOT_CONFIGURED =
       "API key not configured. Please provide it in the AADV plugin settings.";
-   private final SendPromptListener sendPromptListener;
+   private final PromptListener promptListener;
 
    private JPanel contentPanel =  new JPanel();
    private ExampleListener exampleListener;
    private ExamplesPanel examplesPanel;
 
-   public AADVPromptPanel(SendPromptListener sendPromptListener, ExampleListener exampleListener) {
-      this.sendPromptListener = sendPromptListener;
+   public AADVPromptPanel(PromptListener promptListener, ExampleListener exampleListener) {
+      this.promptListener = promptListener;
       this.exampleListener = exampleListener;
       createLayout();
    }
@@ -30,7 +30,7 @@ public class AADVPromptPanel extends JPanel {
    public void createLayout() {
       contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
 
-      contentPanel.add(new PromptPanel(sendPromptListener));
+      contentPanel.add(new PromptPanel(promptListener));
 
       examplesPanel = new ExamplesPanel(exampleListener);
       contentPanel.add(examplesPanel);

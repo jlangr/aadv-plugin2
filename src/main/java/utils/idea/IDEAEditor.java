@@ -13,6 +13,7 @@ import llms.SourceFile;
 import utils.PackageExtractor;
 import utils.SourcePackage;
 
+import java.util.Collection;
 import java.util.Optional;
 
 import static com.intellij.openapi.command.WriteCommandAction.runWriteCommandAction;
@@ -28,6 +29,11 @@ public class IDEAEditor {
    public void replaceEditorContent(Project project, SourceFile sourceFile) {
       var virtualFileOptional = firstVirtualFileEndingWith(project, sourceFile.fileName());
       if (virtualFileOptional.isEmpty()) {
+         // TODO temporary dump to see if problem happens again
+         var virtualFilesByName = FilenameIndex.getVirtualFilesByName(project, sourceFile.fileName(), GlobalSearchScope.projectScope(project));
+         System.out.println("files: " + virtualFilesByName);
+         // end todo
+
          showMessageDialog(project,
             format(MSG_SOURCE_NOT_FOUND, sourceFile.fileName()), MSG_CANNOT_APPLY_SOURCE, getWarningIcon());
          return;

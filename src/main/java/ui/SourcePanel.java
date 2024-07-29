@@ -12,7 +12,7 @@ public class SourcePanel extends JPanel {
    private static final String MSG_TIP_APPLY_SOURCE = "Apply generated code to project";
    private static final String MSG_CLOSE = "Close source panel";
    private final JTextArea textArea;
-   private final SourceFile sourceFile;
+   private SourceFile sourceFile;
    private final SourcePanelListener sourcePanelListener;
 
    public SourcePanel(SourceFile sourceFile, SourcePanelListener sourcePanelListener) {
@@ -67,6 +67,7 @@ public class SourcePanel extends JPanel {
    }
 
    public void updateContent(SourceFile file) {
-      textArea.setText(file.source());
+      this.sourceFile = file;
+      textArea.setText(sourceFile.source());
    }
 }

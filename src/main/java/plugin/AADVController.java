@@ -10,7 +10,7 @@ import java.awt.*;
 import static java.awt.Cursor.WAIT_CURSOR;
 import static java.awt.Cursor.getPredefinedCursor;
 
-public class AADVController implements SendPromptListener, SourcePanelListener, ExampleListener {
+public class AADVController implements PromptListener, SourcePanelListener, ExampleListener {
    private static AADVController controller = null;
    private final Project project;
    private AADVPromptPanel promptView;
@@ -54,7 +54,7 @@ public class AADVController implements SendPromptListener, SourcePanelListener, 
          return;
       }
 
-      model.setPromptText(text);
+      model.setPromptText(text); // TODO can this be deleted
 
       promptView.getParent().setCursor(getPredefinedCursor(WAIT_CURSOR));
 
@@ -67,8 +67,13 @@ public class AADVController implements SendPromptListener, SourcePanelListener, 
 
    @Override
    public void dump(String text) {
-      System.out.println("PROMPT\n");
+      System.out.println("PROMPT:\n");
       System.out.println(model.combinedPrompt());
+   }
+
+   @Override
+   public void update(String text) {
+      model.setPromptText(text);
    }
 
    private void updateSourcePanels(Files files) {

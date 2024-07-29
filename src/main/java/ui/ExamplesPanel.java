@@ -28,7 +28,7 @@ public class ExamplesPanel extends JPanel {
       examples.add(new Example("1", "one", "a one"));
       examples.add(new Example("2", "two", "a two"));
 
-      ExampleListener listener = new ExampleListener() {
+      var listener = new ExampleListener() {
          @Override
          public void add(String panelName, String name, String text) {
             System.out.println("add " + panelName + " name: " + name + " > " + text);
@@ -87,22 +87,4 @@ public class ExamplesPanel extends JPanel {
 
       refresh();
    }
-
-//   public void addedExample() {
-//      addEmptyExample();
-//      refresh(); // TODO no need for arg?
-//   }
-//
-//   public void deleteExample(String panelName) {
-//      var panel = Arrays.stream(this.getComponents())
-//         .filter(component -> component instanceof ExamplePanel && panelName.equals(component.getName()))
-//         .findFirst();
-//      if (panel.isEmpty()) {
-//         System.out.println("panel " + panelName + " not present");
-//         return;
-//      }
-//      this.remove(panel.get());
-//      refresh();
-//   }
-
 }

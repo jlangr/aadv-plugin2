@@ -1,6 +1,7 @@
 package ui;
 
-public interface SendPromptListener {
+public interface PromptListener {
    void send(String text);
    void dump(String text);
+   void update(String text);
 }

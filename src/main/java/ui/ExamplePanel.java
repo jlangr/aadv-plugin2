@@ -91,10 +91,7 @@ public class ExamplePanel extends JPanel {
 
    private void createAddExampleButton() {
       addExampleButton = UI.createIconButton(this, "plus.png", MSG_ADD,
-         e -> {
-            System.out.println("adding example " + nameLabel.getText());
-         exampleListener.add(getName(), nameLabel.getText(), exampleField.getText());
-         });
+         e -> exampleListener.add(getName(), nameLabel.getText(), exampleField.getText()));
       addExampleButton.setEnabled(hasText());
       // TODO how to show different states enabled / disabled
    }

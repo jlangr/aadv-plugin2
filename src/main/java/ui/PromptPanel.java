@@ -6,19 +6,22 @@ import utils.UI;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+
 import static utils.UI.setButtonHeight;
 
 public class PromptPanel extends JPanel {
    public static final int PROMPT_FIELD_LINE_COUNT = 10;
    public static final String MSG_SEND_PROMPT = "Send";
    public static final String MSG_DUMP_PROMPT = "Dump";
-   private final SendPromptListener sendPromptListener;
+   private final PromptListener promptListener;
    private JTextArea promptField;
    private JButton sendPromptButton;
    private JButton dumpPromptButton;
 
-   public PromptPanel(SendPromptListener sendPromptListener) {
-      this.sendPromptListener = sendPromptListener;
+   public PromptPanel(PromptListener promptListener) {
+      this.promptListener = promptListener;
 
       createPromptField();
 
@@ -50,14 +53,15 @@ public class PromptPanel extends JPanel {
 
    private void createPromptField() {
       promptField = UI.createTextArea(5, 80, this::updateButtonState);
-      // TODO delete:
-//      promptField = new JTextArea(5, 80);
-//      promptField.getDocument().addDocumentListener(
-//         new JTextAreaDocumentListener(this::updateButtonState));
-//      promptField.setEditable(true);
-//      promptField.setLineWrap(true);
-//      promptField.setWrapStyleWord(true);
-//      promptField.setMargin(new Insets(10, 10, 10, 10));
+      promptField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {}
+
+            @Override
+            public void focusLost(FocusEvent e) {
+               promptListener.update(promptField.getText());
+            }
+         });
    }
 
    private void updateButtonState(DocumentEvent documentEvent) {
@@ -66,14 +70,14 @@ public class PromptPanel extends JPanel {
 
    private void createPromptButton() {
       sendPromptButton = new JButton(MSG_SEND_PROMPT);
-      sendPromptButton.addActionListener(e -> sendPromptListener.send(promptField.getText()));
+      sendPromptButton.addActionListener(e -> promptListener.send(promptField.getText()));
       sendPromptButton.setEnabled(isPromptTextAvailable());
       setButtonHeight(sendPromptButton);
    }
 
    private void createDumpPromptButton() {
       dumpPromptButton = new JButton(MSG_DUMP_PROMPT);
-      dumpPromptButton.addActionListener( e -> sendPromptListener.dump(promptField.getText()));
+      dumpPromptButton.addActionListener( e -> promptListener.dump(promptField.getText()));
       setButtonHeight(dumpPromptButton);
    }
 
