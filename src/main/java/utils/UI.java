@@ -5,7 +5,6 @@ import ui.JTextAreaDocumentListener;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.function.Consumer;
 
@@ -48,5 +47,16 @@ public class UI {
       button.setPreferredSize(new Dimension(16, 16));
       button.addActionListener(listener);
       return button;
+   }
+
+   public static void embiggen(JLabel label) {
+      var currentFont = label.getFont();
+      label.setFont(currentFont.deriveFont(currentFont.getStyle(), 24f));
+   }
+
+   public static JLabel createHeaderLabel(String text) {
+      var label = new JLabel(text);
+      embiggen(label);
+      return label;
    }
 }

@@ -1,6 +1,7 @@
 package ui;
 
 import com.intellij.ui.components.JBScrollPane;
+import org.jetbrains.annotations.NotNull;
 import utils.UI;
 
 import javax.swing.*;
@@ -9,10 +10,12 @@ import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
+import static utils.UI.embiggen;
 import static utils.UI.setButtonHeight;
 
 public class PromptPanel extends JPanel {
    public static final int PROMPT_FIELD_LINE_COUNT = 10;
+   public static final String MSG_PROMPT = "Prompt Overview";
    public static final String MSG_SEND_PROMPT = "Send";
    public static final String MSG_DUMP_PROMPT = "Dump";
    private final PromptListener promptListener;
@@ -28,6 +31,9 @@ public class PromptPanel extends JPanel {
       setLayout(new BorderLayout());
 
       add(new JBScrollPane(promptField), BorderLayout.CENTER);
+
+      add(createTitlePanel(), BorderLayout.NORTH);
+
       add(createButtonPanel(), BorderLayout.EAST);
 
       // dup?
@@ -35,6 +41,15 @@ public class PromptPanel extends JPanel {
       setPreferredSize(new Dimension(400, preferredHeight));
       setMinimumSize(new Dimension(400, preferredHeight));
       setMaximumSize(new Dimension(Integer.MAX_VALUE, preferredHeight));
+   }
+
+   private JPanel createTitlePanel() {
+      var title = new JLabel(MSG_PROMPT);
+      embiggen(title);
+
+      var titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+      titlePanel.add(title);
+      return titlePanel;
    }
 
    private JPanel createButtonPanel() {

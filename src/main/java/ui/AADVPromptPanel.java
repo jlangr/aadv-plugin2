@@ -32,6 +32,8 @@ public class AADVPromptPanel extends JPanel {
 
       contentPanel.add(new PromptPanel(promptListener));
 
+      contentPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+
       examplesPanel = new ExamplesPanel(exampleListener);
       contentPanel.add(examplesPanel);
 

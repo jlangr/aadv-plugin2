@@ -60,7 +60,9 @@ public class ExamplePanel extends JPanel {
       panel.add(Box.createRigidArea(new Dimension(0, 5)));
 
       exampleField.setAlignmentX(LEFT_ALIGNMENT);
-      panel.add(new JBScrollPane(exampleField));
+      var scrollPane = new JBScrollPane(exampleField);
+      scrollPane.setAlignmentX(LEFT_ALIGNMENT);
+      panel.add(scrollPane);
       return panel;
    }
 

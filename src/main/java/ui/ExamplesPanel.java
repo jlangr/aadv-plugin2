@@ -1,6 +1,7 @@
 package ui;
 
 import llms.Example;
+import utils.UI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,7 +18,9 @@ public class ExamplesPanel extends JPanel {
 
       setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-      add(new JLabel(MSG_EXAMPLES));
+      add(UI.createHeaderLabel(MSG_EXAMPLES));
+
+      add(Box.createRigidArea(new Dimension(0, 20)));
 
       newExamplePanel = addEmptyExample();
 
