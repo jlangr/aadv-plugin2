@@ -5,7 +5,6 @@ import llms.Example;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ExamplesPanel extends JPanel {
@@ -28,6 +27,13 @@ public class ExamplesPanel extends JPanel {
       examples.add(new Example("1", "one", "a one"));
       examples.add(new Example("2", "two", "a two"));
 
+      var panel = createExamplesPanel();
+      panel.refreshExamples(examples);
+      frame.getContentPane().add(panel, BorderLayout.CENTER);
+      frame.setVisible(true);
+   }
+
+   private static ExamplesPanel createExamplesPanel() {
       var listener = new ExampleListener() {
          @Override
          public void add(String panelName, String name, String text) {
@@ -35,14 +41,16 @@ public class ExamplesPanel extends JPanel {
          }
 
          @Override
+         public void upsert(String panelName, String name, String text) {
+            System.out.println("update " + panelName + " name: " + name + " > " + text);
+         }
+
+         @Override
          public void delete(String name) {
             System.out.println("delete " + name);
          }
       };
-      var panel = new ExamplesPanel(listener);
-      panel.refreshExamples(examples);
-      frame.getContentPane().add(panel, BorderLayout.CENTER);
-      frame.setVisible(true);
+      return new ExamplesPanel(listener);
    }
 
    public ExamplesPanel(ExampleListener exampleListener) {

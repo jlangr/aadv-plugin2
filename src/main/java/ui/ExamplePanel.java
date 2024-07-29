@@ -7,6 +7,8 @@ import utils.UI;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.util.UUID;
 
 import static java.awt.BorderLayout.*;
@@ -49,8 +51,9 @@ public class ExamplePanel extends JPanel {
 
       nameLabel = new EditableLabel(
          example == Example.EMPTY || isEmpty(example.getName())
-         ? MSG_NAME_PLACEHOLDER
-         : example.getName());
+            ? MSG_NAME_PLACEHOLDER
+            : example.getName(),
+         newValue -> exampleListener.upsert(getName(), newValue, exampleField.getText()));
       nameLabel.setAlignmentX(LEFT_ALIGNMENT);
       panel.add(nameLabel);
 
@@ -103,6 +106,15 @@ public class ExamplePanel extends JPanel {
 
    private void createExampleField() {
       exampleField = UI.createTextArea(3, 80, this::updateButtonState);
+      exampleField.addFocusListener(
+         new FocusListener() {
+            @Override public void focusGained(FocusEvent e) {}
+
+            @Override
+            public void focusLost(FocusEvent e) {
+               exampleListener.upsert(getName(), nameLabel.getText(), exampleField.getText());
+            }
+         });
    }
 
    private void updateButtonState(DocumentEvent documentEvent) {

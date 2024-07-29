@@ -1,12 +1,16 @@
 package llms;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
 
 public class ExampleList {
+   // TODO tests for all this!
    private List<Example> examples = new ArrayList<>();
 
    public ExampleList() {}
@@ -25,12 +29,16 @@ public class ExampleList {
    }
 
    public Example get(String id) {
-      var result = examples.stream()
-         .filter(e -> e.getId().equals(id))
-         .findFirst();
+      var result = getOptional(id);
       if (result.isEmpty())
          throw new ExampleNotFoundException();
       return result.get();
+   }
+
+   private @NotNull Optional<Example> getOptional(String id) {
+      return examples.stream()
+         .filter(e -> e.getId().equals(id))
+         .findFirst();
    }
 
    public void deleteExample(String id) {
@@ -44,9 +52,22 @@ public class ExampleList {
       }
    }
 
-   public void update(String id, String text) {
-      var example = get(id);
-      example.setText(text);
+   public void upsert(String id, String text) {
+      var example = getOptional(id);
+      if (example.isPresent())
+         example.get().setText(text);
+      else
+         add(id, "", text); // TODO hmm maybe remove this method
+   }
+
+   public void upsert(String id, String name, String text) {
+      var example = getOptional(id);
+      if (example.isPresent()) {
+         example.get().setText(text);
+         example.get().setName(name);
+      }
+      else
+         add(id, name, text);
    }
 
    public String concatenate() {

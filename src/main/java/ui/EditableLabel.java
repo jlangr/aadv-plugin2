@@ -3,20 +3,22 @@ package ui;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class EditableLabel extends JPanel {
    public static final String CHECK_ICON = "\u2713";
    public static final String CANCEL_ICON = "\u2717";
+   private final ChangeListener changeListener;
    private JLabel label;
    private JTextField textField;
    private JButton checkButton;
    private JButton cancelButton;
    private String originalText;
 
-   public EditableLabel(String initialText) {
+   public EditableLabel(String initialText, ChangeListener changeListener) {
+      this.changeListener = changeListener;
+
       setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
       originalText = initialText;
 
@@ -57,6 +59,7 @@ public class EditableLabel extends JPanel {
       originalText = textField.getText();
       label.setText(originalText);
       showLabel();
+      changeListener.changed(originalText);
    }
 
    private void cancelEdit(ActionEvent e) {
