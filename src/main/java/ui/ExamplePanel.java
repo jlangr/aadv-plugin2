@@ -1,5 +1,6 @@
 package ui;
 
+import com.intellij.ui.components.JBScrollPane;
 import llms.Example;
 import utils.UI;
 
@@ -34,7 +35,7 @@ public class ExamplePanel extends JPanel {
 
       setBorder(createEmptyBorder(5, 5, 5, 5));
 
-      int preferredHeight = calculatePreferredHeight(exampleField, 3);
+      int preferredHeight = calculatePreferredHeight(exampleField, 5);
       setPreferredSize(new Dimension(400, preferredHeight));
       setMaximumSize(new Dimension(Integer.MAX_VALUE, preferredHeight));
    }
@@ -46,14 +47,17 @@ public class ExamplePanel extends JPanel {
       panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
       panel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-      nameLabel = new EditableLabel(example == Example.EMPTY || isEmpty(example.getName()) ? MSG_NAME_PLACEHOLDER : example.getName());
+      nameLabel = new EditableLabel(
+         example == Example.EMPTY || isEmpty(example.getName())
+         ? MSG_NAME_PLACEHOLDER
+         : example.getName());
       nameLabel.setAlignmentX(LEFT_ALIGNMENT);
       panel.add(nameLabel);
 
       panel.add(Box.createRigidArea(new Dimension(0, 5)));
 
       exampleField.setAlignmentX(LEFT_ALIGNMENT);
-      panel.add(exampleField);
+      panel.add(new JBScrollPane(exampleField));
       return panel;
    }
 

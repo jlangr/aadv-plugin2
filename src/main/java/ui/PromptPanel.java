@@ -49,13 +49,15 @@ public class PromptPanel extends JPanel {
    }
 
    private void createPromptField() {
-      promptField = new JTextArea(5, 80);
-      promptField.getDocument().addDocumentListener(
-         new JTextAreaDocumentListener(this::updateButtonState));
-      promptField.setEditable(true);
-      promptField.setLineWrap(true);
-      promptField.setWrapStyleWord(true);
-      promptField.setMargin(new Insets(10, 10, 10, 10));
+      promptField = UI.createTextArea(5, 80, this::updateButtonState);
+      // TODO delete:
+//      promptField = new JTextArea(5, 80);
+//      promptField.getDocument().addDocumentListener(
+//         new JTextAreaDocumentListener(this::updateButtonState));
+//      promptField.setEditable(true);
+//      promptField.setLineWrap(true);
+//      promptField.setWrapStyleWord(true);
+//      promptField.setMargin(new Insets(10, 10, 10, 10));
    }
 
    private void updateButtonState(DocumentEvent documentEvent) {
