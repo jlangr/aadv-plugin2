@@ -30,8 +30,8 @@ public class AADVModel {
       exampleList.upsert(id, name, text);
    }
 
-   public void addExample(String id, String name, String text) {
-      exampleList.add(id, name, text);
+   public void addExample(String id) {
+      exampleList.add(id, "", "");
    }
 
    public ExampleList getExampleList() {

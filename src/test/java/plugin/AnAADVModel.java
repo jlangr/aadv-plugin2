@@ -14,8 +14,8 @@ class AnAADVModel {
 
    @Test
    void addsExamples() {
-      model.addExample("123", "a", "hey");
-      model.addExample("345", "b", "there");
+      model.addExample("123");
+      model.addExample("345");
 
       assertEquals(List.of(
             new Example("123", "a", "hey"),
@@ -30,7 +30,7 @@ class AnAADVModel {
 
    @Test
    void upsertExampleWith() {
-      model.addExample("123", "a", "hey");
+      model.addExample("123");
 
       model.upsertExample("123", "a", "smelt");
 
@@ -40,8 +40,8 @@ class AnAADVModel {
 
    @Test
    void deletesExample() {
-      model.addExample("123", "a name", "a");
-      model.addExample("456", "b name", "b");
+      model.addExample("123");
+      model.addExample("456");
 
       model.deleteExample("123");
 
@@ -52,7 +52,7 @@ class AnAADVModel {
    @Test
    void combinesExamplesForPrompt() {
       model.setPromptText("prompt text");
-      model.addExample("1", "abc", "one two three");
+      model.addExample("1");
 
       var result = model.combinedPrompt();
 

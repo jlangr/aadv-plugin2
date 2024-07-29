@@ -6,6 +6,7 @@ import ui.*;
 import utils.idea.IDEAEditor;
 import javax.swing.*;
 import java.awt.*;
+import java.util.UUID;
 
 import static java.awt.Cursor.WAIT_CURSOR;
 import static java.awt.Cursor.getPredefinedCursor;
@@ -109,23 +110,24 @@ public class AADVController implements PromptListener, SourcePanelListener, Exam
 
    // example listener methods
    @Override
-   public void add(String panelName, String name, String text) {
-//      model.addExample(panelName, name, text);
-//      promptView.refreshExamples(model.getExamples());
-      upsert(panelName, name, text);
-   }
-
-   @Override
    public void upsert(String panelName, String name, String text) {
       System.out.println("UPDATING example: " + name + " " + text);
       model.upsertExample(panelName, name, text);
-//      promptView.refreshExamples(model.getExamples()); // way to not need this?
    }
 
    @Override
    public void delete(String panelName) {
       model.deleteExample(panelName);
-      promptView.refreshExamples(model.getExamples());
+      promptView.deleteExample(panelName);
+//      promptView.refreshExamples(model.getExamples());
+   }
+
+   @Override
+   public void addNewExample() {
+      System.out.println("ADDING new example");
+      var id = UUID.randomUUID().toString();
+      model.addExample(id);
+      promptView.addNewExample(id);
    }
 
    public void setPromptView(AADVPromptPanel panel) {

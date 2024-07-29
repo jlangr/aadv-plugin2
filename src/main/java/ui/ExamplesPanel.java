@@ -5,13 +5,11 @@ import utils.UI;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ExamplesPanel extends JPanel {
    public static final String MSG_EXAMPLES = "Examples";
    private final ExampleListener exampleListener;
-   private ExamplePanel newExamplePanel;
 
    public ExamplesPanel(ExampleListener exampleListener) {
       this.exampleListener = exampleListener;
@@ -22,17 +20,27 @@ public class ExamplesPanel extends JPanel {
 
       add(Box.createRigidArea(new Dimension(0, 20)));
 
-      newExamplePanel = addEmptyExample();
+      createAddExampleButton();
+      add(addExampleButton);
 
-      var preferredHeight = newExamplePanel.preferredHeight();
+      // TODO hmm
+      var exampleField = new JTextArea();
+      var preferredHeight = UI.calculatePreferredHeight(exampleField, 5);
       setPreferredSize(new Dimension(400, preferredHeight));
       setMinimumSize(new Dimension(400, preferredHeight));
    }
 
-   private ExamplePanel addEmptyExample() {
-      var panel = new ExamplePanel(exampleListener, Example.EMPTY);
-      add(panel);
-      return panel;
+   JButton addExampleButton;
+   private static final String MSG_ADD = "Add";
+
+   private void createAddExampleButton() {
+      addExampleButton = UI.createIconButton(this, "plus.png", MSG_ADD,
+         e -> exampleListener.addNewExample());
+   }
+
+   public void addEmptyExample(String name) {
+      add(new ExamplePanel(exampleListener, name, Example.EMPTY));
+      refresh();
    }
 
    public void refresh() {
@@ -41,61 +49,27 @@ public class ExamplesPanel extends JPanel {
    }
 
    public void refreshExamples(List<Example> examples) {
-      this.removeAll();
 
-      examples.stream()
-         .forEach(example -> {
-            var panel = new ExamplePanel(exampleListener, example);
-            panel.setExampleText(example.getText());
-            panel.setExampleName(example.getName());
-            panel.setName(example.getId());
-            add(example.getId(), panel);
-         });
+//      this.remove()
 
-      var emptyPanel = addEmptyExample();
-      emptyPanel.requestFocus();
-
+//      examples.stream()
+//         .forEach(example -> {
+//            var panel = new ExamplePanel(exampleListener, example.getId(), example);
+//            panel.setExampleText(example.getText());
+//            panel.setExampleName(example.getName());
+//            panel.setName(example.getId());
+//            add(example.getId(), panel);
+//         });
+//
       refresh();
    }
 
-   // Runner for rendering humble UI:
-
-   public static void main(String[] args) {
-      SwingUtilities.invokeLater(() -> createAndShowGUI());
-   }
-
-   static void createAndShowGUI() {
-      JFrame frame = new JFrame("Simple Swing Application");
-      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      frame.setSize(400, 900);
-
-      var examples = new ArrayList<Example>();
-      examples.add(new Example("1", "one", "a one"));
-      examples.add(new Example("2", "two", "a two"));
-
-      var panel = createExamplesPanel();
-      panel.refreshExamples(examples);
-      frame.getContentPane().add(panel, BorderLayout.CENTER);
-      frame.setVisible(true);
-   }
-
-   static ExamplesPanel createExamplesPanel() {
-      var listener = new ExampleListener() {
-         @Override
-         public void add(String panelName, String name, String text) {
-            System.out.println("add " + panelName + " name: " + name + " > " + text);
+   public void deleteExample(String name) {
+      for (var component: getComponents())
+         if (component != null && component.getName() != null && component.getName().equals(name)) {
+            remove(component);
+            break;
          }
-
-         @Override
-         public void upsert(String panelName, String name, String text) {
-            System.out.println("update " + panelName + " name: " + name + " > " + text);
-         }
-
-         @Override
-         public void delete(String name) {
-            System.out.println("delete " + name);
-         }
-      };
-      return new ExamplesPanel(listener);
+      refresh();
    }
 }

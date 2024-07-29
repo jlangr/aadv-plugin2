@@ -8,9 +8,6 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.util.UUID;
 
 import static java.awt.BorderLayout.*;
 import static javax.swing.BorderFactory.createEmptyBorder;
@@ -23,14 +20,12 @@ public class ExamplePanel extends JPanel {
    private final Example example;
    private JTextArea exampleField;
    private EditableLabel nameLabel;
-   private JButton addExampleButton;
    private JButton deleteExampleButton;
 
-   public ExamplePanel(ExampleListener exampleListener, Example example) {
+   public ExamplePanel(ExampleListener exampleListener, String name, Example example) {
       this.exampleListener = exampleListener;
       this.example = example;
-
-      setName(UUID.randomUUID().toString());
+      setName(name);
 
       setLayout(new BorderLayout());
       add(createButtonPanel(), EAST);
@@ -89,56 +84,25 @@ public class ExamplePanel extends JPanel {
       var buttonPanel = new JPanel();
       buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
 
-      createDeleteExampleButton();
-      createAddExampleButton();
+      deleteExampleButton = UI.createIconButton(this, "close_icon.png", MSG_DELETE,
+         e -> exampleListener.delete(getName()));
 
-      buttonPanel.add(example == Example.EMPTY ? addExampleButton : deleteExampleButton);
+      buttonPanel.add(deleteExampleButton);
       return buttonPanel;
    }
 
-   private void createDeleteExampleButton() {
-      deleteExampleButton = UI.createIconButton(this, "close_icon.png", MSG_DELETE,
-            e -> exampleListener.delete(getName()));
-   }
-
-   private void createAddExampleButton() {
-      addExampleButton = UI.createIconButton(this, "plus.png", MSG_ADD,
-         e -> exampleListener.add(getName(), nameLabel.getText(), exampleField.getText()));
-      addExampleButton.setEnabled(hasText());
-      // TODO how to show different states enabled / disabled
-   }
-
-   // dup
-   private boolean hasText() {
-      return exampleField != null && !exampleField.getText().isBlank();
-   }
-
    private void createExampleField() {
-      exampleField = UI.createTextArea(3, 80, this::updateButtonState);
+      exampleField = UI.createTextArea(3, 80, (e) -> {});
       exampleField.getDocument().addDocumentListener(new DocumentListener() {
          @Override
-         public void insertUpdate(DocumentEvent e) {
-            notifyExampleListener();
-         }
+         public void insertUpdate(DocumentEvent e) { notifyExampleListener(); }
 
          @Override
-         public void removeUpdate(DocumentEvent e) {
-            notifyExampleListener();
-         }
+         public void removeUpdate(DocumentEvent e) { notifyExampleListener(); }
 
          @Override
-         public void changedUpdate(DocumentEvent e) {
-            notifyExampleListener();
-         }
+         public void changedUpdate(DocumentEvent e) { notifyExampleListener(); }
       });
-   }
-
-   private void updateButtonState(DocumentEvent documentEvent) {
-      addExampleButton.setEnabled(!exampleField.getText().isBlank());
-   }
-
-   int preferredHeight() {
-      return UI.calculatePreferredHeight(exampleField, 5);
    }
 
    public void setExampleText(String text) {

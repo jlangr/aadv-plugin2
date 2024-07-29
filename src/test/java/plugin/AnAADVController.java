@@ -45,7 +45,7 @@ class AnAADVController {
       void addedToModelOnAdd() {
          controller.add(ABC_EXAMPLE.getId(), ABC_EXAMPLE.getName(), ABC_EXAMPLE.getText());
 
-         verify(model).addExample(ABC_EXAMPLE.getId(), ABC_EXAMPLE.getName(), ABC_EXAMPLE.getText());
+         verify(model).addExample(ABC_EXAMPLE.getId());
       }
 
       @Test
