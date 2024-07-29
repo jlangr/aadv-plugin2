@@ -9,15 +9,15 @@ import java.awt.event.MouseEvent;
 public class EditableLabel extends JPanel {
    public static final String CHECK_ICON = "\u2713";
    public static final String CANCEL_ICON = "\u2717";
-   private final ChangeListener changeListener;
+   private final FieldListener fieldListener;
    private JLabel label;
    private JTextField textField;
    private JButton checkButton;
    private JButton cancelButton;
    private String originalText;
 
-   public EditableLabel(String initialText, ChangeListener changeListener) {
-      this.changeListener = changeListener;
+   public EditableLabel(String initialText, FieldListener fieldListener) {
+      this.fieldListener = fieldListener;
 
       setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
       originalText = initialText;
@@ -58,8 +58,9 @@ public class EditableLabel extends JPanel {
    private void confirmEdit(ActionEvent e) {
       originalText = textField.getText();
       label.setText(originalText);
+      fieldListener.updated(originalText);
       showLabel();
-      changeListener.changed(originalText);
+      label.requestFocus();
    }
 
    private void cancelEdit(ActionEvent e) {

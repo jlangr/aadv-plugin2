@@ -110,15 +110,16 @@ public class AADVController implements PromptListener, SourcePanelListener, Exam
    // example listener methods
    @Override
    public void add(String panelName, String name, String text) {
-      model.addExample(panelName, name, text);
-      promptView.refreshExamples(model.getExamples());
+//      model.addExample(panelName, name, text);
+//      promptView.refreshExamples(model.getExamples());
+      upsert(panelName, name, text);
    }
 
    @Override
    public void upsert(String panelName, String name, String text) {
       System.out.println("UPDATING example: " + name + " " + text);
       model.upsertExample(panelName, name, text);
-      promptView.refreshExamples(model.getExamples()); // way to not need this?
+//      promptView.refreshExamples(model.getExamples()); // way to not need this?
    }
 
    @Override

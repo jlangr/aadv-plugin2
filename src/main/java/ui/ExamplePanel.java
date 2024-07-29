@@ -6,6 +6,7 @@ import utils.UI;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -37,9 +38,14 @@ public class ExamplePanel extends JPanel {
 
       setBorder(createEmptyBorder(5, 5, 5, 5));
 
+      // dup?
       int preferredHeight = calculatePreferredHeight(exampleField, 5);
       setPreferredSize(new Dimension(400, preferredHeight));
       setMaximumSize(new Dimension(Integer.MAX_VALUE, preferredHeight));
+   }
+
+   private void notifyExampleListener() {
+      exampleListener.upsert(getName(), nameLabel.getText(), exampleField.getText());
    }
 
    private JPanel createContentPanel() {
@@ -49,11 +55,12 @@ public class ExamplePanel extends JPanel {
       panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
       panel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-      nameLabel = new EditableLabel(
-         example == Example.EMPTY || isEmpty(example.getName())
-            ? MSG_NAME_PLACEHOLDER
-            : example.getName(),
-         newValue -> exampleListener.upsert(getName(), newValue, exampleField.getText()));
+      var initialText = example == Example.EMPTY || isEmpty(example.getName())
+         ? MSG_NAME_PLACEHOLDER
+         : example.getName();
+
+      nameLabel = new EditableLabel(initialText,
+         text -> exampleListener.upsert(getName(), text, exampleField.getText()));
       nameLabel.setAlignmentX(LEFT_ALIGNMENT);
       panel.add(nameLabel);
 
@@ -108,15 +115,22 @@ public class ExamplePanel extends JPanel {
 
    private void createExampleField() {
       exampleField = UI.createTextArea(3, 80, this::updateButtonState);
-      exampleField.addFocusListener(
-         new FocusListener() {
-            @Override public void focusGained(FocusEvent e) {}
+      exampleField.getDocument().addDocumentListener(new DocumentListener() {
+         @Override
+         public void insertUpdate(DocumentEvent e) {
+            notifyExampleListener();
+         }
 
-            @Override
-            public void focusLost(FocusEvent e) {
-               exampleListener.upsert(getName(), nameLabel.getText(), exampleField.getText());
-            }
-         });
+         @Override
+         public void removeUpdate(DocumentEvent e) {
+            notifyExampleListener();
+         }
+
+         @Override
+         public void changedUpdate(DocumentEvent e) {
+            notifyExampleListener();
+         }
+      });
    }
 
    private void updateButtonState(DocumentEvent documentEvent) {
