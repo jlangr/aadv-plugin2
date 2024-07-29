@@ -35,7 +35,7 @@ public class ExampleList {
       return result.get();
    }
 
-   private @NotNull Optional<Example> getOptional(String id) {
+   private Optional<Example> getOptional(String id) {
       return examples.stream()
          .filter(e -> e.getId().equals(id))
          .findFirst();
@@ -50,14 +50,6 @@ public class ExampleList {
             break;
          }
       }
-   }
-
-   public void upsert(String id, String text) {
-      var example = getOptional(id);
-      if (example.isPresent())
-         example.get().setText(text);
-      else
-         add(id, "", text); // TODO hmm maybe remove this method
    }
 
    public void upsert(String id, String name, String text) {

@@ -12,47 +12,6 @@ public class ExamplesPanel extends JPanel {
    private final ExampleListener exampleListener;
    private ExamplePanel newExamplePanel;
 
-   public static void main(String[] args) {
-      // Schedule a job for the event-dispatching thread:
-      // creating and showing this application's GUI.
-      SwingUtilities.invokeLater(() -> createAndShowGUI());
-   }
-
-   private static void createAndShowGUI() {
-      JFrame frame = new JFrame("Simple Swing Application");
-      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      frame.setSize(400, 900);
-
-      var examples = new ArrayList<Example>();
-      examples.add(new Example("1", "one", "a one"));
-      examples.add(new Example("2", "two", "a two"));
-
-      var panel = createExamplesPanel();
-      panel.refreshExamples(examples);
-      frame.getContentPane().add(panel, BorderLayout.CENTER);
-      frame.setVisible(true);
-   }
-
-   private static ExamplesPanel createExamplesPanel() {
-      var listener = new ExampleListener() {
-         @Override
-         public void add(String panelName, String name, String text) {
-            System.out.println("add " + panelName + " name: " + name + " > " + text);
-         }
-
-         @Override
-         public void upsert(String panelName, String name, String text) {
-            System.out.println("update " + panelName + " name: " + name + " > " + text);
-         }
-
-         @Override
-         public void delete(String name) {
-            System.out.println("delete " + name);
-         }
-      };
-      return new ExamplesPanel(listener);
-   }
-
    public ExamplesPanel(ExampleListener exampleListener) {
       this.exampleListener = exampleListener;
 
@@ -94,5 +53,46 @@ public class ExamplesPanel extends JPanel {
       emptyPanel.requestFocus();
 
       refresh();
+   }
+
+   // Runner for rendering humble UI:
+
+   public static void main(String[] args) {
+      SwingUtilities.invokeLater(() -> createAndShowGUI());
+   }
+
+   static void createAndShowGUI() {
+      JFrame frame = new JFrame("Simple Swing Application");
+      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      frame.setSize(400, 900);
+
+      var examples = new ArrayList<Example>();
+      examples.add(new Example("1", "one", "a one"));
+      examples.add(new Example("2", "two", "a two"));
+
+      var panel = createExamplesPanel();
+      panel.refreshExamples(examples);
+      frame.getContentPane().add(panel, BorderLayout.CENTER);
+      frame.setVisible(true);
+   }
+
+   static ExamplesPanel createExamplesPanel() {
+      var listener = new ExampleListener() {
+         @Override
+         public void add(String panelName, String name, String text) {
+            System.out.println("add " + panelName + " name: " + name + " > " + text);
+         }
+
+         @Override
+         public void upsert(String panelName, String name, String text) {
+            System.out.println("update " + panelName + " name: " + name + " > " + text);
+         }
+
+         @Override
+         public void delete(String name) {
+            System.out.println("delete " + name);
+         }
+      };
+      return new ExamplesPanel(listener);
    }
 }

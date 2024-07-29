@@ -29,12 +29,13 @@ class AnAADVModel {
    }
 
    @Test
-   void updatesExampleText() {
+   void upsertExampleWith() {
       model.addExample("123", "a", "hey");
 
-      model.updateExampleText("123", "smelt");
+      model.upsertExample("123", "a", "smelt");
 
       assertEquals(model.getExample("123").getText(), "smelt");
+      assertEquals(model.getExample("123").getName(), "a");
    }
 
    @Test
