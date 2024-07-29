@@ -10,8 +10,7 @@ import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
-import static utils.UI.embiggen;
-import static utils.UI.setButtonHeight;
+import static utils.UI.*;
 
 public class PromptPanel extends JPanel {
    public static final int PROMPT_FIELD_LINE_COUNT = 10;
@@ -44,11 +43,8 @@ public class PromptPanel extends JPanel {
    }
 
    private JPanel createTitlePanel() {
-      var title = new JLabel(MSG_PROMPT);
-      embiggen(title);
-
       var titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-      titlePanel.add(title);
+      titlePanel.add(createHeaderLabel(MSG_PROMPT));
       return titlePanel;
    }
 
