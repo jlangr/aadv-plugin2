@@ -36,19 +36,6 @@ public class UI {
       return exampleField;
    }
 
-   public static JButton createIconButton(Object owner, String imageFilename, String toolTipText, ActionListener listener) {
-      var icon = new ImageIcon(owner.getClass().getResource(imageFilename));
-      var button = new JButton(icon);
-      button.setToolTipText(toolTipText);
-      button.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-      button.setContentAreaFilled(false);
-      button.setBorderPainted(false);
-      button.setFocusPainted(false);
-      button.setPreferredSize(new Dimension(16, 16));
-      button.addActionListener(listener);
-      return button;
-   }
-
    public static void embiggen(JLabel label) {
       var currentFont = label.getFont();
       label.setFont(currentFont.deriveFont(currentFont.getStyle(), 24f));
@@ -58,5 +45,26 @@ public class UI {
       var label = new JLabel(text);
       embiggen(label);
       return label;
+   }
+
+
+   public static JButton createIconButton(
+      Object owner, String imageFilename, String toolTipText, ActionListener listener) {
+      return createIconButton(
+         new ImageIcon(owner.getClass().getResource(imageFilename)),
+         toolTipText,
+         listener);
+   }
+
+   public static JButton createIconButton(ImageIcon icon, String toolTipText, ActionListener listener) {
+      var button = new JButton(icon);
+      button.setToolTipText(toolTipText);
+      button.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+      button.setContentAreaFilled(false);
+      button.setBorderPainted(false);
+      button.setFocusPainted(false);
+      button.setPreferredSize(new Dimension(16, 16));
+      button.addActionListener(listener);
+      return button;
    }
 }

@@ -8,6 +8,7 @@ public class Example {
    private final String id;
    private String name;
    private String text;
+   private boolean isEnabled = true;
 
    @Override
    public boolean equals(Object o) {
@@ -58,5 +59,13 @@ public class Example {
       if (name != null && !name.isEmpty()) builder.append("name: " + name + "\n");
       builder.append(text);
       return builder.toString();
+   }
+
+   public void toggleEnabled() {
+      isEnabled = !isEnabled;
+   }
+
+   public boolean isEnabled() {
+      return isEnabled;
    }
 }

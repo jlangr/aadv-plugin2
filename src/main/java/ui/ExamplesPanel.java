@@ -21,7 +21,7 @@ public class ExamplesPanel extends JPanel {
 
       add(createHeaderRow());
 
-      add(Box.createRigidArea(new Dimension(0, 20)));
+      add(Box.createRigidArea(new Dimension(0, 5)));
 
       examplePanels.setLayout(new BoxLayout(examplePanels, BoxLayout.Y_AXIS));
       add(new JBScrollPane(examplePanels));
@@ -45,21 +45,35 @@ public class ExamplesPanel extends JPanel {
       return panel;
    }
 
-   public void addEmptyExample(String name) {
-      examplePanels.add(new ExamplePanel(exampleListener, name, Example.EMPTY));
+   public void addEmptyExample(String id) {
+      examplePanels.add(new ExamplePanel(exampleListener, id, Example.EMPTY));
       refresh();
    }
 
-   public void deleteExample(String name) {
+   public void deleteExample(String id) {
+      var panel = getExamplePanel(id);
+      if (panel != null) {
+         examplePanels.remove(panel);
+         refresh();
+      }
+   }
+
+   private ExamplePanel getExamplePanel(String id) {
       for (var component: examplePanels.getComponents()) {
          if (component == null || component.getName() == null)
             continue;
-         if (component.getName().equals(name)) {
-            examplePanels.remove(component);
-            break;
+         if (component.getName().equals(id)) {
+            return (ExamplePanel)component;
          }
       }
-      refresh();
+      return null;
+   }
+
+   public void refresh(Example example) {
+      var panel = getExamplePanel(example.getId());
+      if (panel != null) {
+         panel.refresh(example);
+      }
    }
 
    public void refresh() {

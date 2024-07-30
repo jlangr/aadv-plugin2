@@ -2,30 +2,40 @@ package ui;
 
 import com.intellij.ui.components.JBScrollPane;
 import llms.Example;
+import org.jetbrains.annotations.NotNull;
 import utils.UI;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
-
 import static java.awt.BorderLayout.*;
 import static javax.swing.BorderFactory.createEmptyBorder;
 
 public class ExamplePanel extends JPanel {
-   private static final String MSG_ADD = "Add";
    private static final String MSG_DELETE = "Delete";
+   private static final String MSG_PAUSE = "Temporarily disable example";
+   private static final String MSG_PLAY = "Reactivate example";
    public static final String MSG_NAME_PLACEHOLDER = "[ add name ]";
+   public static final String IMG_CIRCLE_PAUSE = "Circle-Pause.png";
+   public static final String IMG_CIRCLE_PLAY = "Circle-Play.png";
+
+   private final ImageIcon disableIcon =
+      new ImageIcon(ExamplePanel.class.getResource(IMG_CIRCLE_PAUSE));
+   private final ImageIcon enableIcon =
+      new ImageIcon(ExamplePanel.class.getResource(IMG_CIRCLE_PLAY));
+
    private final ExampleListener exampleListener;
-   private final Example example;
+   private Example example;
    private JTextArea exampleField;
    private EditableLabel nameLabel;
    private JButton deleteExampleButton;
+   private JButton toggleEnabledButton;
 
-   public ExamplePanel(ExampleListener exampleListener, String name, Example example) {
+   public ExamplePanel(ExampleListener exampleListener, String id, Example example) {
       this.exampleListener = exampleListener;
       this.example = example;
-      setName(name);
+      setName(id);
 
       setLayout(new BorderLayout());
       add(createButtonPanel(), EAST);
@@ -86,9 +96,21 @@ public class ExamplePanel extends JPanel {
 
       deleteExampleButton = UI.createIconButton(this, "close_icon.png", MSG_DELETE,
          e -> exampleListener.delete(getName()));
-
       buttonPanel.add(deleteExampleButton);
+
+      toggleEnabledButton = UI.createIconButton(getEnabledButtonIcon(), getImageTooltip(),
+         e -> exampleListener.toggleEnabled(getName()));
+      buttonPanel.add(toggleEnabledButton);
+
       return buttonPanel;
+   }
+
+   private ImageIcon getEnabledButtonIcon() {
+      return example.isEnabled() ? disableIcon : enableIcon;
+   }
+
+   private String getImageTooltip() {
+      return example.isEnabled() ? MSG_PAUSE : MSG_PLAY;
    }
 
    private void createExampleField() {
@@ -105,11 +127,10 @@ public class ExamplePanel extends JPanel {
       });
    }
 
-   public void setExampleText(String text) {
-      exampleField.setText(text);
-   }
-
-   public void setExampleName(String name) {
-      nameLabel.setText(name);
+   public void refresh(Example example) {
+      this.example = example;
+      toggleEnabledButton.setIcon(getEnabledButtonIcon());
+      toggleEnabledButton.setToolTipText(getToolTipText());
+      // TODO any others? not yet
    }
 }

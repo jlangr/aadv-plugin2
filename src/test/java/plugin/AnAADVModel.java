@@ -53,6 +53,7 @@ class AnAADVModel {
    void combinesExamplesForPrompt() {
       model.setPromptText("prompt text");
       model.addExample("1");
+      model.upsertExample("1", "abc", "one two three");
 
       var result = model.combinedPrompt();
 
@@ -61,5 +62,24 @@ class AnAADVModel {
          Examples:
          name: abc
          one two three""", result);
+   }
+
+
+   @Test
+   void doesNotIncludeDisabledExamples() {
+      model.setPromptText("prompt text");
+      model.addExample("1");
+      model.upsertExample("1", "abc", "");
+      model.addExample("2");
+      model.upsertExample("2", "def", "");
+
+      model.toggleEnabled("1");
+
+      var result = model.combinedPrompt();
+      assertEquals("""
+         prompt text
+         Examples:
+         name: def
+         """, result);
    }
 }

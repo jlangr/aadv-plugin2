@@ -3,10 +3,8 @@ package ui;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.ui.components.JBScrollPane;
 import llms.Example;
-
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
 
 public class AADVPromptPanel extends JPanel {
    public static final String MSG_KEY_NOT_CONFIGURED =
@@ -58,5 +56,9 @@ public class AADVPromptPanel extends JPanel {
 
    public void deleteExample(String id) {
       examplesPanel.deleteExample(id);
+   }
+
+   public void refreshExample(Example example) {
+      examplesPanel.refresh(example);
    }
 }

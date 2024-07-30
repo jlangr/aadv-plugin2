@@ -64,7 +64,14 @@ public class ExampleList {
 
    public String concatenate() {
        return getAll().stream()
+          .filter(Example::isEnabled)
           .map(Example::toPromptString)
           .collect(joining("\n---\n"));
+   }
+
+   public void toggleEnabled(String id) {
+      var example = getOptional(id);
+      if (example.isPresent())
+         example.get().toggleEnabled();
    }
 }

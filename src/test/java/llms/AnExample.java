@@ -1,5 +1,6 @@
 package llms;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,5 +22,33 @@ class AnExample {
       var result = example.toPromptString();
 
       assertEquals("name: my name\nsome text", result);
+   }
+
+   @Nested
+   class IsEnabled {
+      @Test
+      void isEnabledByDefault() {
+         var example = new Example("1", "", "some text");
+         assertTrue(example.isEnabled());
+      }
+
+      @Test
+      void togglesToNotEnabledAsFirstStep() {
+         var example = new Example("1", "", "some text");
+
+         example.toggleEnabled();
+
+         assertFalse(example.isEnabled());
+      }
+
+      @Test
+      void togglesBackToEnabled() {
+         var example = new Example("1", "", "some text");
+         example.toggleEnabled();
+
+         example.toggleEnabled();
+
+         assertTrue(example.isEnabled());
+      }
    }
 }

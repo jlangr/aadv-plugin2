@@ -129,6 +129,12 @@ public class AADVController implements PromptListener, SourcePanelListener, Exam
       promptView.addNewExample(id);
    }
 
+   @Override
+   public void toggleEnabled(String id) {
+      model.toggleEnabled(id);
+      promptView.refreshExample(model.getExample(id));
+   }
+
    public void setPromptView(AADVPromptPanel panel) {
       this.promptView = panel;
    }

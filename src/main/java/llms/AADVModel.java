@@ -1,6 +1,7 @@
 package llms;
 
 import ui.SourcePanel;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -49,6 +50,11 @@ public class AADVModel {
    public void deleteExample(String id) {
       exampleList.deleteExample(id);
    }
+
+   public void toggleEnabled(String id) {
+      exampleList.toggleEnabled(id);
+   }
+
 // ===
 
    public String combinedPrompt() {

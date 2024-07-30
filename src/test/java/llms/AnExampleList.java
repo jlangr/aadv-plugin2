@@ -46,5 +46,22 @@ class AnExampleList {
             name: text c
             description for c""", concatenated);
       }
+
+      @Test
+      void ignoresDisabledExamples() {
+         var exampleB = new Example("B", "", "text b");
+         exampleB.toggleEnabled();
+         examples = new ExampleList(
+            new Example("A", "", "text a"),
+            exampleB,
+            new Example("C", "", "text c"));
+
+         var concatenated = examples.concatenate();
+
+         assertEquals("""
+            text a
+            ---
+            text c""", concatenated);
+      }
    }
 }
