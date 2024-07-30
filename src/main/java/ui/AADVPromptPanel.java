@@ -59,8 +59,4 @@ public class AADVPromptPanel extends JPanel {
    public void deleteExample(String name) {
       examplesPanel.deleteExample(name);
    }
-
-   public void refreshExamples(List<Example> examples) {
-      examplesPanel.refreshExamples(examples);
-   }
 }

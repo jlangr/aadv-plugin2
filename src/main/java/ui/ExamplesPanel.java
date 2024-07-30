@@ -48,22 +48,6 @@ public class ExamplesPanel extends JPanel {
       this.repaint();
    }
 
-   public void refreshExamples(List<Example> examples) {
-
-//      this.remove()
-
-//      examples.stream()
-//         .forEach(example -> {
-//            var panel = new ExamplePanel(exampleListener, example.getId(), example);
-//            panel.setExampleText(example.getText());
-//            panel.setExampleName(example.getName());
-//            panel.setName(example.getId());
-//            add(example.getId(), panel);
-//         });
-//
-      refresh();
-   }
-
    public void deleteExample(String name) {
       for (var component: getComponents())
          if (component != null && component.getName() != null && component.getName().equals(name)) {
