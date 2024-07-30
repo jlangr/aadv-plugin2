@@ -1,12 +1,11 @@
-package ui.utils;
+package utils;
 
 import llms.SourceFile;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import utils.PackageExtractor;
 
 import static llms.FileType.PROD;
-import static org.junit.jupiter.api.Assertions.*;
 
 public class APackageExtractor {
    PackageExtractor packageExtractor = new PackageExtractor();

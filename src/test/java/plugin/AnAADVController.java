@@ -1,17 +1,21 @@
 package plugin;
 
 import llms.AADVModel;
-import llms.Example;
-import llms.ExampleList;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import ui.AADVPromptPanel;
-import java.util.List;
-import static org.junit.jupiter.api.Assertions.*;
+import utils.IDGenerator;
+
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class AnAADVController {
    @Test
    void isRetrievedViaSingletonAccessor() {
@@ -24,55 +28,42 @@ class AnAADVController {
    @Nested
    class Examples {
       AADVController controller = AADVController.get(null);
-      AADVPromptPanel promptView = mock(AADVPromptPanel.class);
-      AADVModel model = mock(AADVModel.class);
-      static final Example ABC_EXAMPLE = new Example("abc", "ABC name", "ABC text");
-      ExampleList examples = new ExampleList();
+      @Mock
+      AADVPromptPanel promptView;
+      @Mock
+      AADVModel model;
+      @Mock
+      IDGenerator idGenerator;
 
       @BeforeEach
       void setup() {
+         when(idGenerator.generate()).thenReturn("1");
+
+         controller.setIdGenerator(idGenerator);
          controller.setPromptView(promptView);
          controller.setModel(model);
-         examples.add(ABC_EXAMPLE.getId(), ABC_EXAMPLE.getName(), ABC_EXAMPLE.getText());
       }
 
       @AfterEach
       void resetController() {
          AADVController.reset();
+         Mockito.reset(idGenerator);
       }
 
       @Test
-      void addedToModelOnAdd() {
-         controller.add(ABC_EXAMPLE.getId(), ABC_EXAMPLE.getName(), ABC_EXAMPLE.getText());
+      void addedToModelAndPromptViewOnAddNewExample() {
+         controller.addNewExample();
 
-         verify(model).addExample(ABC_EXAMPLE.getId());
+         verify(model).addExample("1");
+         verify(promptView).addNewExample("1");
       }
 
       @Test
-      void deletedFromModelOnDelete() {
-         controller.delete(ABC_EXAMPLE.getId());
+      void deletedFromModelAndPromptViewOnDelete() {
+         controller.delete("1");
 
-         verify(model).deleteExample(ABC_EXAMPLE.getId());
-      }
-
-      @Test
-      void refreshesPromptViewOnAdd() {
-         when(model.getExamples()).thenReturn(examples.getAll());
-
-         controller.add(ABC_EXAMPLE.getId(), ABC_EXAMPLE.getText(), ABC_EXAMPLE.getText());
-
-         // TODO
-         verify(promptView).refreshExamples(List.of(ABC_EXAMPLE));
-      }
-
-      @Test
-      void refreshesPromptViewOnDelete() {
-         when(model.getExamples()).thenReturn(examples.getAll());
-
-         controller.delete(ABC_EXAMPLE.getId());
-
-         // TODO
-         verify(promptView).refreshExamples(List.of(ABC_EXAMPLE));
+         verify(model).deleteExample("1");
+         verify(promptView).deleteExample("1");
       }
    }
 }

@@ -3,6 +3,7 @@ package plugin;
 import com.intellij.openapi.project.Project;
 import llms.*;
 import ui.*;
+import utils.IDGenerator;
 import utils.idea.IDEAEditor;
 import javax.swing.*;
 import java.awt.*;
@@ -14,19 +15,18 @@ import static java.awt.Cursor.getPredefinedCursor;
 public class AADVController implements PromptListener, SourcePanelListener, ExampleListener {
    private static AADVController controller = null;
    private final Project project;
-   private AADVPromptPanel promptView;
-   private final AADVOutputPanel outputView;
+   private AADVPromptPanel promptView = new AADVPromptPanel(this, this);
+   private final AADVOutputPanel outputView = new AADVOutputPanel();
 
    private OpenAIClient openAIClient
 //      = new StubOpenAIClient(); // TODO change to prod
       = new OpenAIClient();
    AADVModel model = new AADVModel();
    private IDEAEditor ide = new IDEAEditor();
+   private IDGenerator idGenerator = new IDGenerator();
 
    private AADVController(Project project) {
       this.project = project;
-      this.promptView = new AADVPromptPanel(this, this);
-      this.outputView = new AADVOutputPanel();
    }
 
    public static void reset() {
@@ -109,9 +109,10 @@ public class AADVController implements PromptListener, SourcePanelListener, Exam
    }
 
    // example listener methods
+
+   // this might be only "update" when all is said and done
    @Override
    public void upsert(String panelName, String name, String text) {
-      System.out.println("UPDATING example: " + name + " " + text);
       model.upsertExample(panelName, name, text);
    }
 
@@ -119,13 +120,11 @@ public class AADVController implements PromptListener, SourcePanelListener, Exam
    public void delete(String panelName) {
       model.deleteExample(panelName);
       promptView.deleteExample(panelName);
-//      promptView.refreshExamples(model.getExamples());
    }
 
    @Override
    public void addNewExample() {
-      System.out.println("ADDING new example");
-      var id = UUID.randomUUID().toString();
+      var id = idGenerator.generate();
       model.addExample(id);
       promptView.addNewExample(id);
    }
@@ -136,5 +135,9 @@ public class AADVController implements PromptListener, SourcePanelListener, Exam
 
    public void setModel(AADVModel model) {
       this.model = model;
+   }
+
+   void setIdGenerator(IDGenerator idGenerator) {
+      this.idGenerator = idGenerator;
    }
 }
