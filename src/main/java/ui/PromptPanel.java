@@ -43,7 +43,7 @@ public class PromptPanel extends JPanel {
    }
 
    private JPanel createTitlePanel() {
-      var titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+      var titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
       titlePanel.add(createHeaderLabel(MSG_PROMPT));
       return titlePanel;
    }

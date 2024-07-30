@@ -19,10 +19,7 @@ public class ExamplesPanel extends JPanel {
 
       setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-      add(UI.createHeaderLabel(MSG_EXAMPLES));
-
-      createAddExampleButton();
-      add(addExampleButton);
+      add(createHeaderRow());
 
       add(Box.createRigidArea(new Dimension(0, 20)));
 
@@ -36,9 +33,16 @@ public class ExamplesPanel extends JPanel {
       setMinimumSize(new Dimension(400, preferredHeight));
    }
 
-   private void createAddExampleButton() {
+   private JPanel createHeaderRow() {
+      var panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
       addExampleButton = UI.createIconButton(this, "plus.png", MSG_ADD,
          e -> exampleListener.addNewExample());
+      panel.add(addExampleButton);
+
+      panel.add(UI.createHeaderLabel(MSG_EXAMPLES));
+
+      return panel;
    }
 
    public void addEmptyExample(String name) {
