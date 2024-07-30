@@ -3,11 +3,11 @@ package plugin;
 import com.intellij.openapi.project.Project;
 import llms.*;
 import ui.*;
+import utils.Console;
 import utils.IDGenerator;
 import utils.idea.IDEAEditor;
 import javax.swing.*;
 import java.awt.*;
-import java.util.UUID;
 
 import static java.awt.Cursor.WAIT_CURSOR;
 import static java.awt.Cursor.getPredefinedCursor;
@@ -68,8 +68,8 @@ public class AADVController implements PromptListener, SourcePanelListener, Exam
 
    @Override
    public void dump(String text) {
-      System.out.println("PROMPT:\n");
-      System.out.println(model.combinedPrompt());
+      Console.log("PROMPT:\n");
+      Console.log(model.combinedPrompt());
    }
 
    @Override
@@ -117,9 +117,9 @@ public class AADVController implements PromptListener, SourcePanelListener, Exam
    }
 
    @Override
-   public void delete(String panelName) {
-      model.deleteExample(panelName);
-      promptView.deleteExample(panelName);
+   public void delete(String id) {
+      model.deleteExample(id);
+      promptView.deleteExample(id);
    }
 
    @Override

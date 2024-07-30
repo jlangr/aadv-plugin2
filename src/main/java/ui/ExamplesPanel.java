@@ -51,11 +51,14 @@ public class ExamplesPanel extends JPanel {
    }
 
    public void deleteExample(String name) {
-      for (var component: examplePanels.getComponents())
-         if (component != null && component.getName() != null && component.getName().equals(name)) {
-            remove(component);
+      for (var component: examplePanels.getComponents()) {
+         if (component == null || component.getName() == null)
+            continue;
+         if (component.getName().equals(name)) {
+            examplePanels.remove(component);
             break;
          }
+      }
       refresh();
    }
 
