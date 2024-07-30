@@ -1,15 +1,18 @@
 package ui;
 
+import com.intellij.ui.components.JBScrollPane;
 import llms.Example;
 import utils.UI;
-
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
 
 public class ExamplesPanel extends JPanel {
    public static final String MSG_EXAMPLES = "Examples";
+   private static final String MSG_ADD = "Add";
    private final ExampleListener exampleListener;
+   private final JPanel examplePanels = new JPanel();
+
+   JButton addExampleButton;
 
    public ExamplesPanel(ExampleListener exampleListener) {
       this.exampleListener = exampleListener;
@@ -18,10 +21,13 @@ public class ExamplesPanel extends JPanel {
 
       add(UI.createHeaderLabel(MSG_EXAMPLES));
 
-      add(Box.createRigidArea(new Dimension(0, 20)));
-
       createAddExampleButton();
       add(addExampleButton);
+
+      add(Box.createRigidArea(new Dimension(0, 20)));
+
+      examplePanels.setLayout(new BoxLayout(examplePanels, BoxLayout.Y_AXIS));
+      add(new JBScrollPane(examplePanels));
 
       // TODO hmm
       var exampleField = new JTextArea();
@@ -30,30 +36,27 @@ public class ExamplesPanel extends JPanel {
       setMinimumSize(new Dimension(400, preferredHeight));
    }
 
-   JButton addExampleButton;
-   private static final String MSG_ADD = "Add";
-
    private void createAddExampleButton() {
       addExampleButton = UI.createIconButton(this, "plus.png", MSG_ADD,
          e -> exampleListener.addNewExample());
    }
 
    public void addEmptyExample(String name) {
-      add(new ExamplePanel(exampleListener, name, Example.EMPTY));
+      examplePanels.add(new ExamplePanel(exampleListener, name, Example.EMPTY));
+      refresh();
+   }
+
+   public void deleteExample(String name) {
+      for (var component: examplePanels.getComponents())
+         if (component != null && component.getName() != null && component.getName().equals(name)) {
+            remove(component);
+            break;
+         }
       refresh();
    }
 
    public void refresh() {
       this.revalidate();
       this.repaint();
-   }
-
-   public void deleteExample(String name) {
-      for (var component: getComponents())
-         if (component != null && component.getName() != null && component.getName().equals(name)) {
-            remove(component);
-            break;
-         }
-      refresh();
    }
 }

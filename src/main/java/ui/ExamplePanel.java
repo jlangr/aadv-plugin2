@@ -92,7 +92,7 @@ public class ExamplePanel extends JPanel {
    }
 
    private void createExampleField() {
-      exampleField = UI.createTextArea(3, 80, (e) -> {});
+      exampleField = UI.createTextArea(8, 80, (e) -> {});
       exampleField.getDocument().addDocumentListener(new DocumentListener() {
          @Override
          public void insertUpdate(DocumentEvent e) { notifyExampleListener(); }
