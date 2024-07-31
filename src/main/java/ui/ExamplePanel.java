@@ -2,7 +2,6 @@ package ui;
 
 import com.intellij.ui.components.JBScrollPane;
 import llms.Example;
-import org.jetbrains.annotations.NotNull;
 import utils.UI;
 
 import javax.swing.*;
@@ -54,28 +53,32 @@ public class ExamplePanel extends JPanel {
    }
 
    private JPanel createContentPanel() {
-      createExampleField();
+      exampleField = createExampleField();
+      nameLabel = createNameLabel();
 
       var panel = new JPanel();
       panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
       panel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-      var initialText = example == Example.EMPTY || isEmpty(example.getName())
-         ? MSG_NAME_PLACEHOLDER
-         : example.getName();
-
-      nameLabel = new EditableLabel(initialText,
-         text -> exampleListener.upsert(getName(), text, exampleField.getText()));
       nameLabel.setAlignmentX(LEFT_ALIGNMENT);
       panel.add(nameLabel);
 
       panel.add(Box.createRigidArea(new Dimension(0, 5)));
 
-      exampleField.setAlignmentX(LEFT_ALIGNMENT);
       var scrollPane = new JBScrollPane(exampleField);
       scrollPane.setAlignmentX(LEFT_ALIGNMENT);
       panel.add(scrollPane);
       return panel;
+   }
+
+   private EditableLabel createNameLabel() {
+      var initialText = example == Example.EMPTY || isEmpty(example.getName())
+         ? MSG_NAME_PLACEHOLDER
+         : example.getName();
+
+      var nameLabel = new EditableLabel(initialText,
+         text -> exampleListener.upsert(getName(), text, exampleField.getText()));
+      return nameLabel;
    }
 
    private boolean isEmpty(String s) {
@@ -113,8 +116,8 @@ public class ExamplePanel extends JPanel {
       return example.isEnabled() ? MSG_PAUSE : MSG_PLAY;
    }
 
-   private void createExampleField() {
-      exampleField = UI.createTextArea(8, 80, (e) -> {});
+   private JTextArea createExampleField() {
+      var exampleField = UI.createTextArea(8, 80, (e) -> {});
       exampleField.getDocument().addDocumentListener(new DocumentListener() {
          @Override
          public void insertUpdate(DocumentEvent e) { notifyExampleListener(); }
@@ -125,6 +128,7 @@ public class ExamplePanel extends JPanel {
          @Override
          public void changedUpdate(DocumentEvent e) { notifyExampleListener(); }
       });
+      return exampleField;
    }
 
    public void refresh(Example example) {
