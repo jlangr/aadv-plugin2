@@ -50,8 +50,8 @@ public class AADVPromptPanel extends JPanel {
       add(scrollPane, BorderLayout.CENTER);
    }
 
-   public void addNewExample(String name) {
-      examplesPanel.addEmptyExample(name);
+   public void addNewExample(Example example) {
+      examplesPanel.addExamplePanel(example);
    }
 
    public void deleteExample(String id) {

@@ -1,12 +1,9 @@
 package ui;
 
-import com.intellij.ui.components.JBScrollPane;
 import llms.Example;
 import utils.UI;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import java.awt.*;
 import static java.awt.BorderLayout.*;
 import static javax.swing.BorderFactory.createEmptyBorder;
@@ -25,48 +22,27 @@ public class ExamplePanel extends JPanel {
       new ImageIcon(ExamplePanel.class.getResource(IMG_CIRCLE_PLAY));
 
    private final ExampleListener exampleListener;
+   private final ExampleContentPanel exampleContentPanel;
    private Example example;
-   private JTextArea exampleField;
-   private EditableLabel nameLabel;
    private JButton deleteExampleButton;
    private JButton toggleEnabledButton;
 
-   public ExamplePanel(ExampleListener exampleListener, String id, Example example) {
+   public ExamplePanel(ExampleListener exampleListener, Example example) {
       this.exampleListener = exampleListener;
       this.example = example;
-
-      setName(id);
-
-      exampleField = createExampleField();
-      nameLabel = createNameLabel();
+      exampleContentPanel = new ExampleContentPanel(exampleListener, example);
 
       setLayout(new BorderLayout());
       add(createButtonPanel(), EAST);
-      add(new ExampleContentPanel(nameLabel, exampleField), CENTER);
+      add(exampleContentPanel, CENTER);
 
       setBorder(createEmptyBorder(5, 5, 5, 5));
 
       // dup?
-      int preferredHeight = calculatePreferredHeight(exampleField, 5);
+      // TODO ugh accessing content panel field
+      int preferredHeight = calculatePreferredHeight(exampleContentPanel.exampleField, 5);
       setPreferredSize(new Dimension(400, preferredHeight));
       setMaximumSize(new Dimension(Integer.MAX_VALUE, preferredHeight));
-   }
-
-   private void notifyExampleListener() {
-      exampleListener.upsert(getName(), nameLabel.getText(), exampleField.getText());
-   }
-
-   private EditableLabel createNameLabel() {
-      var initialText = example == Example.EMPTY || isEmpty(example.getName())
-         ? MSG_NAME_PLACEHOLDER
-         : example.getName();
-
-      return new EditableLabel(initialText,
-         text -> exampleListener.upsert(getName(), text, exampleField.getText()));
-   }
-
-   private boolean isEmpty(String s) {
-      return s == null || s.isEmpty();
    }
 
    // dup?
@@ -82,11 +58,11 @@ public class ExamplePanel extends JPanel {
       buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
 
       deleteExampleButton = UI.createIconButton(this, "close_icon.png", MSG_DELETE,
-         e -> exampleListener.delete(getName()));
+         e -> exampleListener.delete(example.getId()));
       buttonPanel.add(deleteExampleButton);
 
       toggleEnabledButton = UI.createIconButton(getEnabledButtonIcon(), getImageTooltip(),
-         e -> exampleListener.toggleEnabled(getName()));
+         e -> exampleListener.toggleEnabled(example.getId()));
       buttonPanel.add(toggleEnabledButton);
 
       return buttonPanel;
@@ -100,41 +76,10 @@ public class ExamplePanel extends JPanel {
       return example.isEnabled() ? MSG_PAUSE : MSG_PLAY;
    }
 
-   private JTextArea createExampleField() {
-      var exampleField = UI.createTextArea(8, 80, (e) -> {});
-      exampleField.getDocument().addDocumentListener(new DocumentListener() {
-         @Override
-         public void insertUpdate(DocumentEvent e) { notifyExampleListener(); }
-
-         @Override
-         public void removeUpdate(DocumentEvent e) { notifyExampleListener(); }
-
-         @Override
-         public void changedUpdate(DocumentEvent e) { notifyExampleListener(); }
-      });
-      return exampleField;
-   }
-
    public void refresh(Example example) {
       this.example = example;
+      exampleContentPanel.refresh(example);
       toggleEnabledButton.setIcon(getEnabledButtonIcon());
       toggleEnabledButton.setToolTipText(getToolTipText());
-      // TODO any others? not yet
-   }
-
-   static class ExampleContentPanel extends JPanel {
-      ExampleContentPanel(EditableLabel nameLabel, JTextArea exampleField) {
-         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-         setAlignmentX(Component.LEFT_ALIGNMENT);
-
-         nameLabel.setAlignmentX(LEFT_ALIGNMENT);
-         add(nameLabel);
-
-         add(Box.createRigidArea(new Dimension(0, 5)));
-
-         var scrollPane = new JBScrollPane(exampleField);
-         scrollPane.setAlignmentX(LEFT_ALIGNMENT);
-         add(scrollPane);
-      }
    }
 }

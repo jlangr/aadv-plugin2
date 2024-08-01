@@ -1,6 +1,8 @@
 package plugin;
 
 import llms.AADVModel;
+import llms.Example;
+import llms.ExampleNotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -12,7 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import ui.AADVPromptPanel;
 import utils.IDGenerator;
 
-import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -28,10 +30,10 @@ class AnAADVController {
    @Nested
    class Examples {
       AADVController controller = AADVController.get(null);
+      AADVModel model = new AADVModel();
+
       @Mock
       AADVPromptPanel promptView;
-      @Mock
-      AADVModel model;
       @Mock
       IDGenerator idGenerator;
 
@@ -54,15 +56,17 @@ class AnAADVController {
       void addedToModelAndPromptViewOnAddNewExample() {
          controller.addNewExample();
 
-         verify(model).addExample("1");
-         verify(promptView).addNewExample("1");
+         var example = model.getExample("1");
+         var expectedExample = new Example("1", "", "");
+         assertEquals(expectedExample, example);
+         verify(promptView).addNewExample(expectedExample);
       }
 
       @Test
       void deletedFromModelAndPromptViewOnDelete() {
          controller.delete("1");
 
-         verify(model).deleteExample("1");
+         assertThrows(ExampleNotFoundException.class, () -> model.getExample("1"));
          verify(promptView).deleteExample("1");
       }
    }

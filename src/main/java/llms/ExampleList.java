@@ -1,7 +1,5 @@
 package llms;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,13 +27,15 @@ public class ExampleList {
    }
 
    public Example get(String id) {
-      var result = getOptional(id);
+      var result = getExampleOptional(id);
       if (result.isEmpty())
          throw new ExampleNotFoundException();
+      System.out.println("FOUND EXAMPLE WITH ID " + id);
       return result.get();
    }
 
-   private Optional<Example> getOptional(String id) {
+   // TODO test
+   public Optional<Example> getExampleOptional(String id) {
       return examples.stream()
          .filter(e -> e.getId().equals(id))
          .findFirst();
@@ -52,14 +52,13 @@ public class ExampleList {
       }
    }
 
-   public void upsert(String id, String name, String text) {
-      var example = getOptional(id);
-      if (example.isPresent()) {
-         example.get().setText(text);
-         example.get().setName(name);
-      }
-      else
-         add(id, name, text);
+   public void update(String id, String name, String text) {
+      var example = getExampleOptional(id);
+      if (example.isEmpty())
+         throw new ExampleNotFoundException();
+
+      example.get().setText(text);
+      example.get().setName(name);
    }
 
    public String concatenate() {
@@ -70,7 +69,7 @@ public class ExampleList {
    }
 
    public void toggleEnabled(String id) {
-      var example = getOptional(id);
+      var example = getExampleOptional(id);
       if (example.isPresent())
          example.get().toggleEnabled();
    }

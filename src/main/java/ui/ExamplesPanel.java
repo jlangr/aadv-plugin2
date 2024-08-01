@@ -45,8 +45,8 @@ public class ExamplesPanel extends JPanel {
       return panel;
    }
 
-   public void addEmptyExample(String id) {
-      examplePanels.add(new ExamplePanel(exampleListener, id, Example.EMPTY));
+   public void addExamplePanel(Example example) {
+      examplePanels.add(new ExamplePanel(exampleListener, example));
       refresh();
    }
 
