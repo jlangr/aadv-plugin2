@@ -58,26 +58,25 @@ public class ExamplesPanel extends JPanel {
       }
    }
 
-   private ExamplePanel getExamplePanel(String id) {
-      for (var component: examplePanels.getComponents()) {
-         if (component == null || component.getName() == null)
-            continue;
-         if (component.getName().equals(id)) {
-            return (ExamplePanel)component;
-         }
-      }
-      return null;
-   }
-
    public void refresh(Example example) {
       var panel = getExamplePanel(example.getId());
-      if (panel != null) {
+      if (panel != null)
          panel.refresh(example);
-      }
    }
 
    public void refresh() {
       this.revalidate();
       this.repaint();
+   }
+
+   private ExamplePanel getExamplePanel(String id) {
+      for (var component: examplePanels.getComponents()) {
+         if (component == null || component.getClass() != ExamplePanel.class)
+            continue;
+         var examplePanel = (ExamplePanel)component;
+         if (examplePanel.getExampleId().equals(id))
+            return examplePanel;
+      }
+      return null;
    }
 }

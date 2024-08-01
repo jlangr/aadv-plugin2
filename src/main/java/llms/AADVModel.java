@@ -27,7 +27,7 @@ public class AADVModel {
    }
 
    // Examples
-   public void upsertExample(String id, String name, String text) {
+   public void updateExample(String id, String name, String text) {
       exampleList.update(id, name, text);
    }
 

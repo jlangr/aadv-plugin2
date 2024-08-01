@@ -29,10 +29,10 @@ class AnAADVModel {
    }
 
    @Test
-   void upsertExampleWith() {
+   void updateExampleWith() {
       model.addExample("123");
 
-      model.upsertExample("123", "a", "smelt");
+      model.updateExample("123", "a", "smelt");
 
       assertEquals(model.getExample("123").getText(), "smelt");
       assertEquals(model.getExample("123").getName(), "a");
@@ -53,7 +53,7 @@ class AnAADVModel {
    void combinesExamplesForPrompt() {
       model.setPromptText("prompt text");
       model.addExample("1");
-      model.upsertExample("1", "abc", "one two three");
+      model.updateExample("1", "abc", "one two three");
 
       var result = model.combinedPrompt();
 
@@ -69,9 +69,9 @@ class AnAADVModel {
    void doesNotIncludeDisabledExamples() {
       model.setPromptText("prompt text");
       model.addExample("1");
-      model.upsertExample("1", "abc", "");
+      model.updateExample("1", "abc", "");
       model.addExample("2");
-      model.upsertExample("2", "def", "");
+      model.updateExample("2", "def", "");
 
       model.toggleEnabled("1");
 

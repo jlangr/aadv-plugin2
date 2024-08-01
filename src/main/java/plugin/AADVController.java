@@ -112,7 +112,7 @@ public class AADVController implements PromptListener, SourcePanelListener, Exam
 
    @Override
    public void update(String panelName, String name, String text) {
-      model.upsertExample(panelName, name, text);
+      model.updateExample(panelName, name, text);
    }
 
    @Override

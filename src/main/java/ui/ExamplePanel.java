@@ -82,4 +82,8 @@ public class ExamplePanel extends JPanel {
       toggleEnabledButton.setIcon(getEnabledButtonIcon());
       toggleEnabledButton.setToolTipText(getToolTipText());
    }
+
+   public String getExampleId() {
+      return example.getId();
+   }
 }
