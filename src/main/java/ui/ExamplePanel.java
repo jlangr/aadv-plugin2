@@ -34,11 +34,15 @@ public class ExamplePanel extends JPanel {
    public ExamplePanel(ExampleListener exampleListener, String id, Example example) {
       this.exampleListener = exampleListener;
       this.example = example;
+
       setName(id);
+
+      exampleField = createExampleField();
+      nameLabel = createNameLabel();
 
       setLayout(new BorderLayout());
       add(createButtonPanel(), EAST);
-      add(createContentPanel(), CENTER);
+      add(new ExampleContentPanel(nameLabel, exampleField), CENTER);
 
       setBorder(createEmptyBorder(5, 5, 5, 5));
 
@@ -52,33 +56,13 @@ public class ExamplePanel extends JPanel {
       exampleListener.upsert(getName(), nameLabel.getText(), exampleField.getText());
    }
 
-   private JPanel createContentPanel() {
-      exampleField = createExampleField();
-      nameLabel = createNameLabel();
-
-      var panel = new JPanel();
-      panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-      panel.setAlignmentX(Component.LEFT_ALIGNMENT);
-
-      nameLabel.setAlignmentX(LEFT_ALIGNMENT);
-      panel.add(nameLabel);
-
-      panel.add(Box.createRigidArea(new Dimension(0, 5)));
-
-      var scrollPane = new JBScrollPane(exampleField);
-      scrollPane.setAlignmentX(LEFT_ALIGNMENT);
-      panel.add(scrollPane);
-      return panel;
-   }
-
    private EditableLabel createNameLabel() {
       var initialText = example == Example.EMPTY || isEmpty(example.getName())
          ? MSG_NAME_PLACEHOLDER
          : example.getName();
 
-      var nameLabel = new EditableLabel(initialText,
+      return new EditableLabel(initialText,
          text -> exampleListener.upsert(getName(), text, exampleField.getText()));
-      return nameLabel;
    }
 
    private boolean isEmpty(String s) {
@@ -136,5 +120,21 @@ public class ExamplePanel extends JPanel {
       toggleEnabledButton.setIcon(getEnabledButtonIcon());
       toggleEnabledButton.setToolTipText(getToolTipText());
       // TODO any others? not yet
+   }
+
+   static class ExampleContentPanel extends JPanel {
+      ExampleContentPanel(EditableLabel nameLabel, JTextArea exampleField) {
+         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+         setAlignmentX(Component.LEFT_ALIGNMENT);
+
+         nameLabel.setAlignmentX(LEFT_ALIGNMENT);
+         add(nameLabel);
+
+         add(Box.createRigidArea(new Dimension(0, 5)));
+
+         var scrollPane = new JBScrollPane(exampleField);
+         scrollPane.setAlignmentX(LEFT_ALIGNMENT);
+         add(scrollPane);
+      }
    }
 }
