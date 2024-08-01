@@ -15,6 +15,7 @@ class ExampleContentPanel extends JPanel {
 
    JTextArea exampleField;
    private EditableLabel nameLabel;
+   private JLabel disabledLabel = new JLabel("");
 
    ExampleContentPanel(ExampleListener exampleListener, Example example) {
       this.example = example;
@@ -30,8 +31,11 @@ class ExampleContentPanel extends JPanel {
       setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
       setAlignmentX(Component.LEFT_ALIGNMENT);
 
-      nameLabel.setAlignmentX(LEFT_ALIGNMENT);
-      add(nameLabel);
+      var header = new JPanel(new FlowLayout(FlowLayout.LEFT));
+      header.add(nameLabel);
+      header.setAlignmentX(LEFT_ALIGNMENT);
+      header.add(disabledLabel);
+      add(header);
 
       add(Box.createRigidArea(new Dimension(0, 5)));
 
@@ -62,12 +66,14 @@ class ExampleContentPanel extends JPanel {
    }
 
    private EditableLabel createNameLabel(Example example) {
-      var initialText = example == Example.EMPTY || isEmpty(example.getName())
+      return new EditableLabel(nameLabelText(example),
+         text -> exampleListener.update(example.getId(), text, exampleField.getText()));
+   }
+
+   private String nameLabelText(Example example) {
+      return example == Example.EMPTY || isEmpty(example.getName())
          ? ExamplePanel.MSG_NAME_PLACEHOLDER
          : example.getName();
-
-      return new EditableLabel(initialText,
-         text -> exampleListener.update(example.getId(), text, exampleField.getText()));
    }
 
    private void notifyExampleListener() {
@@ -80,5 +86,9 @@ class ExampleContentPanel extends JPanel {
 
    public void refresh(Example example) {
       this.example = example;
+      nameLabel.setText(nameLabelText(example));
+      disabledLabel.setText(example.isEnabled() ? "" : "[ disabled ]");
+//      this.revalidate();
+//      this.repaint();
    }
 }

@@ -30,7 +30,6 @@ public class ExampleList {
       var result = getExampleOptional(id);
       if (result.isEmpty())
          throw new ExampleNotFoundException();
-      System.out.println("FOUND EXAMPLE WITH ID " + id);
       return result.get();
    }
 
