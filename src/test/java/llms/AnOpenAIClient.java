@@ -1,15 +1,36 @@
 package llms;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import plugin.AADVPluginSettings;
 import utils.Http;
 
-import static llms.OpenAIClient.MESSAGE_TYPE_SYSTEM;
-import static llms.OpenAIClient.PROMPT_ASSISTANT_GUIDELINES;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
+import java.net.http.HttpRequest;
+import java.util.HashMap;
+import java.util.List;
 
+import static llms.OpenAIClient.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
 class AnOpenAIClient {
-    OpenAIClient client = new OpenAIClient();
+    @Mock
+    Http http;
+
+    @Mock
+    HttpRequest request;
+
+    @Mock
+    AADVPluginSettings aadvPluginSettings;
+
+    @InjectMocks
+    OpenAIClient client;
 
     @Test
     void usesARequestBodyWithAllNecessaryMessages() {
@@ -20,12 +41,23 @@ class AnOpenAIClient {
         assertEquals(new Message(MESSAGE_TYPE_SYSTEM, PROMPT_ASSISTANT_GUIDELINES), messages[0]);
     }
 
-    // TODO
 //    @Test
 //    void retrieveCompletion() {
-//        var http = mock(Http.class);
+//        var contentWithTestFile = "/* test class A.java */\nclass A{}\n/* end test class */";
+//        var examples = new ExampleList(new Example("1", "name", "text"));
+//        var choice = new Choice(1, new Message("", contentWithTestFile), "", null);
+//        var response = new ChatCompletionResponse(
+//           "1", "", 1L, "model",
+//           List.of(choice), null, "fingerprint");
+//        var requestBody = client.createRequestBody("prompt", examples);
+//        when(aadvPluginSettings.retrieveAPIKey()).thenReturn("apikey");
+//        when(http.createPostRequest(any(HashMap.class), eq("apiKey"), eq(API_URL)))
+//           .thenReturn(request);
+//        when(http.send(request)).thenReturn(response);
 //
-//        client.retrieveCompletion("prompt", )
+//        var files = client.retrieveCompletion("prompt", examples);
 //
+//        assertEquals(new SourceFile(FileType.TEST, "class A{}", "A.java"),
+//           files.testFiles().get(0));
 //    }
 }

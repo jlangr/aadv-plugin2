@@ -29,25 +29,31 @@ public class OpenAIClient {
    static final String PROMPT_TEXT = "Generate code for this:";
    static final String PROMPT_EXAMPLES = "Examples:";
 
-   Http http = new Http();
+   private final Http http;
+   private AADVPluginSettings aadvPluginSettings;
 
-   public Files retrieveCompletion(String prompt, ExampleList examples) {
-      var apiKey = new AADVPluginSettings().retrieveAPIKey();
-      var requestBody = createRequestBody(prompt, examples);
+   public OpenAIClient(Http http, AADVPluginSettings aadvPluginSettings) {
+      this.http = http;
+      this.aadvPluginSettings = aadvPluginSettings;
+   }
+
+   public Files retrieveCompletion(Message[] messages) {
+      var apiKey = aadvPluginSettings.retrieveAPIKey();
+      var requestBody = createRequestBody(messages);
       var request = http.createPostRequest(requestBody, apiKey, API_URL);
       var completion = (ChatCompletionResponse)http.send(request);
       return new CodeResponseSplitter().split(completion.firstMessageContent());
    }
 
-   private HashMap<Object, Object> createRequestBody(String prompt, ExampleList examples) {
+   private HashMap<Object, Object> createRequestBody(Message[] messages) {
       var requestBody = new HashMap<>();
       requestBody.put("model", "gpt-4o");
-      requestBody.put("messages", createRequestMessages(prompt, examples));
+      requestBody.put("messages", messages);
       requestBody.put("max_tokens", 4096);
       return requestBody;
    }
 
-   Message[] createRequestMessages(String prompt, ExampleList examples) {
+   public Message[] createRequestMessages(String prompt, ExampleList examples) {
       var messages = new ArrayList<Message>();
       messages.add(new Message(MESSAGE_TYPE_SYSTEM, PROMPT_ASSISTANT_GUIDELINES));
       messages.add(new Message(MESSAGE_TYPE_SYSTEM, PROMPT_CODE_STYLE));

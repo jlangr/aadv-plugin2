@@ -26,14 +26,14 @@ public class Http {
       }
    }
 
-   public HttpRequest createPostRequest(HashMap<Object, Object> request, String apiKey, String apiUrl) {
-      var requestBody = toJson(request);
+   public HttpRequest createPostRequest(HashMap<Object, Object> requestBody, String apiKey, String apiUrl) {
+      var jsonRequestBody = toJson(requestBody);
 
       return HttpRequest.newBuilder()
          .uri(URI.create(apiUrl))
          .header("Content-Type", "application/json")
          .header("Authorization", "Bearer " + apiKey)
-         .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+         .POST(HttpRequest.BodyPublishers.ofString(jsonRequestBody))
          .build();
    }
 

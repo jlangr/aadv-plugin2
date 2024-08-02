@@ -4,6 +4,7 @@ import com.intellij.openapi.project.Project;
 import llms.*;
 import ui.*;
 import utils.Console;
+import utils.Http;
 import utils.IDGenerator;
 import utils.idea.IDEAEditor;
 import javax.swing.*;
@@ -18,11 +19,11 @@ public class AADVController implements PromptListener, SourcePanelListener, Exam
    private AADVPromptPanel promptView = new AADVPromptPanel(this, this);
    private final AADVOutputPanel outputView = new AADVOutputPanel();
 
-   private OpenAIClient openAIClient
+   private final OpenAIClient openAIClient
 //      = new StubOpenAIClient(); // TODO change to prod
-      = new OpenAIClient();
+      = new OpenAIClient(new Http(), new AADVPluginSettings());
    AADVModel model = new AADVModel();
-   private IDEAEditor ide = new IDEAEditor();
+   private final IDEAEditor ide = new IDEAEditor();
    private IDGenerator idGenerator = new IDGenerator();
 
    private AADVController(Project project) {
@@ -60,7 +61,9 @@ public class AADVController implements PromptListener, SourcePanelListener, Exam
       promptView.getParent().setCursor(getPredefinedCursor(WAIT_CURSOR));
 
       new Thread(() -> {
-         var files = openAIClient.retrieveCompletion(text, model.getExampleList());
+         var messages = openAIClient.createRequestMessages(text, model.getExampleList());
+//         var files = openAIClient.retrieveCompletion(text, model.getExampleList());
+         var files = openAIClient.retrieveCompletion(messages);
          updateSourcePanels(files);
          promptView.getParent().setCursor(Cursor.getDefaultCursor());
       }).start();
@@ -78,10 +81,8 @@ public class AADVController implements PromptListener, SourcePanelListener, Exam
    }
 
    private void updateSourcePanels(Files files) {
-      files.prodFiles().stream()
-            .forEach(file -> upsertSourcePanel(file));
-      files.testFiles().stream()
-         .forEach(file -> upsertSourcePanel(file));
+      files.prodFiles().forEach(this::upsertSourcePanel);
+      files.testFiles().forEach(this::upsertSourcePanel);
    }
 
    private void upsertSourcePanel(SourceFile sourceFile) {
