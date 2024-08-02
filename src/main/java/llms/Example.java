@@ -54,7 +54,7 @@ public class Example {
       return name;
    }
 
-   String toPromptString() {
+   String toPromptText() {
       var builder = new StringBuilder();
       if (name != null && !name.isEmpty()) builder.append("name: " + name + "\n");
       builder.append(text);

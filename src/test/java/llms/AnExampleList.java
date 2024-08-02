@@ -5,12 +5,23 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class AnExampleList {
    ExampleList examples;
+
+   @Nested
+   class Creation {
+      @Test
+      void withAListOfExamples() {
+         examples = new ExampleList(new Example("1", "x", "y"));
+
+         assertEquals(List.of(new Example("1", "x", "y")), examples.getAll());
+      }
+   }
 
    @Nested
    class WhenMutated {
@@ -51,6 +62,23 @@ class AnExampleList {
          examples.delete("1");
 
          assertEquals(Collections.emptyList(), examples.getAll());
+      }
+
+      @Test
+      void deleteDoesNothingOnEmptyList() {
+         examples.delete("1");
+
+         assertEquals(Collections.emptyList(), examples.getAll());
+      }
+
+      @Test
+      void deleteDoesNothingWhenExampleNotFound() {
+         examples.add("1", "name", "text");
+         examples.add("2", "name", "text");
+
+         examples.delete("3");
+
+         assertEquals(List.of(new Example("1", "name", "text"), new Example("2", "name", "text")), examples.getAll());
       }
 
       @Test

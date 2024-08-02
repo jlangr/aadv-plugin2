@@ -10,7 +10,7 @@ class AnExample {
    void createsPromptStringWhenOnlyExampleTextProvided() {
       var example = new Example("1", "", "some text");
 
-      var result = example.toPromptString();
+      var result = example.toPromptText();
 
       assertEquals("some text", result);
    }
@@ -19,9 +19,18 @@ class AnExample {
    void createsPromptStringWhenExampleTextAndNameProvided() {
       var example = new Example("1", "my name", "some text");
 
-      var result = example.toPromptString();
+      var result = example.toPromptText();
 
       assertEquals("name: my name\nsome text", result);
+   }
+
+   @Test
+   void doesNotAppendNameIfNull() {
+      var example = new Example("1", null, "some text");
+
+      var result = example.toPromptText();
+
+      assertEquals("some text", result);
    }
 
    @Nested

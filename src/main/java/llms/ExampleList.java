@@ -60,7 +60,7 @@ public class ExampleList {
    public String toPromptText() {
        return getAll().stream()
           .filter(Example::isEnabled)
-          .map(Example::toPromptString)
+          .map(Example::toPromptText)
           .collect(joining("\n---\n"));
    }
 
