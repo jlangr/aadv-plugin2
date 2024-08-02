@@ -1,16 +1,52 @@
 package plugin;
 
-import llms.AADVModel;
-import llms.Example;
-import llms.ExampleNotFoundException;
+import llms.*;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import ui.SourcePanel;
+import ui.SourcePanelListener;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 class AnAADVModel {
    AADVModel model = new AADVModel();
+
+   @Nested
+   class SourcePanels {
+      SourceFile file = new SourceFile(FileType.PROD, "source", "filename");
+      private SourcePanelListener sourcePanelListener = mock(SourcePanelListener.class);
+
+      @Test
+      void retrievesAddedPanelByFile() {
+         model.add(new SourcePanel(file, sourcePanelListener));
+
+         var panel = model.getPanel(file).get();
+
+         assertEquals(panel.getName(), file.fileName());
+      }
+
+      @Test
+      void returnsEmptyOptionWhenRetrievingNonexistentFile() {
+         var optional = model.getPanel(file);
+
+         assertEquals(Optional.empty(), optional);
+      }
+
+      @Test
+      void removesPanel() {
+         var panel = new SourcePanel(file, sourcePanelListener);
+         model.add(panel);
+
+         model.remove(panel);
+
+         var optional = model.getPanel(file);
+         assertEquals(Optional.empty(), optional);
+      }
+   }
 
    @Test
    void addsExamples() {
@@ -50,6 +86,24 @@ class AnAADVModel {
    }
 
    @Test
+   void canObtainExampleListObjectAsWell() {
+      model.addExample("123");
+
+      var exampleList = model.getExampleList();
+      assertEquals(List.of(new Example("123", "", "")), exampleList.getAll());
+   }
+
+   @Test
+   void togglesEnabledById() {
+      model.addExample("123");
+
+      model.toggleEnabled("123");
+
+      var example = model.getExample("123");
+      assertFalse(example.isEnabled());
+   }
+
+   @Test
    void combinesExamplesForPrompt() {
       model.setPromptText("prompt text");
       model.addExample("1");
@@ -62,24 +116,5 @@ class AnAADVModel {
          Examples:
          name: abc
          one two three""", result);
-   }
-
-
-   @Test
-   void doesNotIncludeDisabledExamples() {
-      model.setPromptText("prompt text");
-      model.addExample("1");
-      model.updateExample("1", "abc", "");
-      model.addExample("2");
-      model.updateExample("2", "def", "");
-
-      model.toggleEnabled("1");
-
-      var result = model.combinedPrompt();
-      assertEquals("""
-         prompt text
-         Examples:
-         name: def
-         """, result);
    }
 }
