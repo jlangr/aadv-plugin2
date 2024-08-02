@@ -48,7 +48,7 @@ public class AADVModel {
    }
 
    public void deleteExample(String id) {
-      exampleList.deleteExample(id);
+      exampleList.delete(id);
    }
 
    public void toggleEnabled(String id) {
@@ -63,7 +63,7 @@ public class AADVModel {
       stringBuilder.append("\n");
       stringBuilder.append(MSG_EXAMPLES);
       stringBuilder.append("\n");
-      stringBuilder.append(exampleList.concatenate());
+      stringBuilder.append(exampleList.toPromptText());
       return stringBuilder.toString();
    }
 

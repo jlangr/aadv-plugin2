@@ -8,7 +8,6 @@ import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
 
 public class ExampleList {
-   // TODO tests for all this!
    private List<Example> examples = new ArrayList<>();
 
    public ExampleList() {}
@@ -17,7 +16,6 @@ public class ExampleList {
       this.examples.addAll(asList(examples));
    }
 
-   // TODO test
    public void add(String id, String name, String text) {
       examples.add(new Example(id, name, text));
    }
@@ -27,20 +25,19 @@ public class ExampleList {
    }
 
    public Example get(String id) {
-      var result = getExampleOptional(id);
+      var result = getOptional(id);
       if (result.isEmpty())
          throw new ExampleNotFoundException();
       return result.get();
    }
 
-   // TODO test
-   public Optional<Example> getExampleOptional(String id) {
+   public Optional<Example> getOptional(String id) {
       return examples.stream()
          .filter(e -> e.getId().equals(id))
          .findFirst();
    }
 
-   public void deleteExample(String id) {
+   public void delete(String id) {
       var iterator = examples.iterator();
       while (iterator.hasNext()) {
          var example = iterator.next();
@@ -52,7 +49,7 @@ public class ExampleList {
    }
 
    public void update(String id, String name, String text) {
-      var example = getExampleOptional(id);
+      var example = getOptional(id);
       if (example.isEmpty())
          throw new ExampleNotFoundException();
 
@@ -60,7 +57,7 @@ public class ExampleList {
       example.get().setName(name);
    }
 
-   public String concatenate() {
+   public String toPromptText() {
        return getAll().stream()
           .filter(Example::isEnabled)
           .map(Example::toPromptString)
@@ -68,7 +65,7 @@ public class ExampleList {
    }
 
    public void toggleEnabled(String id) {
-      var example = getExampleOptional(id);
+      var example = getOptional(id);
       if (example.isPresent())
          example.get().toggleEnabled();
    }

@@ -88,7 +88,5 @@ class ExampleContentPanel extends JPanel {
       this.example = example;
       nameLabel.setText(nameLabelText(example));
       disabledLabel.setText(example.isEnabled() ? "" : "[ disabled ]");
-//      this.revalidate();
-//      this.repaint();
    }
 }

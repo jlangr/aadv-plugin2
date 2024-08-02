@@ -56,7 +56,7 @@ public class OpenAIClient {
    }
 
    private String generatePrompt(String prompt, ExampleList examples) {
-       return getString(prompt, examples.concatenate());
+       return getString(prompt, examples.toPromptText());
    }
 
    private String getString(String prompt, String examplesText) {
