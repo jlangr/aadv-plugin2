@@ -1,4 +1,4 @@
-package llms;
+package llms.openai;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;

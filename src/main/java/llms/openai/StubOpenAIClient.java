@@ -1,6 +1,8 @@
-package llms;
+package llms.openai;
 
-import plugin.AADVPluginSettings;
+import llms.Files;
+import llms.SourceFile;
+import plugin.settings.AADVPluginSettings;
 import utils.Http;
 
 import java.util.List;

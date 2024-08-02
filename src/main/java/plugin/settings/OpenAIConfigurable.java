@@ -1,4 +1,4 @@
-package plugin;
+package plugin.settings;
 
 import com.intellij.openapi.options.Configurable;
 import org.jetbrains.annotations.Nls;

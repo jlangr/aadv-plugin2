@@ -1,22 +1,21 @@
 package llms;
 
+import llms.openai.Message;
+import llms.openai.OpenAIClient;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import plugin.AADVPluginSettings;
+import plugin.settings.AADVPluginSettings;
 import utils.Http;
 
 import java.net.http.HttpRequest;
-import java.util.HashMap;
-import java.util.List;
 
-import static llms.OpenAIClient.*;
+import static llms.openai.OpenAIClient.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class AnOpenAIClient {

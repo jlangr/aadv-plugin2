@@ -1,16 +1,12 @@
 package ui;
 
 import com.intellij.ui.components.JBScrollPane;
-import org.jetbrains.annotations.NotNull;
 import utils.UI;
-
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-
-import static utils.UI.*;
 
 public class PromptPanel extends JPanel {
    public static final int PROMPT_FIELD_LINE_COUNT = 10;
@@ -44,7 +40,7 @@ public class PromptPanel extends JPanel {
 
    private JPanel createTitlePanel() {
       var titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-      titlePanel.add(createHeaderLabel(MSG_PROMPT));
+      titlePanel.add(UI.createHeaderLabel(MSG_PROMPT));
       return titlePanel;
    }
 
@@ -82,13 +78,13 @@ public class PromptPanel extends JPanel {
       sendPromptButton = new JButton(MSG_SEND_PROMPT);
       sendPromptButton.addActionListener(e -> promptListener.send(promptField.getText()));
       sendPromptButton.setEnabled(isPromptTextAvailable());
-      setButtonHeight(sendPromptButton);
+      UI.setButtonHeight(sendPromptButton);
    }
 
    private void createDumpPromptButton() {
       dumpPromptButton = new JButton(MSG_DUMP_PROMPT);
       dumpPromptButton.addActionListener( e -> promptListener.dump(promptField.getText()));
-      setButtonHeight(dumpPromptButton);
+      UI.setButtonHeight(dumpPromptButton);
    }
 
    private boolean isPromptTextAvailable() {

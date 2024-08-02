@@ -2,6 +2,8 @@ package plugin;
 
 import com.intellij.openapi.project.Project;
 import llms.*;
+import llms.openai.OpenAIClient;
+import plugin.settings.AADVPluginSettings;
 import ui.*;
 import utils.Console;
 import utils.Http;

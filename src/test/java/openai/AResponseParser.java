@@ -1,7 +1,7 @@
 package openai;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import llms.ResponseParser;
+import llms.openai.ResponseParser;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

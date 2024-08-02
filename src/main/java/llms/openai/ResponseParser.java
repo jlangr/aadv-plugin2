@@ -1,4 +1,4 @@
-package llms;
+package llms.openai;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

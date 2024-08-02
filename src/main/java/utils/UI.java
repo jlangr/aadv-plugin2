@@ -47,7 +47,6 @@ public class UI {
       return label;
    }
 
-
    public static JButton createIconButton(
       Object owner, String imageFilename, String toolTipText, ActionListener listener) {
       return createIconButton(

@@ -2,7 +2,7 @@ package utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import llms.ResponseParser;
+import llms.openai.ResponseParser;
 
 import java.net.URI;
 import java.net.http.HttpClient;

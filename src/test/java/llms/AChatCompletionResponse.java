@@ -1,5 +1,8 @@
 package llms;
 
+import llms.openai.ChatCompletionResponse;
+import llms.openai.Choice;
+import llms.openai.Message;
 import org.junit.jupiter.api.Test;
 import java.util.List;
 

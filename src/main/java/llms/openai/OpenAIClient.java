@@ -1,6 +1,9 @@
-package llms;
+package llms.openai;
 
-import plugin.AADVPluginSettings;
+import llms.CodeResponseSplitter;
+import llms.ExampleList;
+import llms.Files;
+import plugin.settings.AADVPluginSettings;
 import utils.Http;
 
 import java.util.ArrayList;
