@@ -1,85 +1,85 @@
 package utils;
 
 import llms.SourceFile;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static llms.FileType.PROD;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class APackageExtractor {
    PackageExtractor packageExtractor = new PackageExtractor();
 
    @Test
-   void testExtractPackageStatement() {
+   void extractPackageStatement() {
       var source = "package abc;\n\nclass ABC {}\n";
       var result = packageExtractor.extractPackage(source);
-      Assertions.assertTrue(result.hasPackageStatement());
-      Assertions.assertEquals("package abc;\n\n", result.prefix());
+      assertTrue(result.hasPackageStatement());
+      assertEquals("package abc;\n\n", result.prefix());
    }
 
    @Test
-   void testNoPackageStatement() {
+   void noPackageStatement() {
       var source = "import abc;";
       var result = packageExtractor.extractPackage(source);
-      Assertions.assertFalse(result.hasPackageStatement());
-      Assertions.assertNull(result.prefix());
+      assertFalse(result.hasPackageStatement());
+      assertNull(result.prefix());
    }
 
    @Test
-   void testRetainLeadingComments() {
+   void retainLeadingComments() {
       var source = "package abc;\n// hey\nclass ABC {}\n";
       var result = packageExtractor.extractPackage(source);
-      Assertions.assertTrue(result.hasPackageStatement());
-      Assertions.assertEquals("package abc;\n// hey\n", result.prefix());
+      assertTrue(result.hasPackageStatement());
+      assertEquals("package abc;\n// hey\n", result.prefix());
    }
 
    @Test
-   void testRetainLeadingCommentsWithInlineComments() {
+   void retainLeadingCommentsWithInlineComments() {
       var source = "package abc;// hey\nclass ABC {}\n";
       var result = packageExtractor.extractPackage(source);
-      Assertions.assertTrue(result.hasPackageStatement());
-      Assertions.assertEquals("package abc;// hey\n", result.prefix());
+      assertTrue(result.hasPackageStatement());
+      assertEquals("package abc;// hey\n", result.prefix());
    }
 
    @Test
-   void testExtractPackageWithWhitespace() {
+   void extractPackageWithWhitespace() {
       var source = "\n    \n   package def;\nclass ABC {}\n";
       var result = packageExtractor.extractPackage(source);
-      Assertions.assertTrue(result.hasPackageStatement());
-      Assertions.assertEquals("\n    \n   package def;\n", result.prefix());
+      assertTrue(result.hasPackageStatement());
+      assertEquals("\n    \n   package def;\n", result.prefix());
    }
 
    @Test
-   void testPackageWithInlineCommentsAndWhitespace() {
+   void packageWithInlineCommentsAndWhitespace() {
       var source = "package xyz; // whatever\n\nimport x;";
       var result = packageExtractor.extractPackage(source);
-      Assertions.assertTrue(result.hasPackageStatement());
-      Assertions.assertEquals("package xyz; // whatever\n\n", result.prefix());
+      assertTrue(result.hasPackageStatement());
+      assertEquals("package xyz; // whatever\n\n", result.prefix());
    }
 
    @Test
-   void testIncludesCommentsPriorToPackageStatement() {
+   void includesCommentsPriorToPackageStatement() {
       var source = "// hey\n/* here */\npackage mno;\n\nclass X {}";
       var result = packageExtractor.extractPackage(source);
-      Assertions.assertTrue(result.hasPackageStatement());
-      Assertions.assertEquals("// hey\n/* here */\npackage mno;\n\n", result.prefix());
+      assertTrue(result.hasPackageStatement());
+      assertEquals("// hey\n/* here */\npackage mno;\n\n", result.prefix());
    }
 
    @Test
-   void testOmitClassDeclarationOnSameLine() {
+   void omitClassDeclarationOnSameLine() {
       var source = "package xyz; class A {}";
       var result = packageExtractor.extractPackage(source);
-      Assertions.assertTrue(result.hasPackageStatement());
-      Assertions.assertEquals("package xyz;", result.prefix());
+      assertTrue(result.hasPackageStatement());
+      assertEquals("package xyz;", result.prefix());
    }
 
    @Test
-   void testIncludesCommentsPriorToAndAfterPackageStatement() {
+   void includesCommentsPriorToAndAfterPackageStatement() {
       var source = "// hey\n/* here */\npackage mno;\n\n/* whatever */\n// hey\nclass X {}";
       var result = packageExtractor.extractPackage(source);
-      Assertions.assertTrue(result.hasPackageStatement());
-      Assertions.assertEquals("// hey\n/* here */\npackage mno;\n\n/* whatever */\n// hey\n", result.prefix());
+      assertTrue(result.hasPackageStatement());
+      assertEquals("// hey\n/* here */\npackage mno;\n\n/* whatever */\n// hey\n", result.prefix());
    }
 
    @Nested
@@ -90,7 +90,7 @@ public class APackageExtractor {
 
          var updatedSource = packageExtractor.updateSource(sourceFile, "class Existing {}");
 
-         Assertions.assertEquals("class New {}", updatedSource);
+         assertEquals("class New {}", updatedSource);
       }
 
       @Test
@@ -99,7 +99,7 @@ public class APackageExtractor {
 
          var updatedSource = packageExtractor.updateSource(sourceFile, "package x;\nclass Existing {}");
 
-         Assertions.assertEquals("package x;\nclass New {}", updatedSource);
+         assertEquals("package x;\nclass New {}", updatedSource);
       }
    }
 }

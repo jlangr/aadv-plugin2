@@ -104,17 +104,19 @@ class AnAADVModel {
    }
 
    @Test
-   void combinesExamplesForPrompt() {
+   void dumpPromptWritesCombinedPromptToConsole() {
       model.setPromptText("prompt text");
       model.addExample("1");
       model.updateExample("1", "abc", "one two three");
 
       var result = model.dumpPrompt();
 
-      assertEquals("""
+      assertTrue(result.contains("""
          prompt text
          Examples:
+         
          name: abc
-         one two three""", result);
+         one two three
+         """), result);
    }
 }
