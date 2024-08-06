@@ -34,7 +34,7 @@ class AnOpenAIClient {
 
    @Test
    void retrieveCompletion() {
-      var chatCompletionResponse = createChatCompletionResponse();
+      var chatCompletionResponse = new ChatCompletionResponseBuilder().build();
       when(aadvPluginSettings.retrieveAPIKey()).thenReturn("apikey");
       when(http.createPostRequest(eq(requestBody), eq("apikey"), eq(API_URL)))
          .thenReturn(request);
@@ -43,11 +43,5 @@ class AnOpenAIClient {
       var actualResponse = client.retrieveCompletion(requestBody);
 
       assertEquals(chatCompletionResponse, actualResponse);
-   }
-
-   private ChatCompletionResponse createChatCompletionResponse() {
-      return new ChatCompletionResponse(
-         "1", "", 1L, "model",
-         List.of(new Choice(1, new Message("", ""), "", null)), null, "fingerprint");
    }
 }

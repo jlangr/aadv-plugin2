@@ -12,7 +12,7 @@ public class AADVPromptWindowFactory implements ToolWindowFactory, DumbAware {
       var controller = AADVController.get(project);
 
       var contentFactory = ContentFactory.getInstance();
-      var content = contentFactory.createContent(controller.getPromptView(), "", false);
+      var content = contentFactory.createContent(controller.promptView, "", false);
       toolWindow.getContentManager().addContent(content);
    }
 }

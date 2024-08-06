@@ -2,6 +2,7 @@ package llms;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static java.util.Arrays.asList;
@@ -70,5 +71,20 @@ public class ExampleList {
             ? new Example(id, example.name(), example.text(), !example.isEnabled())
             : example)
          .collect(toList());
+   }
+
+   // generated
+
+   @Override
+   public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      ExampleList that = (ExampleList) o;
+      return Objects.equals(examples, that.examples);
+   }
+
+   @Override
+   public int hashCode() {
+      return Objects.hashCode(examples);
    }
 }

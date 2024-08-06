@@ -17,17 +17,19 @@ import static java.awt.Cursor.*;
 public class AADVController implements PromptListener, SourcePanelListener, ExampleListener {
    private static AADVController controller = null;
    private final Project project;
-   private AADVPromptPanel promptView = new AADVPromptPanel(this, this);
-   private final AADVOutputPanel outputView = new AADVOutputPanel();
+   AADVPromptPanel promptView = new AADVPromptPanel(this, this);
+   private AADVOutputPanel outputView = new AADVOutputPanel();
 
    private final OpenAIClient openAIClient =
       new OpenAIClient(new Http(), new AADVPluginSettings());
-   private final OpenAI openAI
-//      = new StubOpenAIClient();
-      = new OpenAI(openAIClient);
+   private OpenAI openAI = new OpenAI(openAIClient);
    private AADVModel model = new AADVModel();
-   private final IDEAEditor ide = new IDEAEditor();
+   private IDEAEditor ide = new IDEAEditor();
    private IDGenerator idGenerator = new IDGenerator();
+   private AADVPluginSettings aadvPluginSettings = new AADVPluginSettings();
+   private Console console = new Console();
+
+   Thread thread;
 
    private AADVController(Project project) {
       this.project = project;
@@ -43,17 +45,13 @@ public class AADVController implements PromptListener, SourcePanelListener, Exam
       return controller;
    }
 
-   public JComponent getOutputView() {
+   public AADVOutputPanel getOutputView() {
       return outputView;
-   }
-
-   public JComponent getPromptView() {
-      return promptView;
    }
 
    @Override
    public void send(String text) {
-      var apiKey = new AADVPluginSettings().retrieveAPIKey();
+      var apiKey = aadvPluginSettings.retrieveAPIKey();
       if (apiKey == null) {
          promptView.showMessage(AADVPromptPanel.MSG_KEY_NOT_CONFIGURED);
          return;
@@ -65,23 +63,26 @@ public class AADVController implements PromptListener, SourcePanelListener, Exam
 
       var prompt = new Prompt(text, model.getExampleList());
 
-      new Thread(() -> {
+      thread = new Thread(() -> {
          var files = openAI.retrieveCompletion(prompt);
          updateSourcePanels(files);
          promptView.getParent().setCursor(getDefaultCursor());
-      }).start();
+      });
+      thread.start();
    }
 
    @Override
-   public void dump(String text) {
-      Console.log("PROMPT:\n");
-      Console.log(model.dumpPrompt());
+   public void dump() {
+      console.log("PROMPT:\n");
+      console.log(model.dumpPrompt());
    }
 
    @Override
    public void update(String text) {
       model.setPromptText(text);
    }
+
+   // source panels
 
    private void updateSourcePanels(Files files) {
       files.prodFiles().forEach(this::upsertSourcePanel);
@@ -115,8 +116,8 @@ public class AADVController implements PromptListener, SourcePanelListener, Exam
    // example listener methods
 
    @Override
-   public void update(String panelName, String name, String text) {
-      model.updateExample(panelName, name, text);
+   public void update(String id, String name, String text) {
+      model.updateExample(id, name, text);
    }
 
    @Override
@@ -149,5 +150,26 @@ public class AADVController implements PromptListener, SourcePanelListener, Exam
 
    void setIdGenerator(IDGenerator idGenerator) {
       this.idGenerator = idGenerator;
+   }
+
+   public void setIDEAEditor(IDEAEditor ideaEditor) {
+      ide = ideaEditor;
+   }
+
+   public void setOutputView(AADVOutputPanel outputView) {
+      this.outputView = outputView;
+   }
+
+   public void setAADVPluginSettings(AADVPluginSettings aadvPluginSettings) {
+
+      this.aadvPluginSettings = aadvPluginSettings;
+   }
+
+   public void setOpenAI(OpenAI openAI) {
+      this.openAI = openAI;
+   }
+
+   public Console getConsole() {
+      return console;
    }
 }

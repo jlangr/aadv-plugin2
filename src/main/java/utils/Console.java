@@ -1,7 +1,14 @@
 package utils;
 
 public class Console {
-   public static void log(String message) {
+   private String lastMessage;
+
+   public void log(String message) {
       System.out.println(message);
+      lastMessage = message;
+   }
+
+   public String lastMessage() {
+      return lastMessage;
    }
 }

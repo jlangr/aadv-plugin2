@@ -70,4 +70,8 @@ public class SourcePanel extends JPanel {
       this.sourceFile = file;
       textArea.setText(sourceFile.source());
    }
+
+   public String getContent() {
+      return textArea.getText();
+   }
 }

@@ -83,7 +83,7 @@ public class PromptPanel extends JPanel {
 
    private void createDumpPromptButton() {
       dumpPromptButton = new JButton(MSG_DUMP_PROMPT);
-      dumpPromptButton.addActionListener( e -> promptListener.dump(promptField.getText()));
+      dumpPromptButton.addActionListener( e -> promptListener.dump());
       UI.setButtonHeight(dumpPromptButton);
    }
 

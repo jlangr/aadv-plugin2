@@ -1,9 +1,6 @@
 package llms.openai;
 
 import llms.*;
-import plugin.settings.AADVPluginSettings;
-import utils.Http;
-
 import java.util.HashMap;
 
 public class OpenAI {

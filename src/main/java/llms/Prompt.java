@@ -6,8 +6,7 @@ import static java.lang.String.format;
 import static llms.PromptMessageType.SYSTEM;
 import static llms.PromptMessageType.USER;
 
-public class Prompt {
-
+public record Prompt(String promptText, ExampleList examples) {
    static final String PROMPT_OVERVIEW = "Generate JUnit test class(es) and production Java code for the solution. " +
       "In output, begin each code listing with a header in either the form:\n" +
       "/* test class TestFileName.java */\n" +
@@ -32,13 +31,6 @@ public class Prompt {
       """;
    static final String PROMPT_TEXT = "Generate code for this:";
    static final String PROMPT_EXAMPLES = "Examples:";
-   private final String promptText;
-   private final ExampleList examples;
-
-   public Prompt(String promptText, ExampleList examples) {
-      this.promptText = promptText;
-      this.examples = examples;
-   }
 
    public List<PromptMessage> messages() {
       var messages = new ArrayList<PromptMessage>();

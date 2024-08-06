@@ -65,4 +65,8 @@ public class AADVModel {
    public void setPromptText(String text) {
       promptText = text;
    }
+
+   public String getPromptText() {
+      return promptText;
+   }
 }
