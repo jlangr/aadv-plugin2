@@ -1,51 +1,45 @@
 package llms.openai;
 
-import llms.CodeResponseSplitter;
-import llms.ExampleList;
-import llms.Files;
+import llms.*;
 import plugin.settings.AADVPluginSettings;
 import utils.Http;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-
-import static java.lang.String.format;
-import static java.util.stream.Collectors.joining;
 
 public class OpenAIClient {
    static final String MESSAGE_ROLE_USER = "user";
-   static final String MESSAGE_TYPE_SYSTEM = "system";
+   public static final String MESSAGE_TYPE_SYSTEM = "system";
    static final String API_URL = "https://api.openai.com/v1/chat/completions";
-   static final String PROMPT_OVERVIEW = "Generate JUnit test class(es) and production Java code for the solution. " +
-      "In output, begin each code listing with a header in either the form:\n/* test class TestFileName.java */\nor:\n/* prod class ProdFileName.java */\nEnd each code listing with a footer, either:\n/* end test class */\nor:\n/* end prod class */. Substitute the real file name for TestFileName and ProdFileName. ";
-   static final String PROMPT_ASSISTANT_GUIDELINES = "You're a Java programming assistant. When asked to generate solution code, include only code. Don't include any explanation. Don't include comments in any code.";
-   // TODO: show & allow updates in plugin configuration
-   static final String PROMPT_CODE_STYLE = """
-      - When possible, prefer functional solutions, with functional methods and immutable classes.
-      - Extract unit behavioral concepts to separate methods.
-      - Extract conditionals to separate predicate methods.
-      - Minimize use of temporary variables. Make calls to functions instead.
-      - Create instance-side methods by default. Do not use static methods unless appropriate or otherwise asked.
-      - Within chained calls using the streams interface, extract lambda bodies with implementation details to separate methods.
-      - In tests, do not start the name of the test method with the word "test".
-      """;
-   static final String PROMPT_TEXT = "Generate code for this:";
-   static final String PROMPT_EXAMPLES = "Examples:";
 
    private final Http http;
-   private AADVPluginSettings aadvPluginSettings;
+   private final AADVPluginSettings aadvPluginSettings;
+   private Prompt prompt;
 
    public OpenAIClient(Http http, AADVPluginSettings aadvPluginSettings) {
       this.http = http;
       this.aadvPluginSettings = aadvPluginSettings;
    }
 
-   public Files retrieveCompletion(Message[] messages) {
+   public Files retrieveCompletion(Prompt prompt) {
       var apiKey = aadvPluginSettings.retrieveAPIKey();
-      var requestBody = createRequestBody(messages);
+      var requestBody = createRequestBody(toOpenAIMessages(prompt));
       var request = http.createPostRequest(requestBody, apiKey, API_URL);
       var completion = (ChatCompletionResponse)http.send(request);
       return new CodeResponseSplitter().split(completion.firstMessageContent());
+   }
+
+   private Message[] toOpenAIMessages(Prompt prompt) {
+      return prompt.messages().stream()
+         .map(promptMessage ->
+            new Message(role(promptMessage.promptMessageType()), promptMessage.text()))
+         .toArray(Message[]::new);
+   }
+
+   private String role(PromptMessageType promptMessageType) {
+      return switch(promptMessageType) {
+         case system -> "system";
+         case user -> "user";
+      };
    }
 
    private HashMap<Object, Object> createRequestBody(Message[] messages) {
@@ -54,27 +48,5 @@ public class OpenAIClient {
       requestBody.put("messages", messages);
       requestBody.put("max_tokens", 4096);
       return requestBody;
-   }
-
-   public Message[] createRequestMessages(String prompt, ExampleList examples) {
-      var messages = new ArrayList<Message>();
-      messages.add(new Message(MESSAGE_TYPE_SYSTEM, PROMPT_ASSISTANT_GUIDELINES));
-      messages.add(new Message(MESSAGE_TYPE_SYSTEM, PROMPT_CODE_STYLE));
-      messages.add(new Message(MESSAGE_ROLE_USER, generatePrompt(prompt, examples)));
-      return messages.toArray(new Message[0]);
-   }
-
-   private String generatePrompt(String prompt, ExampleList examples) {
-       return getString(prompt, examples.toPromptText());
-   }
-
-   private String getString(String prompt, String examplesText) {
-      var builder = new StringBuilder();
-      builder.append(format("%n%s%n", PROMPT_OVERVIEW));
-      builder.append(format("%n%s%n", PROMPT_TEXT));
-      builder.append(prompt);
-      builder.append(format("%n%s%n", PROMPT_EXAMPLES));
-      builder.append(format("%n%s%n", examplesText));
-      return builder.toString();
    }
 }

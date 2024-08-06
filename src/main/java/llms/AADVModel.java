@@ -57,14 +57,9 @@ public class AADVModel {
 
 // ===
 
-   public String combinedPrompt() {
-      var stringBuilder = new StringBuilder();
-      stringBuilder.append(promptText);
-      stringBuilder.append("\n");
-      stringBuilder.append(MSG_EXAMPLES);
-      stringBuilder.append("\n");
-      stringBuilder.append(exampleList.toPromptText());
-      return stringBuilder.toString();
+   public String dumpPrompt() {
+      var prompt = new Prompt(promptText, exampleList);
+      return prompt.messages().toString();
    }
 
    public void setPromptText(String text) {

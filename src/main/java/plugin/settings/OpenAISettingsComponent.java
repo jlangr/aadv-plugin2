@@ -14,7 +14,7 @@ public class OpenAISettingsComponent {
       panel = new JPanel(new GridBagLayout());
       apiKeyField = new JBTextField();
 
-      GridBagConstraints gbc = new GridBagConstraints();
+      var gbc = new GridBagConstraints();
       gbc.fill = GridBagConstraints.HORIZONTAL;
       gbc.insets = new Insets(5, 5, 5, 5);
 
@@ -34,7 +34,7 @@ public class OpenAISettingsComponent {
    }
 
    public boolean isModified() {
-      String savedApiKey = OpenAISettingsState.getInstance().getApiKey();
+      var savedApiKey = OpenAISettingsState.getInstance().getApiKey();
       return !StringUtil.equals(apiKeyField.getText(), savedApiKey);
    }
 
@@ -43,7 +43,7 @@ public class OpenAISettingsComponent {
    }
 
    public void reset() {
-      String savedApiKey = OpenAISettingsState.getInstance().getApiKey();
+      var savedApiKey = OpenAISettingsState.getInstance().getApiKey();
       apiKeyField.setText(savedApiKey);
    }
 }

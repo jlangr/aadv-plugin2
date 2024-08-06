@@ -58,11 +58,11 @@ public class ExamplePanel extends JPanel {
       buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
 
       deleteExampleButton = UI.createIconButton(this, "close_icon.png", MSG_DELETE,
-         e -> exampleListener.delete(example.getId()));
+         e -> exampleListener.delete(example.id()));
       buttonPanel.add(deleteExampleButton);
 
       toggleEnabledButton = UI.createIconButton(getEnabledButtonIcon(), getImageTooltip(),
-         e -> exampleListener.toggleEnabled(example.getId()));
+         e -> exampleListener.toggleEnabled(example.id()));
       buttonPanel.add(toggleEnabledButton);
 
       return buttonPanel;
@@ -84,6 +84,6 @@ public class ExamplePanel extends JPanel {
    }
 
    public String getExampleId() {
-      return example.getId();
+      return example.id();
    }
 }

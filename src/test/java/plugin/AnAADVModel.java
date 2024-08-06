@@ -54,8 +54,8 @@ class AnAADVModel {
       model.addExample("345");
 
       assertEquals(List.of(
-            new Example("123", "a", "hey"),
-            new Example("345", "b", "there")),
+            new Example("123", "", "", true),
+            new Example("345", "", "", true)),
          model.getExamples());
    }
 
@@ -70,8 +70,8 @@ class AnAADVModel {
 
       model.updateExample("123", "a", "smelt");
 
-      assertEquals(model.getExample("123").getText(), "smelt");
-      assertEquals(model.getExample("123").getName(), "a");
+      assertEquals(model.getExample("123").text(), "smelt");
+      assertEquals(model.getExample("123").name(), "a");
    }
 
    @Test
@@ -82,7 +82,7 @@ class AnAADVModel {
       model.deleteExample("123");
 
       assertEquals(model.getExamples(),
-         List.of(new Example("456", "b name", "b")));
+         List.of(new Example("456", "", "")));
    }
 
    @Test
@@ -109,7 +109,7 @@ class AnAADVModel {
       model.addExample("1");
       model.updateExample("1", "abc", "one two three");
 
-      var result = model.combinedPrompt();
+      var result = model.dumpPrompt();
 
       assertEquals("""
          prompt text

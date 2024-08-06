@@ -67,17 +67,17 @@ class ExampleContentPanel extends JPanel {
 
    private EditableLabel createNameLabel(Example example) {
       return new EditableLabel(nameLabelText(example),
-         text -> exampleListener.update(example.getId(), text, exampleField.getText()));
+         text -> exampleListener.update(example.id(), text, exampleField.getText()));
    }
 
    private String nameLabelText(Example example) {
-      return example == Example.EMPTY || isEmpty(example.getName())
+      return example == Example.EMPTY || isEmpty(example.name())
          ? ExamplePanel.MSG_NAME_PLACEHOLDER
-         : example.getName();
+         : example.name();
    }
 
    private void notifyExampleListener() {
-      exampleListener.update(example.getId(), nameLabel.getText(), exampleField.getText());
+      exampleListener.update(example.id(), nameLabel.getText(), exampleField.getText());
    }
 
    private boolean isEmpty(String s) {

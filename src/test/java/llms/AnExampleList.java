@@ -55,45 +55,55 @@ class AnExampleList {
          assertEquals(Optional.empty(), examples.getOptional("1"));
       }
 
-      @Test
-      void deletesExampleById() {
-         examples.add("1", "name", "text");
+      @Nested
+      class WhenDeleting {
+         @Test
+         void deletesExampleMatchingId() {
+            examples.add("1", "name", "text");
 
-         examples.delete("1");
+            examples.delete("1");
 
-         assertEquals(Collections.emptyList(), examples.getAll());
+            assertEquals(Collections.emptyList(), examples.getAll());
+         }
+
+         @Test
+         void doesNothingOnEmptyList() {
+            examples.delete("1");
+
+            assertEquals(Collections.emptyList(), examples.getAll());
+         }
+
+         @Test
+         void doesNothingWhenExampleNotFound() {
+            examples.add("1", "name", "text");
+            examples.add("2", "name", "text");
+
+            examples.delete("3");
+
+            assertEquals(List.of(new Example("1", "name", "text"), new Example("2", "name", "text")), examples.getAll());
+         }
       }
 
-      @Test
-      void deleteDoesNothingOnEmptyList() {
-         examples.delete("1");
+      @Nested
+      class WhenUpdating {
+         @Test // it's a defect if this ever happens
+         void doesNothingWhenIdNotFound() {
+            examples.add("1", "name", "text");
 
-         assertEquals(Collections.emptyList(), examples.getAll());
-      }
+            examples.update("2", "newName", "newText");
 
-      @Test
-      void deleteDoesNothingWhenExampleNotFound() {
-         examples.add("1", "name", "text");
-         examples.add("2", "name", "text");
+            assertEquals(List.of(new Example("1", "name", "text")), examples.getAll());
+         }
 
-         examples.delete("3");
+         @Test
+         void replacesTextAndNameOnUpdate() {
+            examples.add("1", "name", "text");
+            examples.add("2", "2 name", "2 text");
 
-         assertEquals(List.of(new Example("1", "name", "text"), new Example("2", "name", "text")), examples.getAll());
-      }
+            examples.update("1", "newName", "newText");
 
-      @Test
-      void replacesTextAndNameOnUpdate() {
-         examples.add("1", "name", "text");
-
-         examples.update("1", "newName", "newText");
-
-         assertEquals(new Example("1", "newName", "text"), examples.get("1"));
-      }
-
-      @Test
-      void throwsOnUpdateForNonexistentId() {
-         assertThrows(ExampleNotFoundException.class,
-            () -> examples.update("1", "", ""));
+            assertEquals(new Example("1", "newName", "newText"), examples.get("1"));
+         }
       }
 
       @Test
@@ -104,6 +114,9 @@ class AnExampleList {
 
          var example = examples.get("1");
          assertFalse(example.isEnabled());
+         assertEquals("name", example.name());
+         assertEquals("text", example.text());
+         assertEquals("1", example.id());
       }
 
       @Test
@@ -158,8 +171,7 @@ class AnExampleList {
 
       @Test
       void ignoresDisabledExamples() {
-         var exampleB = new Example("B", "", "text b");
-         exampleB.toggleEnabled();
+         var exampleB = new Example("B", "", "text b", false);
          examples = new ExampleList(
             new Example("A", "", "text a"),
             exampleB,

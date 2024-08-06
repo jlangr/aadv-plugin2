@@ -62,10 +62,10 @@ public class AADVController implements PromptListener, SourcePanelListener, Exam
 
       promptView.getParent().setCursor(getPredefinedCursor(WAIT_CURSOR));
 
+      var prompt = new Prompt(text, model.getExampleList());
+
       new Thread(() -> {
-         var messages = openAIClient.createRequestMessages(text, model.getExampleList());
-//         var files = openAIClient.retrieveCompletion(text, model.getExampleList());
-         var files = openAIClient.retrieveCompletion(messages);
+         var files = openAIClient.retrieveCompletion(prompt);
          updateSourcePanels(files);
          promptView.getParent().setCursor(Cursor.getDefaultCursor());
       }).start();
@@ -74,7 +74,7 @@ public class AADVController implements PromptListener, SourcePanelListener, Exam
    @Override
    public void dump(String text) {
       Console.log("PROMPT:\n");
-      Console.log(model.combinedPrompt());
+      Console.log(model.dumpPrompt());
    }
 
    @Override

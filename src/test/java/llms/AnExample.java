@@ -33,31 +33,9 @@ class AnExample {
       assertEquals("some text", result);
    }
 
-   @Nested
-   class IsEnabled {
-      @Test
-      void isEnabledByDefault() {
-         var example = new Example("1", "", "some text");
-         assertTrue(example.isEnabled());
-      }
-
-      @Test
-      void togglesToNotEnabledAsFirstStep() {
-         var example = new Example("1", "", "some text");
-
-         example.toggleEnabled();
-
-         assertFalse(example.isEnabled());
-      }
-
-      @Test
-      void togglesBackToEnabled() {
-         var example = new Example("1", "", "some text");
-         example.toggleEnabled();
-
-         example.toggleEnabled();
-
-         assertTrue(example.isEnabled());
-      }
+   @Test
+   void isEnabledByDefault() {
+      var example = new Example("1", "", "some text");
+      assertTrue(example.isEnabled());
    }
 }

@@ -59,7 +59,7 @@ public class ExamplesPanel extends JPanel {
    }
 
    public void refresh(Example example) {
-      var panel = getExamplePanel(example.getId());
+      var panel = getExamplePanel(example.id());
       if (panel != null)
          panel.refresh(example);
    }

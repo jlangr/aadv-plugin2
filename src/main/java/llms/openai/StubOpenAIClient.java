@@ -1,6 +1,7 @@
 package llms.openai;
 
 import llms.Files;
+import llms.Prompt;
 import llms.SourceFile;
 import plugin.settings.AADVPluginSettings;
 import utils.Http;
@@ -17,7 +18,7 @@ public class StubOpenAIClient extends OpenAIClient {
    }
 
    @Override
-   public Files retrieveCompletion(Message[] messages) {
+   public Files retrieveCompletion(Prompt prompt) {
       return new Files(
          List.of(
             new SourceFile(PROD, fizzBuzzProdSource, "FizzBuzz.java"),

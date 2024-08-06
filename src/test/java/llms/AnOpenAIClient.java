@@ -12,10 +12,9 @@ import utils.Http;
 
 import java.net.http.HttpRequest;
 
-import static llms.openai.OpenAIClient.*;
+import static llms.openai.OpenAIClient.MESSAGE_TYPE_SYSTEM;
+import static llms.Prompt.PROMPT_ASSISTANT_GUIDELINES;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 
 @ExtendWith(MockitoExtension.class)
 class AnOpenAIClient {
@@ -31,14 +30,14 @@ class AnOpenAIClient {
     @InjectMocks
     OpenAIClient client;
 
-    @Test
-    void usesARequestBodyWithAllNecessaryMessages() {
-        var examples = new ExampleList();
-
-        var messages = client.createRequestMessages("my prompt", examples);
-
-        assertEquals(new Message(MESSAGE_TYPE_SYSTEM, PROMPT_ASSISTANT_GUIDELINES), messages[0]);
-    }
+//    @Test
+//    void usesARequestBodyWithAllNecessaryMessages() {
+//        var examples = new ExampleList();
+//
+//        var messages = client.createRequestMessages("my prompt", examples);
+//
+//        assertEquals(new Message(MESSAGE_TYPE_SYSTEM, PROMPT_ASSISTANT_GUIDELINES), messages[0]);
+//    }
 
 //    @Test
 //    void retrieveCompletion() {

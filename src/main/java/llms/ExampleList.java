@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 
 public class ExampleList {
    private List<Example> examples = new ArrayList<>();
@@ -33,7 +34,7 @@ public class ExampleList {
 
    public Optional<Example> getOptional(String id) {
       return examples.stream()
-         .filter(e -> e.getId().equals(id))
+         .filter(e -> e.id().equals(id))
          .findFirst();
    }
 
@@ -41,7 +42,7 @@ public class ExampleList {
       var iterator = examples.iterator();
       while (iterator.hasNext()) {
          var example = iterator.next();
-         if (example.getId().equals(id)) {
+         if (example.id().equals(id)) {
             iterator.remove();
             break;
          }
@@ -49,12 +50,11 @@ public class ExampleList {
    }
 
    public void update(String id, String name, String text) {
-      var example = getOptional(id);
-      if (example.isEmpty())
-         throw new ExampleNotFoundException();
-
-      example.get().setText(text);
-      example.get().setName(name);
+      examples = examples.stream()
+         .map(example -> example.id().equals(id)
+            ? new Example(id, name, text, example.isEnabled())
+            : example)
+         .collect(toList());
    }
 
    public String toPromptText() {
@@ -65,8 +65,10 @@ public class ExampleList {
    }
 
    public void toggleEnabled(String id) {
-      var example = getOptional(id);
-      if (example.isPresent())
-         example.get().toggleEnabled();
+      examples = examples.stream()
+         .map(example -> example.id().equals(id)
+            ? new Example(id, example.name(), example.text(), !example.isEnabled())
+            : example)
+         .collect(toList());
    }
 }
