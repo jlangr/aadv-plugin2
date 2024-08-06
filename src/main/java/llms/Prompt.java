@@ -7,17 +7,20 @@ import static llms.PromptMessageType.SYSTEM;
 import static llms.PromptMessageType.USER;
 
 public record Prompt(String promptText, ExampleList examples) {
-   static final String PROMPT_OVERVIEW = "Generate JUnit test class(es) and production Java code for the solution. " +
-      "In output, begin each code listing with a header in either the form:\n" +
-      "/* test class TestFileName.java */\n" +
-      "or:\n" +
-      "/* prod class ProdFileName.java */\n" +
-      "End each code listing with a footer, either:\n" +
-      "/* end test class */\n" +
-      "or:\n" +
-      "/* end prod class */. Substitute the real file name for TestFileName and ProdFileName. ";
-   public static final String PROMPT_ASSISTANT_GUIDELINES = "You're a Java programming assistant. When asked to generate solution code, include only code. Don't include any explanation. Don't include comments in any code.";
-   // TODO: show & allow updates in plugin configuration
+   static final String PROMPT_OVERVIEW = """
+      Generate JUnit test class(es) and production Java code for the solution.
+      In output, begin each code listing with a header in either the form:
+      /* test class TestFileName.java */
+      or:
+      /* prod class ProdFileName.java */
+      End each code listing with a footer, either:
+      /* end test class */
+      or:
+      /* end prod class */.
+      Substitute the real file name for TestFileName and ProdFileName.""";
+   public static final String PROMPT_ASSISTANT_GUIDELINES = """
+      You're a Java programming assistant. When asked to generate solution code,
+      include only code. Don't include any explanation. Don't include comments in any code.""";
    static final String PROMPT_CODE_STYLE = """
       - When possible, prefer functional solutions, with functional methods and immutable classes. Avoid side effects.
       - Extract implementation specifics to separate cohesive methods.

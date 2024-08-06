@@ -7,11 +7,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import plugin.settings.AADVPluginSettings;
 import utils.Http;
-
 import java.net.http.HttpRequest;
 import java.util.HashMap;
-import java.util.List;
-
 import static llms.openai.OpenAIClient.API_URL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.eq;

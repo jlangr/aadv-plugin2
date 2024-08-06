@@ -10,7 +10,6 @@ import utils.Console;
 import utils.Http;
 import utils.IDGenerator;
 import utils.idea.IDEAEditor;
-import javax.swing.*;
 
 import static java.awt.Cursor.*;
 
@@ -27,7 +26,7 @@ public class AADVController implements PromptListener, SourcePanelListener, Exam
    private IDEAEditor ide = new IDEAEditor();
    private IDGenerator idGenerator = new IDGenerator();
    private AADVPluginSettings aadvPluginSettings = new AADVPluginSettings();
-   private Console console = new Console();
+   private final Console console = new Console();
 
    Thread thread;
 

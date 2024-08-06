@@ -211,7 +211,7 @@ class AnAADVController {
 
                controller.toggleEnabled("1");
 
-               assertEquals(false, model.getExample("1").isEnabled());
+               assertFalse(model.getExample("1").isEnabled());
             }
 
             @Test

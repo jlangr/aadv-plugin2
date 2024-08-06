@@ -7,9 +7,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class AADVModel {
-   public static final String MSG_EXAMPLES = "Examples:";
-   private List<SourcePanel> panels = new ArrayList<>();
-   private ExampleList exampleList = new ExampleList();
+   private final List<SourcePanel> panels = new ArrayList<>();
+   private final ExampleList exampleList = new ExampleList();
    private String promptText = "";
 
    public void add(SourcePanel panel) {

@@ -1,9 +1,7 @@
 package utils;
 
 import llms.SourceFile;
-
 import java.util.Optional;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PackageExtractor {
@@ -39,8 +37,6 @@ public class PackageExtractor {
       var sourcePackage = extractPackage(currentSource);
       if (!sourcePackage.hasPackageStatement()) return sourceFile.source();
 
-      var newSource = new StringBuilder(sourcePackage.prefix());
-      newSource.append(sourceFile.source());
-      return newSource.toString();
+      return sourcePackage.prefix() + sourceFile.source();
    }
 }

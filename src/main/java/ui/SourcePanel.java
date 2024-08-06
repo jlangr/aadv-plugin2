@@ -1,5 +1,6 @@
 package ui;
 
+import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBScrollPane;
 import llms.SourceFile;
 import utils.UI;
@@ -61,8 +62,8 @@ public class SourcePanel extends JPanel {
 
    private JPanel createSourceTypeChip(SourceFile sourceFile) {
       return switch (sourceFile.fileType()) {
-         case PROD -> new Chip(CHIP_TEXT_PROD, Color.BLUE);
-         case TEST -> new Chip(CHIP_TEXT_TEST, new Color(0, 150, 0));
+         case PROD -> new Chip(CHIP_TEXT_PROD, JBColor.BLUE);
+         case TEST -> new Chip(CHIP_TEXT_TEST, JBColor.GREEN);
       };
    }
 

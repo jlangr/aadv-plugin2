@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class AADVOutputPanel extends JPanel{
-   private JPanel contentPanel =  new JPanel();
+   private final JPanel contentPanel =  new JPanel();
 
    public AADVOutputPanel() {
       layOut();
