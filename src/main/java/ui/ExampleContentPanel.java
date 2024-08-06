@@ -14,8 +14,8 @@ class ExampleContentPanel extends JPanel {
    private final ExampleListener exampleListener;
 
    JTextArea exampleField;
-   private EditableLabel nameLabel;
-   private JLabel disabledLabel = new JLabel("");
+   private final EditableLabel nameLabel;
+   private final JLabel disabledLabel = new JLabel("");
 
    ExampleContentPanel(ExampleListener exampleListener, Example example) {
       this.example = example;

@@ -11,8 +11,8 @@ public class AADVPromptPanel extends JPanel {
       "API key not configured. Please provide it in the AADV plugin settings.";
    private final PromptListener promptListener;
 
-   private JPanel contentPanel =  new JPanel();
-   private ExampleListener exampleListener;
+   private final JPanel contentPanel =  new JPanel();
+   private final ExampleListener exampleListener;
    private ExamplesPanel examplesPanel;
 
    public AADVPromptPanel(PromptListener promptListener, ExampleListener exampleListener) {

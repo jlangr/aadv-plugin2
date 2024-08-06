@@ -7,13 +7,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class EditableLabel extends JPanel {
-   public static final String CHECK_ICON = "\u2713";
-   public static final String CANCEL_ICON = "\u2717";
+   public static final String CHECK_ICON = "✓";
+   public static final String CANCEL_ICON = "✗";
    private final FieldListener fieldListener;
-   private JLabel label;
-   private JTextField textField;
-   private JButton checkButton;
-   private JButton cancelButton;
+   private final JLabel label;
+   private final JTextField textField;
+   private final JButton checkButton;
+   private final JButton cancelButton;
    private String originalText;
 
    public EditableLabel(String initialText, FieldListener fieldListener) {

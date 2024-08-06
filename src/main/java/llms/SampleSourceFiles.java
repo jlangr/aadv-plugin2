@@ -18,7 +18,7 @@ public class SampleSourceFiles {
                return "Fizz";
             } else if (number % 5 == 0) {
                return "Buzz";
-            } 
+            }
 
             return String.valueOf(number);
         }
@@ -29,28 +29,28 @@ public class SampleSourceFiles {
    public static final String fizzBuzzTestSource = """
       import org.junit.jupiter.api.Test;
       import static org.junit.jupiter.api.Assertions.*;
-            
+      
       public class FizzBuzzTest {
-            
+      
           @Test
           public void testFizzBuzz() {
               FizzBuzz fizzBuzz = new FizzBuzz();
-            
+      
               // Test FizzBuzz cases
               assertEquals("FizzBuzz", fizzBuzz.getFizzBuzzValue(15));
               assertEquals("FizzBuzz", fizzBuzz.getFizzBuzzValue(30));
               assertEquals("FizzBuzz", fizzBuzz.getFizzBuzzValue(45));
-            
+      
               // Test Fizz cases
               assertEquals("Fizz", fizzBuzz.getFizzBuzzValue(3));
               assertEquals("Fizz", fizzBuzz.getFizzBuzzValue(6));
               assertEquals("Fizz", fizzBuzz.getFizzBuzzValue(9));
-            
+      
               // Test Buzz cases
               assertEquals("Buzz", fizzBuzz.getFizzBuzzValue(5));
               assertEquals("Buzz", fizzBuzz.getFizzBuzzValue(10));
               assertEquals("Buzz", fizzBuzz.getFizzBuzzValue(20));
-            
+      
               // Test other cases
               assertEquals("1", fizzBuzz.getFizzBuzzValue(1));
               assertEquals("2", fizzBuzz.getFizzBuzzValue(2));

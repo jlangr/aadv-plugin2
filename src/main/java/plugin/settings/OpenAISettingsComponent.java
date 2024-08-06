@@ -2,13 +2,14 @@ package plugin.settings;
 
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.components.JBTextField;
+import com.intellij.util.ui.JBUI;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class OpenAISettingsComponent {
-   private JPanel panel;
-   private JBTextField apiKeyField;
+   private final JPanel panel;
+   private final JBTextField apiKeyField;
 
    public OpenAISettingsComponent() {
       panel = new JPanel(new GridBagLayout());
@@ -16,7 +17,7 @@ public class OpenAISettingsComponent {
 
       var gbc = new GridBagConstraints();
       gbc.fill = GridBagConstraints.HORIZONTAL;
-      gbc.insets = new Insets(5, 5, 5, 5);
+      gbc.insets = JBUI.insets(5);
 
       gbc.gridx = 0;
       gbc.gridy = 0;

@@ -1,5 +1,6 @@
 package utils;
 
+import com.intellij.util.ui.JBUI;
 import ui.JTextAreaDocumentListener;
 
 import javax.swing.*;
@@ -32,7 +33,7 @@ public class UI {
       exampleField.setEditable(true);
       exampleField.setLineWrap(true);
       exampleField.setWrapStyleWord(true);
-      exampleField.setMargin(new Insets(10, 10, 10, 10));
+      exampleField.setMargin(JBUI.insets(10));
       return exampleField;
    }
 

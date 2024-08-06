@@ -1,11 +1,13 @@
 package ui;
 
+import com.intellij.ui.JBColor;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class Chip extends JPanel {
-   private String text;
-   private Color backgroundColor;
+   private final String text;
+   private final Color backgroundColor;
 
    public Chip(String text, Color backgroundColor) {
       this.text = text;
@@ -27,7 +29,7 @@ public class Chip extends JPanel {
       g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 15, 15);
 
       // Set the text color and draw the text in the center
-      g2d.setColor(Color.WHITE);
+      g2d.setColor(JBColor.WHITE);
       FontMetrics fm = g2d.getFontMetrics();
       int textWidth = fm.stringWidth(text);
       int textHeight = fm.getAscent();

@@ -5,7 +5,6 @@ import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.Service;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
-import org.jetbrains.annotations.Nullable;
 
 @State(
    name = "com.example.OpenAISettingsState",
@@ -15,7 +14,6 @@ import org.jetbrains.annotations.Nullable;
 public final class OpenAISettingsState implements PersistentStateComponent<OpenAISettingsState> {
    private String apiKey;
 
-   @Nullable
    @Override
    public OpenAISettingsState getState() {
       return this;
