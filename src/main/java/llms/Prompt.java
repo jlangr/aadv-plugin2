@@ -3,8 +3,8 @@ package llms;
 import java.util.ArrayList;
 import java.util.List;
 import static java.lang.String.format;
-import static llms.PromptMessageType.system;
-import static llms.PromptMessageType.user;
+import static llms.PromptMessageType.SYSTEM;
+import static llms.PromptMessageType.USER;
 
 public class Prompt {
 
@@ -42,10 +42,10 @@ public class Prompt {
 
    public List<PromptMessage> messages() {
       var messages = new ArrayList<PromptMessage>();
-      messages.add(new PromptMessage(system, PROMPT_ASSISTANT_GUIDELINES));
-      messages.add(new PromptMessage(system, PROMPT_CODE_STYLE));
-      messages.add(new PromptMessage(system, PROMPT_LANGUAGE_SPECIFIC_CODE_STYLE));
-      messages.add(new PromptMessage(user, examplesToText()));
+      messages.add(new PromptMessage(SYSTEM, PROMPT_ASSISTANT_GUIDELINES));
+      messages.add(new PromptMessage(SYSTEM, PROMPT_CODE_STYLE));
+      messages.add(new PromptMessage(SYSTEM, PROMPT_LANGUAGE_SPECIFIC_CODE_STYLE));
+      messages.add(new PromptMessage(USER, examplesToText()));
       return messages;
    }
 

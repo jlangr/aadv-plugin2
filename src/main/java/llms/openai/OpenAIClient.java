@@ -37,8 +37,8 @@ public class OpenAIClient {
 
    private String role(PromptMessageType promptMessageType) {
       return switch(promptMessageType) {
-         case system -> "system";
-         case user -> "user";
+         case SYSTEM -> "system";
+         case USER -> "user";
       };
    }
 

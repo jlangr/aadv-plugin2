@@ -1,5 +1,5 @@
 package llms;
 
 public enum PromptMessageType {
-   system, user
+   SYSTEM, USER
 }
