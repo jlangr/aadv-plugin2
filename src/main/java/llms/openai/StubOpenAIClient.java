@@ -12,9 +12,9 @@ import static llms.FileType.PROD;
 import static llms.FileType.TEST;
 import static llms.SampleSourceFiles.*;
 
-public class StubOpenAIClient extends OpenAIClient {
+public class StubOpenAIClient extends OpenAI {
    public StubOpenAIClient(Http http) {
-      super(http, new AADVPluginSettings());
+      super(new OpenAIClient(http, new AADVPluginSettings()));
    }
 
    @Override

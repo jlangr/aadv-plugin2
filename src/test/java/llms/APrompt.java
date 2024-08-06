@@ -1,5 +1,6 @@
 package llms;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static llms.Prompt.*;
@@ -15,7 +16,7 @@ class APrompt {
 
       var result = prompt.messages();
 
-      assertEquals(new PromptMessage(SYSTEM, PROMPT_ASSISTANT_GUIDELINES), result.get(0));
+      Assertions.assertEquals(new PromptMessage(SYSTEM, PROMPT_ASSISTANT_GUIDELINES), result.get(0));
       assertEquals(new PromptMessage(SYSTEM, PROMPT_CODE_STYLE), result.get(1));
       assertEquals(new PromptMessage(SYSTEM, PROMPT_LANGUAGE_SPECIFIC_CODE_STYLE), result.get(2));
       var userMessage = result.get(3);

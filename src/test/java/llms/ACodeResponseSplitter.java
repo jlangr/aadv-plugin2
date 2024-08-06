@@ -16,7 +16,7 @@ class ACodeResponseSplitter {
          /* prod class FizzBuzz.java */
          %s
          /* end prod class */
-                  
+
          /* prod class Helper.java */
          %s
          /* end prod class */

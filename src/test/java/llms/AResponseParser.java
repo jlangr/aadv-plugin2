@@ -1,4 +1,4 @@
-package openai;
+package llms;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import llms.openai.ResponseParser;

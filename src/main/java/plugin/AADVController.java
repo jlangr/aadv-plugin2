@@ -2,6 +2,7 @@ package plugin;
 
 import com.intellij.openapi.project.Project;
 import llms.*;
+import llms.openai.OpenAI;
 import llms.openai.OpenAIClient;
 import plugin.settings.AADVPluginSettings;
 import ui.*;
@@ -10,10 +11,8 @@ import utils.Http;
 import utils.IDGenerator;
 import utils.idea.IDEAEditor;
 import javax.swing.*;
-import java.awt.*;
 
-import static java.awt.Cursor.WAIT_CURSOR;
-import static java.awt.Cursor.getPredefinedCursor;
+import static java.awt.Cursor.*;
 
 public class AADVController implements PromptListener, SourcePanelListener, ExampleListener {
    private static AADVController controller = null;
@@ -21,10 +20,12 @@ public class AADVController implements PromptListener, SourcePanelListener, Exam
    private AADVPromptPanel promptView = new AADVPromptPanel(this, this);
    private final AADVOutputPanel outputView = new AADVOutputPanel();
 
-   private final OpenAIClient openAIClient
-//      = new StubOpenAIClient(); // TODO change to prod
-      = new OpenAIClient(new Http(), new AADVPluginSettings());
-   AADVModel model = new AADVModel();
+   private final OpenAIClient openAIClient =
+      new OpenAIClient(new Http(), new AADVPluginSettings());
+   private final OpenAI openAI
+//      = new StubOpenAIClient();
+      = new OpenAI(openAIClient);
+   private AADVModel model = new AADVModel();
    private final IDEAEditor ide = new IDEAEditor();
    private IDGenerator idGenerator = new IDGenerator();
 
@@ -65,9 +66,9 @@ public class AADVController implements PromptListener, SourcePanelListener, Exam
       var prompt = new Prompt(text, model.getExampleList());
 
       new Thread(() -> {
-         var files = openAIClient.retrieveCompletion(prompt);
+         var files = openAI.retrieveCompletion(prompt);
          updateSourcePanels(files);
-         promptView.getParent().setCursor(Cursor.getDefaultCursor());
+         promptView.getParent().setCursor(getDefaultCursor());
       }).start();
    }
 
