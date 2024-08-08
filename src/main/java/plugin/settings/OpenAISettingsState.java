@@ -1,5 +1,6 @@
 package plugin.settings;
 
+import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.Service;
@@ -12,7 +13,19 @@ import com.intellij.openapi.components.Storage;
 )
 @Service(Service.Level.APP)
 public final class OpenAISettingsState implements PersistentStateComponent<OpenAISettingsState> {
+   static OpenAISettingsState DEFAULT_INSTANCE =
+      ApplicationManager.getApplication().getService(OpenAISettingsState.class);
+   private static OpenAISettingsState instance = DEFAULT_INSTANCE;
+
    private String apiKey;
+
+   public static void setInstance(OpenAISettingsState openAISettingsState) {
+      instance = openAISettingsState;
+   }
+
+   public static void reset() {
+      instance = DEFAULT_INSTANCE;
+   }
 
    @Override
    public OpenAISettingsState getState() {
@@ -25,7 +38,7 @@ public final class OpenAISettingsState implements PersistentStateComponent<OpenA
    }
 
    public static OpenAISettingsState getInstance() {
-      return ApplicationManager.getApplication().getService(OpenAISettingsState.class);
+      return instance;
    }
 
    public String getApiKey() {
