@@ -22,7 +22,7 @@
     <extensions defaultExtensionNs="com.intellij">
         <toolWindow id="AADVPrompt" factoryClass="plugin.AADVPromptWindowFactory" anchor="left"/>
         <toolWindow id="AADVOutput" factoryClass="plugin.AADVOutputWindowFactory" anchor="right"/>
-        <projectConfigurable instance="plugin.settings.OpenAIConfigurable"/>
+        <projectConfigurable instance="plugin.settings.AADVConfigurable"/>
     </extensions>
 
     <actions>

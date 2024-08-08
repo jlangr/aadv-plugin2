@@ -6,20 +6,20 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
-public class OpenAIConfigurable implements Configurable {
-   private OpenAISettingsComponent settingsComponent;
+public class AADVConfigurable implements Configurable {
+   private AADVSettings settingsComponent;
 
    @Nls(capitalization = Nls.Capitalization.Title)
    @Override
    public String getDisplayName() {
-      return "OpenAI Settings";
+      return "AADV Settings";
    }
 
    @Nullable
    @Override
    public JComponent createComponent() {
-      settingsComponent = new OpenAISettingsComponent();
-      return settingsComponent.getPanel();
+      settingsComponent = new AADVSettings();
+      return settingsComponent;
    }
 
    @Override

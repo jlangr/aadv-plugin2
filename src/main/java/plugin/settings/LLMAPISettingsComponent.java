@@ -7,11 +7,11 @@ import com.intellij.util.ui.JBUI;
 import javax.swing.*;
 import java.awt.*;
 
-public class OpenAISettingsComponent {
+public class LLMAPISettingsComponent {
    private final JPanel panel;
    private final JBTextField apiKeyField;
 
-   public OpenAISettingsComponent() {
+   public LLMAPISettingsComponent() {
       panel = new JPanel(new GridBagLayout());
       apiKeyField = new JBTextField();
 
