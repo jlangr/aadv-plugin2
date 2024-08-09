@@ -1,5 +1,6 @@
 package plugin.settings;
 import com.intellij.ui.components.JBList;
+import com.intellij.ui.components.JBScrollPane;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,17 +13,20 @@ public class StyleSettingsComponent extends JPanel {
    private final StyleSettings styleSettings;
 
    public StyleSettingsComponent() {
-      // Retrieve the StyleSettings from the persistent state
       this.styleSettings = AADVSettingsState.getInstance().getStyleSettings();
 
       setLayout(new BorderLayout());
 
       var leftPanel = createLeftPanel();
       rulePanel = createRulePanel();
+
       add(leftPanel, BorderLayout.WEST);
-      add(new JScrollPane(rulePanel), BorderLayout.CENTER);
+      var scrollableRulePanel = new JBScrollPane(rulePanel);
+      scrollableRulePanel.setVerticalScrollBarPolicy(JBScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+      add(scrollableRulePanel, BorderLayout.CENTER);
 
       setupEventListeners();
+
       updateUIFromModel();
    }
 
@@ -85,7 +89,7 @@ public class StyleSettingsComponent extends JPanel {
       int selectedIndex = languageList.getSelectedIndex();
       if (selectedIndex != -1) {
          var selectedLanguage = styleSettings.languages().get(selectedIndex);
-         var newRule = new Rule("New Rule", true); // Default new rule text
+         var newRule = new Rule("New Rule");
          selectedLanguage.getRules().add(newRule);
          updateRuleList();
       }
@@ -109,8 +113,12 @@ public class StyleSettingsComponent extends JPanel {
    }
 
    private void addRuleComponent(Rule rule, Language language) {
+      if (rulePanel.getComponentCount() > 0)
+         rulePanel.add(Box.createVerticalStrut(10));
+
       var ruleComponent = new RuleComponent(rule, language, styleSettings, this);
-      rulePanel.add(ruleComponent, rulePanel.getComponentCount() - 1);
+
+      rulePanel.add(ruleComponent, -1);
    }
 
    public boolean isModified() {
@@ -124,17 +132,15 @@ public class StyleSettingsComponent extends JPanel {
 
    public void reset() {
       var currentSettings = AADVSettingsState.getInstance().getStyleSettings();
-
       styleSettings.languages().clear();
       styleSettings.languages().addAll(currentSettings.languages());
 
       updateUIFromModel();
    }
 
-
    public void updateUIFromModel() {
       languageListModel.clear();
-      for (Language language : styleSettings.languages())
+      for (var language : styleSettings.languages())
          languageListModel.addElement(language.getName());
 
       if (!styleSettings.languages().isEmpty()) {

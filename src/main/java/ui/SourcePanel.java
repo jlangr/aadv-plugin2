@@ -51,12 +51,12 @@ public class SourcePanel extends JPanel {
    }
 
    private JButton createUpdateButton() {
-      return UI.createIconButton(this, "right.png", MSG_TIP_APPLY_SOURCE,
+      return UI.createIconButton("right.png", MSG_TIP_APPLY_SOURCE,
          e -> sourcePanelListener.applySourceToIDE(sourceFile));
    }
 
    private JButton createCloseButton() {
-      return UI.createIconButton(this, "close_icon.png", MSG_CLOSE,
+      return UI.createIconButton("close_icon.png", MSG_CLOSE,
          e -> sourcePanelListener.delete(sourceFile));
    }
 

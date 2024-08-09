@@ -39,5 +39,15 @@ public class Language {
          ", rules=" + rules +
          '}';
    }
+
+   public void toggleEnabled(Rule rule) {
+      var matchingRule = rules.stream()
+         .filter(r -> r.getId().equals(rule.getId()))
+         .findFirst();
+      if (matchingRule.isEmpty())
+         throw new RuntimeException("rule not found " + matchingRule.get().getId());
+
+      matchingRule.get().toggleEnabled();
+   }
 }
 

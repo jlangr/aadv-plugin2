@@ -36,7 +36,7 @@ public class ExamplesPanel extends JPanel {
    private JPanel createHeaderRow() {
       var panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
-      addExampleButton = UI.createIconButton(this, "plus.png", MSG_ADD,
+      addExampleButton = UI.createIconButton("plus.png", MSG_ADD,
          e -> exampleListener.addNewExample());
       panel.add(addExampleButton);
 

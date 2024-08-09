@@ -46,7 +46,7 @@ class AnAADVSettingsState {
       storeOnApplication(new AADVSettingsStateBuilder().withApiKey("999").build());
       var state = new AADVSettingsState.State();
       state.apiKey = "123";
-      state.languages = List.of(new Language("Ruby", List.of(new Rule("", true))));
+      state.languages = List.of(new Language("Ruby", List.of(new Rule(""))));
 
       AADVSettingsState.getInstance().loadState(state);
 

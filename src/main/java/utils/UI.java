@@ -49,11 +49,9 @@ public class UI {
    }
 
    public static JButton createIconButton(
-      Object owner, String imageFilename, String toolTipText, ActionListener listener) {
-      return createIconButton(
-         new ImageIcon(owner.getClass().getResource(imageFilename)),
-         toolTipText,
-         listener);
+      String imageFilename, String toolTipText, ActionListener listener) {
+      var imageIcon = ImageLoader.loadImageIcon("/images/" + imageFilename);
+      return createIconButton(imageIcon, toolTipText, listener);
    }
 
    public static JButton createIconButton(ImageIcon icon, String toolTipText, ActionListener listener) {

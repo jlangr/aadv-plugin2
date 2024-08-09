@@ -15,7 +15,6 @@ public class AADVSettingsComponent extends JPanel {
     public AADVSettingsComponent() {
         setLayout(new BorderLayout());
 
-        // Initialize the settings components using state data
         this.styleSettingsComponent = new StyleSettingsComponent();
         this.llmapiSettingsComponent = new LLMAPISettingsComponent(AADVSettingsState.getInstance().getLLMAPISettings());
 
@@ -32,12 +31,10 @@ public class AADVSettingsComponent extends JPanel {
     }
 
     public void apply() {
-        if (styleSettingsComponent.isModified()) {
+        if (styleSettingsComponent.isModified())
             styleSettingsComponent.apply();
-        }
-        if (llmapiSettingsComponent.isModified()) {
+        if (llmapiSettingsComponent.isModified())
             llmapiSettingsComponent.apply();
-        }
     }
 
     public void reset() {

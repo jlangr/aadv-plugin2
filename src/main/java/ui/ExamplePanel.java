@@ -48,7 +48,7 @@ public class ExamplePanel extends JPanel {
       var buttonPanel = new JPanel();
       buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
 
-      var deleteExampleButton = UI.createIconButton(this, "close_icon.png", MSG_DELETE,
+      var deleteExampleButton = UI.createIconButton("close_icon.png", MSG_DELETE,
          e -> exampleListener.delete(example.id()));
       buttonPanel.add(deleteExampleButton);
 

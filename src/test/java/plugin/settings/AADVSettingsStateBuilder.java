@@ -27,7 +27,7 @@ class AADVSettingsStateBuilder {
    }
 
    public AADVSettingsStateBuilder withLanguage(String languageName, String... ruleTexts) {
-      var rules = stream(ruleTexts).map(s -> new Rule(s, true)).toList();
+      var rules = stream(ruleTexts).map(s -> new Rule(s)).toList();
       var language = new Language(languageName, rules);
       languages.add(language);
       return this;
