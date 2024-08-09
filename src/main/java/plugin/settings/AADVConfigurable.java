@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 
 public class AADVConfigurable implements Configurable {
-   private AADVSettings settingsComponent;
+   private AADVSettingsComponent aadvSettingsComponent;
 
    @Nls(capitalization = Nls.Capitalization.Title)
    @Override
@@ -18,31 +18,31 @@ public class AADVConfigurable implements Configurable {
    @Nullable
    @Override
    public JComponent createComponent() {
-      settingsComponent = new AADVSettings();
-      return settingsComponent;
+      aadvSettingsComponent = new AADVSettingsComponent();
+      return aadvSettingsComponent;
    }
 
    @Override
    public boolean isModified() {
-      return settingsComponent != null && settingsComponent.isModified();
+      return aadvSettingsComponent != null && aadvSettingsComponent.isModified();
    }
 
    @Override
    public void apply() {
-      if (settingsComponent != null) {
-         settingsComponent.apply();
+      if (aadvSettingsComponent != null) {
+         aadvSettingsComponent.apply();
       }
    }
 
    @Override
    public void reset() {
-      if (settingsComponent != null) {
-         settingsComponent.reset();
+      if (aadvSettingsComponent != null) {
+         aadvSettingsComponent.reset();
       }
    }
 
    @Override
    public void disposeUIResources() {
-      settingsComponent = null;
+      aadvSettingsComponent = null;
    }
 }

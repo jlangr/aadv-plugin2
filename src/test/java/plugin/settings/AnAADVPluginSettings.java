@@ -25,18 +25,18 @@ class AnAADVPluginSettings {
 
       @Test
       void returnsNullWhenSettingsStateNull() {
-         when(application.getService(OpenAISettingsState.class)).thenReturn(null);
+         when(application.getService(AADVSettingsState.class)).thenReturn(null);
 
          assertEquals(null, pluginSettings.retrieveAPIKey());
       }
 
       @Nested
       class WithNonNullSettingsState {
-         OpenAISettingsState settingsState = new OpenAISettingsState();
+         AADVSettingsState settingsState = new AADVSettingsState();
 
          @BeforeEach
          void setup() {
-            OpenAISettingsState.setInstance(settingsState);
+//            AADVSettingsState.setInstance(settingsState);
          }
 
          @Test
@@ -70,6 +70,6 @@ class AnAADVPluginSettings {
 
    @AfterEach
    void cleanup() {
-      OpenAISettingsState.reset();
+//      AADVSettingsState.reset();
    }
 }

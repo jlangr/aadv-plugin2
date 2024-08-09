@@ -1,36 +1,36 @@
 package plugin.settings;
-
 import com.intellij.ui.components.JBList;
-import com.intellij.ui.components.JBScrollPane;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
 public class StyleSettingsComponent extends JPanel {
-
-   private static final String MSG_ENTER_LANGUAGE = "Enter programming language:";
    private DefaultListModel<String> languageListModel;
    private JBList<String> languageList;
    private JPanel rulePanel;
-   private ArrayList<RuleComponent> ruleComponents;
+   private final StyleSettings styleSettings;
 
    public StyleSettingsComponent() {
+      // Retrieve the StyleSettings from the persistent state
+      this.styleSettings = AADVSettingsState.getInstance().getStyleSettings();
+
       setLayout(new BorderLayout());
 
       var leftPanel = createLeftPanel();
       rulePanel = createRulePanel();
       add(leftPanel, BorderLayout.WEST);
-      add(new JBScrollPane(rulePanel), BorderLayout.CENTER);
+      add(new JScrollPane(rulePanel), BorderLayout.CENTER);
 
       setupEventListeners();
+      updateUIFromModel();
    }
 
    private JPanel createLeftPanel() {
       var leftPanel = new JPanel(new BorderLayout());
       languageListModel = new DefaultListModel<>();
       languageList = new JBList<>(languageListModel);
-      leftPanel.add(new JBScrollPane(languageList), BorderLayout.CENTER);
+      leftPanel.add(new JScrollPane(languageList), BorderLayout.CENTER);
 
       var languageButtonsPanel = new JPanel(new FlowLayout());
       var addLanguageButton = new JButton("+");
@@ -48,101 +48,109 @@ public class StyleSettingsComponent extends JPanel {
    private JPanel createRulePanel() {
       var panel = new JPanel();
       panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-      ruleComponents = new ArrayList<>();
+
+      var addRuleButton = new JButton("Add Rule");
+      addRuleButton.addActionListener(e -> onAddRule());
+
+      panel.add(addRuleButton);
+
+      rulePanel = panel;
       return panel;
    }
 
    private void setupEventListeners() {
       languageList.addListSelectionListener(e -> {
-         if (!e.getValueIsAdjusting()) {
+         if (!e.getValueIsAdjusting())
             updateRuleList();
-         }
       });
    }
 
    private void onAddLanguage() {
-      var language = JOptionPane.showInputDialog(MSG_ENTER_LANGUAGE);
+      var language = JOptionPane.showInputDialog("New programming language:");
       if (language != null && !language.trim().isEmpty()) {
-         languageListModel.addElement(language.trim());
-         addNewRule(new Rule("", true));
+         styleSettings.languages().add(new Language(language.trim(), new ArrayList<>()));
+         updateUIFromModel();
       }
    }
 
    private void onRemoveLanguage() {
       var selectedIndex = languageList.getSelectedIndex();
       if (selectedIndex != -1) {
-         languageListModel.remove(selectedIndex);
-         rulePanel.removeAll();
-         ruleComponents.clear();
-         rulePanel.revalidate();
-         rulePanel.repaint();
+         styleSettings.languages().remove(selectedIndex);
+         updateUIFromModel();
+      }
+   }
+
+   private void onAddRule() {
+      int selectedIndex = languageList.getSelectedIndex();
+      if (selectedIndex != -1) {
+         var selectedLanguage = styleSettings.languages().get(selectedIndex);
+         var newRule = new Rule("New Rule", true); // Default new rule text
+         selectedLanguage.getRules().add(newRule);
+         updateRuleList();
       }
    }
 
    private void updateRuleList() {
       rulePanel.removeAll();
-      ruleComponents.clear();
-      var selectedLanguage = languageList.getSelectedValue();
-      if (selectedLanguage != null) {
-         addRuleComponent(new Rule("Rule 1 for " + selectedLanguage, true));
-         addRuleComponent(new Rule("Rule 2 for " + selectedLanguage, true));
-         addRuleComponent(new Rule("Rule 3 for " + selectedLanguage, true));
+      int selectedIndex = languageList.getSelectedIndex();
+      if (selectedIndex != -1) {
+         var selectedLanguage = styleSettings.languages().get(selectedIndex);
+         for (var rule : selectedLanguage.getRules())
+            addRuleComponent(rule, selectedLanguage);
       }
+
+      var addRuleButton = new JButton("Add Rule");
+      addRuleButton.addActionListener(e -> onAddRule());
+      rulePanel.add(addRuleButton);
+
       rulePanel.revalidate();
       rulePanel.repaint();
    }
 
-   private void addRuleComponent(Rule rule) {
-      var ruleComponent = new RuleComponent(rule, this);
-      ruleComponents.add(ruleComponent);
-      rulePanel.add(ruleComponent);
+   private void addRuleComponent(Rule rule, Language language) {
+      var ruleComponent = new RuleComponent(rule, language, styleSettings, this);
+      rulePanel.add(ruleComponent, rulePanel.getComponentCount() - 1);  // Add before the Add Rule button
    }
 
-   public void removeRuleComponent(RuleComponent ruleComponent) {
-      ruleComponents.remove(ruleComponent);
-      rulePanel.remove(ruleComponent);
-      rulePanel.revalidate();
-      rulePanel.repaint();
+   public boolean isModified() {
+      var currentSettings = AADVSettingsState.getInstance().getStyleSettings();
+      return !styleSettings.equals(currentSettings);
    }
 
-   public void moveRuleComponentUp(RuleComponent ruleComponent) {
-      var index = ruleComponents.indexOf(ruleComponent);
-      if (index > 0) {
-         ruleComponents.remove(index);
-         ruleComponents.add(index - 1, ruleComponent);
-         rulePanel.remove(ruleComponent);
-         rulePanel.add(ruleComponent, index - 1);
-         rulePanel.revalidate();
-         rulePanel.repaint();
+   public void apply() {
+      AADVSettingsState.getInstance().setStyleSettings(cloneStyleSettings(styleSettings));
+   }
+
+   public void reset() {
+      var currentSettings = AADVSettingsState.getInstance().getStyleSettings();
+
+      styleSettings.languages().clear();
+      styleSettings.languages().addAll(currentSettings.languages());
+
+      updateUIFromModel();  // Ensure the UI is updated after resetting the settings
+   }
+
+
+   public void updateUIFromModel() {
+      languageListModel.clear();
+      for (Language language : styleSettings.languages())
+         languageListModel.addElement(language.getName());
+
+      if (!styleSettings.languages().isEmpty()) {
+         languageList.setSelectedIndex(0); // Ensure a language is selected
+         updateRuleList();
       }
+      revalidate();
+      repaint();
    }
 
-   public void moveRuleComponentDown(RuleComponent ruleComponent) {
-      var index = ruleComponents.indexOf(ruleComponent);
-      if (index < ruleComponents.size() - 1) {
-         ruleComponents.remove(index);
-         ruleComponents.add(index + 1, ruleComponent);
-         rulePanel.remove(ruleComponent);
-         rulePanel.add(ruleComponent, index + 1);
-         rulePanel.revalidate();
-         rulePanel.repaint();
+   private StyleSettings cloneStyleSettings(StyleSettings settings) {
+      var clonedLanguages = new ArrayList<Language>();
+      for (var language : settings.languages()) {
+         var clonedRules = new ArrayList<>(language.getRules());
+         clonedLanguages.add(new Language(language.getName(), clonedRules));
       }
-   }
-
-   public void addNewRuleBelow(RuleComponent ruleComponent) {
-      var index = ruleComponents.indexOf(ruleComponent);
-      var newRuleComponent = new RuleComponent(new Rule("", true), this);
-      ruleComponents.add(index + 1, newRuleComponent);
-      rulePanel.add(newRuleComponent, index + 1);
-      rulePanel.revalidate();
-      rulePanel.repaint();
-   }
-
-   public void addNewRule(Rule rule) {
-      var newRuleComponent = new RuleComponent(rule, this);
-      ruleComponents.add(newRuleComponent);
-      rulePanel.add(newRuleComponent);
-      rulePanel.revalidate();
-      rulePanel.repaint();
+      return new StyleSettings(clonedLanguages);
    }
 }

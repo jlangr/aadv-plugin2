@@ -5,17 +5,17 @@ import org.junit.jupiter.api.Test;
 import javax.swing.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static plugin.settings.AADVSettings.MSG_CODING_STYLE;
-import static plugin.settings.AADVSettings.MSG_LLM_APIS;
+import static plugin.settings.AADVSettingsComponent.MSG_CODING_STYLE;
+import static plugin.settings.AADVSettingsComponent.MSG_LLM_APIS;
 
-class AADVSettingsTest {
-   private AADVSettings aadvSettings;
+class AADVSettingsComponentTest {
+   private AADVSettingsComponent aadvSettingsComponent;
    private LLMAPISettingsComponent mockOpenAISettingsComponent;
 
    @BeforeEach
    void setUp() {
       mockOpenAISettingsComponent = mock(LLMAPISettingsComponent.class);
-      aadvSettings = new AADVSettings() {
+      aadvSettingsComponent = new AADVSettingsComponent() {
          {
             llmapiSettingsComponent = mockOpenAISettingsComponent;
          }
@@ -25,27 +25,27 @@ class AADVSettingsTest {
    @Test
    void isModified() {
       when(mockOpenAISettingsComponent.isModified()).thenReturn(true);
-      assertTrue(aadvSettings.isModified());
+      assertTrue(aadvSettingsComponent.isModified());
 
       when(mockOpenAISettingsComponent.isModified()).thenReturn(false);
-      assertFalse(aadvSettings.isModified());
+      assertFalse(aadvSettingsComponent.isModified());
    }
 
    @Test
    void apply() {
-      aadvSettings.apply();
+      aadvSettingsComponent.apply();
       verify(mockOpenAISettingsComponent, times(1)).apply();
    }
 
    @Test
    void reset() {
-      aadvSettings.reset();
+      aadvSettingsComponent.reset();
       verify(mockOpenAISettingsComponent, times(1)).reset();
    }
 
    @Test
    void overallLayoutEmploysTabbedPane() {
-      var components = aadvSettings.getComponents();
+      var components = aadvSettingsComponent.getComponents();
       assertEquals(1, components.length);
 
       var tabbedPane = (JTabbedPane) components[0];
@@ -63,6 +63,6 @@ class AADVSettingsTest {
    }
 
    private JTabbedPane getTabbedPane() {
-      return (JTabbedPane)aadvSettings.getComponents()[0];
+      return (JTabbedPane) aadvSettingsComponent.getComponents()[0];
    }
 }

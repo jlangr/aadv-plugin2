@@ -1,8 +1,6 @@
 package plugin.settings;
 
-import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.components.JBTextField;
-import com.intellij.util.ui.JBUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,13 +9,13 @@ public class LLMAPISettingsComponent {
    private final JPanel panel;
    private final JBTextField apiKeyField;
 
-   public LLMAPISettingsComponent() {
+   public LLMAPISettingsComponent(LLMAPISettings llmapiSettings) {
       panel = new JPanel(new GridBagLayout());
-      apiKeyField = new JBTextField();
+      apiKeyField = new JBTextField(llmapiSettings.apiKey()); // Load API key from state
 
       var gbc = new GridBagConstraints();
       gbc.fill = GridBagConstraints.HORIZONTAL;
-      gbc.insets = JBUI.insets(5);
+      gbc.insets = new Insets(5, 5, 5, 5);
 
       gbc.gridx = 0;
       gbc.gridy = 0;
@@ -35,16 +33,16 @@ public class LLMAPISettingsComponent {
    }
 
    public boolean isModified() {
-      var savedApiKey = OpenAISettingsState.getInstance().getApiKey();
-      return !StringUtil.equals(apiKeyField.getText(), savedApiKey);
+      String savedApiKey = AADVSettingsState.getInstance().getApiKey();
+      return !apiKeyField.getText().equals(savedApiKey);
    }
 
    public void apply() {
-      OpenAISettingsState.getInstance().setApiKey(apiKeyField.getText());
+      AADVSettingsState.getInstance().setApiKey(apiKeyField.getText());
    }
 
    public void reset() {
-      var savedApiKey = OpenAISettingsState.getInstance().getApiKey();
+      String savedApiKey = AADVSettingsState.getInstance().getApiKey();
       apiKeyField.setText(savedApiKey);
    }
 }
