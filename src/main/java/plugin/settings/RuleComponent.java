@@ -1,5 +1,6 @@
 package plugin.settings;
 
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.components.JBScrollPane;
 
 import javax.swing.*;
