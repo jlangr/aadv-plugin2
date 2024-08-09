@@ -7,8 +7,7 @@ public class Language {
    private String name;
    private List<Rule> rules = new ArrayList<>();
 
-   // Public no-arg constructor needed for deserialization
-   public Language() {
+   public Language() {   // needed for deserialization
    }
 
    public Language(String name, List<Rule> rules) {
@@ -41,6 +40,8 @@ public class Language {
    }
 
    public void toggleEnabled(Rule rule) {
+      System.out.println("RULES: " + rules);
+      System.out.println("updating rule: " + rule);
       var matchingRule = rules.stream()
          .filter(r -> r.getId().equals(rule.getId()))
          .findFirst();
