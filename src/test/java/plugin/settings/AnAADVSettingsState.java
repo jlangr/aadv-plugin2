@@ -5,7 +5,6 @@ import com.intellij.openapi.application.ApplicationManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Arrays.stream;
@@ -24,16 +23,15 @@ class AnAADVSettingsState {
 
    @Test
    void getInstanceReturnsStoredSettingsState() {
-      storeOnApplication(new SettingsStateBuilder()
+      storeOnApplication(new AADVSettingsStateBuilder()
          .withApiKey("123")
          .withLanguage("Java", "Rule 1", "Rule 2")
          .build());
 
-      var state = AADVSettingsState.getInstance();
+      var settingsState = AADVSettingsState.getInstance();
 
-      assertEquals("123", state.getApiKey());
-      var languages = state.getStyleSettings().languages();
-      var java = languages.get(0);
+      assertEquals("123", settingsState.getApiKey());
+      var java = settingsState.getStyleSettings().languages().get(0);
       assertEquals("Java", java.getName());
       assertEquals("Rule 1", java.getRules().get(0).getText());
       assertEquals("Rule 2", java.getRules().get(1).getText());
@@ -43,51 +41,16 @@ class AnAADVSettingsState {
       when(application.getService(AADVSettingsState.class)).thenReturn(storedSettingsState);
    }
 
-   //   @Test
-//   void loadsFromSettingsState() {
-//      var settingsState = new SettingsStateBuilder().withApiKey("999").build();
-//      when(application.getService(AADVSettingsState.class)).thenReturn(settingsState);
-//      var state = AADVSettingsState.getInstance();
-//
-//      var newSettingsState = new SettingsStateBuilder().withApiKey("123").build();
-//      AADVSettingsState.getInstance().loadState(newSettingsState);
-//
-//      assertEquals("123", state.getApiKey());
-//   }
+      @Test
+   void loadsFromSettingsState() {
+      storeOnApplication(new AADVSettingsStateBuilder().withApiKey("999").build());
+      var state = new AADVSettingsState.State();
+      state.apiKey = "123";
+      state.languages = List.of(new Language("Ruby", List.of(new Rule("", true))));
 
-   //   @Test
-//   void returnsSelfFromGetState() {
-//      var settingsState = new SettingsStateBuilder().build();
-//      when(application.getService(AADVSettingsState.class)).thenReturn(settingsState);
-//      AADVSettingsState.setInstance(settingsState);
-//      var state = AADVSettingsState.getInstance();
-//
-//      var result = state.getState();
-//
-//      assertSame(settingsState, result);
-//   }
-//
-   class SettingsStateBuilder {
-      private String apiKey;
-      private List<Language> languages = new ArrayList<>();
+      AADVSettingsState.getInstance().loadState(state);
 
-      SettingsStateBuilder withApiKey(String apiKey) {
-         this.apiKey = apiKey;
-         return this;
-      }
-
-      public SettingsStateBuilder withLanguage(String languageName, String... ruleTexts) {
-         var rules = stream(ruleTexts).map(s -> new Rule(s, true)).toList();
-         var language = new Language(languageName, rules);
-         languages.add(language);
-         return this;
-      }
-
-      AADVSettingsState build() {
-         var state = new AADVSettingsState();
-         state.setApiKey(apiKey);
-         state.setStyleSettings(new StyleSettings(languages));
-         return state;
-      }
+      assertEquals("123", AADVSettingsState.getInstance().getApiKey());
    }
+
 }
