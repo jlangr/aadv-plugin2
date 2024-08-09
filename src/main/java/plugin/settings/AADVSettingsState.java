@@ -16,7 +16,6 @@ import java.util.List;
 )
 @Service(Service.Level.APP)
 public final class AADVSettingsState implements PersistentStateComponent<AADVSettingsState.State> {
-
    public static class State {
       public String apiKey = "";
       public List<Language> languages = new ArrayList<>();
@@ -48,7 +47,7 @@ public final class AADVSettingsState implements PersistentStateComponent<AADVSet
    }
 
    public StyleSettings getStyleSettings() {
-      return cloneStyleSettings(new StyleSettings(myState.languages)); // Return a deep copy
+      return new StyleSettings(myState.languages).clone(); // Return a deep copy
    }
 
    public void setStyleSettings(StyleSettings styleSettings) {
@@ -61,15 +60,5 @@ public final class AADVSettingsState implements PersistentStateComponent<AADVSet
 
    public void setLLMAPISettings(LLMAPISettings llmapiSettings) {
       myState.apiKey = llmapiSettings.apiKey();
-   }
-
-   // TODO duplicate
-   private StyleSettings cloneStyleSettings(StyleSettings settings) {
-      var clonedLanguages = new ArrayList<Language>();
-      for (Language lang : settings.languages()) {
-         var clonedRules = new ArrayList<>(lang.getRules());
-         clonedLanguages.add(new Language(lang.getName(), clonedRules));
-      }
-      return new StyleSettings(clonedLanguages);
    }
 }

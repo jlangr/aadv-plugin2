@@ -110,7 +110,7 @@ public class StyleSettingsComponent extends JPanel {
 
    private void addRuleComponent(Rule rule, Language language) {
       var ruleComponent = new RuleComponent(rule, language, styleSettings, this);
-      rulePanel.add(ruleComponent, rulePanel.getComponentCount() - 1);  // Add before the Add Rule button
+      rulePanel.add(ruleComponent, rulePanel.getComponentCount() - 1);
    }
 
    public boolean isModified() {
@@ -128,7 +128,7 @@ public class StyleSettingsComponent extends JPanel {
       styleSettings.languages().clear();
       styleSettings.languages().addAll(currentSettings.languages());
 
-      updateUIFromModel();  // Ensure the UI is updated after resetting the settings
+      updateUIFromModel();
    }
 
 
