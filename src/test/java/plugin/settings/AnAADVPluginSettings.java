@@ -14,11 +14,11 @@ import static org.mockito.Mockito.when;
 class AnAADVPluginSettings {
    @Nested
    class RetrieveApiKey {
-      static Application application;
+      Application application;
       AADVPluginSettings pluginSettings = new AADVPluginSettings();
 
-      @BeforeAll
-      static void setUp() {
+      @BeforeEach
+      void setUp() {
          application = mock(Application.class);
          ApplicationManager.setApplication(application);
       }
@@ -32,11 +32,12 @@ class AnAADVPluginSettings {
 
       @Nested
       class WithNonNullSettingsState {
-         AADVSettingsState settingsState = new AADVSettingsState();
+         AADVSettingsState settingsState;
 
          @BeforeEach
          void setup() {
-//            AADVSettingsState.setInstance(settingsState);
+            settingsState = new AADVSettingsState();
+            when(application.getService(AADVSettingsState.class)).thenReturn(settingsState);
          }
 
          @Test
@@ -49,12 +50,12 @@ class AnAADVPluginSettings {
          }
 
          @Test
-         void returnsNullWhenApiKeyIsEmpty() {
+         void returnsEmptyWhenApiKeyIsEmpty() {
             settingsState.setApiKey("  \n \t \r ");
 
             var result = pluginSettings.retrieveAPIKey();
 
-            assertEquals(null, result);
+            assertEquals("", result);
          }
 
          @Test
