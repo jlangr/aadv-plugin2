@@ -18,6 +18,7 @@ public final class OpenAISettingsState implements PersistentStateComponent<OpenA
    private static OpenAISettingsState instance = DEFAULT_INSTANCE;
 
    private String apiKey;
+   private StyleSettings styleSettings;
 
    public static void setInstance(OpenAISettingsState openAISettingsState) {
       instance = openAISettingsState;
@@ -47,5 +48,13 @@ public final class OpenAISettingsState implements PersistentStateComponent<OpenA
 
    public void setApiKey(String apiKey) {
       this.apiKey = apiKey;
+   }
+
+   public StyleSettings getStyleSettings() {
+      return styleSettings;
+   }
+
+   public void setStyleSettings(StyleSettings styleSettings) {
+      this.styleSettings = styleSettings;
    }
 }
